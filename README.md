@@ -1,9 +1,10 @@
 ---
-title: XVASynth
-emoji: 😻
-colorFrom: green
+title: xVASynth
+emoji: 🗣
+colorFrom: gray
 colorTo: gray
 sdk: gradio
+app_file: app.py
 pinned: false
 license: gpl-3.0
 ---
