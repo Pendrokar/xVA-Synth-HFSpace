@@ -46,7 +46,7 @@ pyinstaller-hooks-contrib==2020.9
 pykakasi==2.2.1
 pyparsing==2.4.7
 python-crfsuite==0.9.8
-PyYAML==5.4.1
+PyYAML
 regex==2021.8.28
 requests==2.25.1
 resampy==0.2.2
