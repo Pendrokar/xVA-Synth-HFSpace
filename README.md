@@ -3,7 +3,7 @@ title: XVASynth
 emoji: 😻
 colorFrom: green
 colorTo: gray
-sdk: docker
+sdk: gradio
 pinned: false
 license: gpl-3.0
 ---
