@@ -1,0 +1,4 @@
+python3-torch
+python3-numba
+python3-llvmlite
+python3-scipy
