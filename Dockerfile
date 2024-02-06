@@ -2,7 +2,7 @@
 
 FROM python:3.10
 
-RUN apt-get install build-essential
+RUN apt-get install build-base
 
 WORKDIR /code
 
