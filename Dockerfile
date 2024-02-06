@@ -2,6 +2,9 @@
 
 FROM python:3.10
 
+RUN apt-get update
+RUN apt-get upgrade
+
 RUN apt-get install build-base
 
 WORKDIR /code
