@@ -5,7 +5,7 @@ FROM python:3.10
 RUN apt-get update
 RUN apt-get upgrade
 
-RUN apt-get install build-base
+RUN apt-get install build-essential python3-dev
 
 WORKDIR /code
 
