@@ -1,1 +1,1 @@
-build-essential python3-dev
+build-essential python3-dev liblapack-dev libblas-dev
