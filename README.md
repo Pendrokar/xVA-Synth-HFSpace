@@ -4,7 +4,7 @@ emoji: 🗣
 colorFrom: gray
 colorTo: gray
 sdk: gradio
-python_version: 3.10
+python_version: 3.9
 app_file: app.py
 tags:
   - tts
