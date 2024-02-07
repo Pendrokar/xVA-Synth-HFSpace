@@ -28,7 +28,7 @@ inflect==4.1.0
 jaconv==0.3
 joblib==0.17.0
 librosa==0.8.0
-llvmlite==0.34.0
+llvmlite
 num2words==0.5.10
 numba==0.51.2
 numpy
