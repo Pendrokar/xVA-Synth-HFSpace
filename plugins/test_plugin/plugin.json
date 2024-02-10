@@ -1,0 +1,83 @@
+{
+    "plugin-name": "Test plugin",
+    "author": "DanRuta",
+    "nexus-link": null,
+    "plugin-version": "1.0",
+    "plugin-short-description": "A test plugin to develop the functionality",
+    "min-app-version": "1.0.0",
+    "max-app-version": "1.4.0",
+    "install-requires-restart": false,
+    "uninstall-requires-restart": true,
+
+    "front-end-style-files": ["style1.css"],
+
+    "front-end-hooks": {
+        "start": {
+            "pre": {
+                "file": "frontendPlugin.js",
+                "function": "preStartFn"
+            },
+            "post": {
+                "file": "frontendPlugin.js",
+                "function": "postStartFn"
+            }
+        },
+        "keep-sample": {
+            "pre": {
+                "file": "frontendPlugin.js",
+                "function": "preKeepSample"
+            },
+            "post": {
+                "file": "frontendPlugin.js",
+                "function": "postKeepSample"
+            }
+        }
+    },
+    "back-end-hooks": {
+        "start": {
+            "pre": {
+                "file": "start.py",
+                "function": "start_pre"
+            },
+            "post": {
+                "file": null,
+                "function": "start_post"
+            }
+        },
+        "load-model": {
+            "pre": {
+                "file": null,
+                "function": null
+            },
+            "post": {
+                "file": null,
+                "function": null
+            }
+        },
+        "synth-line": {
+            "pre": {
+                "file": null,
+                "function": null
+            },
+            "post": {
+                "file": null,
+                "function": null
+            }
+        },
+        "output-audio": {
+            "replace": false,
+            "pre": {
+                "file": "main.py",
+                "function": "output_audio_pre"
+            },
+            "post": {
+                "file": null,
+                "function": null
+            }
+        },
+        "custom-event": {
+            "file": "custom_event.py",
+            "function": "custom_event_fn"
+        }
+    }
+}

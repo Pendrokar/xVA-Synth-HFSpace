@@ -1,0 +1,61 @@
+{
+    "title": "xVASynth Terminology",
+    "description": "Some technical words specific to xVASynth related tech",
+    "version": "1.0.0",
+    "author": "Dan Ruta",
+    "nexusLink": null,
+    "data": {
+        "xvasynth": {
+            "enabled": true,
+            "arpabet": "EH1 G S V EY0 EY0 IH0 S IH0 N TH"
+        },
+        "model": {
+            "enabled": true,
+            "arpabet": "M AA1 D AH0 L"
+        },
+        "hifi": {
+            "enabled": true,
+            "arpabet": "HH AA0 IH0 F AA0 IH0"
+        },
+        "fastpitch": {
+            "enabled": true,
+            "arpabet": "F AE1 S T P IH0 T CH"
+        },
+        "tacotron": {
+            "enabled": true,
+            "arpabet": "T AA0 K OW0 T R OW0 N"
+        },
+        "ai": {
+            "enabled": true,
+            "arpabet": "EY1 IY0 AA0 IY0"
+        },
+        "cmudict": {
+            "enabled": true,
+            "arpabet": "S IY1 IY1 EH0 M Y UW1 D IH1 K T"
+        },
+        "ffmpeg": {
+            "enabled": true,
+            "arpabet": "EH1 F } { EH1 F } { EH0 M P EH0 G"
+        },
+        "vram": {
+            "enabled": true,
+            "arpabet": "V IY0 R AE1 M"
+        },
+        "nvidia": {
+            "enabled": true,
+            "arpabet": "EH0 N V IH1 D IY0 AA1"
+        },
+        "xvatrainer": {
+            "enabled": true,
+            "arpabet": "EH1 G S V EY0 IH0 } { T R EY1 N ER0"
+        },
+        "gpu": {
+            "enabled": true,
+            "arpabet": "JH IY1 P IY1 Y UW1"
+        },
+        "video": {
+            "enabled": true,
+            "arpabet": "V IY0 D IY0 OW0"
+        }
+    }
+}

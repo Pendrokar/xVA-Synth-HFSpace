@@ -1,0 +1,1843 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>xVA Synth</title>
+</head>
+<link rel="stylesheet" type="text/css" href="style.css">
+<style id="cssHack">
+    ::selection {
+        background: gray;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: rgba(204,204,204, 0.5) !important;
+    }
+    a {
+        color: rgb(204, 204, 204);
+    }
+    .invertedButton {
+       background: none;
+       border: 2px solid #ccc;
+    }
+</style>
+<style id="css_hack_pitch_editor">.slider::-webkit-slider-thumb {height: 50px;}</style>
+<body>
+    <div id="chromeBar">
+        <div id="dragBar">xVA Synth</div>
+        <div id="chromeActions">
+            <div id="chromeMin">&#x1F5D5;</div>
+            <div id="chromeMax">&#128470;</div>
+            <div id="chromeQuit">&#x2716;</div>
+        </div>
+    </div>
+    <div id="appcontent">
+        <div id="left">
+            <div class="top" id="topLeft">
+                <div id="selectedGameDisplay">Select game</div>
+                <button id="changeGameButton">&#8644;</button>
+            </div>
+            <div id="searchContainer">
+                <input type="text" id="voiceSearchInput" name="" placeholder="Search voices...">
+            </div>
+            <div class="content">
+                <div id="voiceTypeContainer" style="height: calc(95vh - 107px)"></div>
+                <div style="height: 35px;width: 100%;display: flex;justify-content: center;">
+                    <button id="nexusMenuButton" class="invertedButton" style="width: 280px;max-width: 300px;">Get more voices</button>
+                </div>
+            </div>
+        </div>
+        <div id="right">
+            <div id="rightBG1"></div>
+            <div id="rightBG2"></div>
+            <div id="topRight" class="top">
+                <span></span>
+                <div id="title">
+                    <div id="titleInfo" style="display: none;">i</div>
+                    <div id="titleDetails" class="flexTable">
+                        <div>
+                            <div id="i18n_voiceInfo_name">Voice Name:</div>
+                            <div id="titleInfoName"></div>
+                        </div>
+                        <div>
+                            <div id="i18n_voiceInfo_id">Voice ID:</div>
+                            <div id="titleInfoVoiceID"></div>
+                        </div>
+                        <div>
+                            <div id="i18n_voiceInfo_gender">Gender:</div>
+                            <div id="titleInfoGender"></div>
+                        </div>
+                        <div>
+                            <div id="i18n_voiceInfo_appVersion">App version:</div>
+                            <div id="titleInfoAppVersion">4</div>
+                        </div>
+                        <div>
+                            <div id="i18n_voiceInfo_modelVersion">Model version:</div>
+                            <div id="titleInfoModelVersion"></div>
+                        </div>
+                        <div>
+                            <div id="i18n_voiceInfo_modelType">Model type:</div>
+                            <div id="titleInfoModelType"></div>
+                        </div>
+                        <div>
+                            <div id="i18n_voiceInfo_lang">Language:</div>
+                            <div id="titleInfoLanguage">English</div>
+                        </div>
+                        <div>
+                            <div id="i18n_voiceInfo_author">Trained by:</div>
+                            <div id="titleInfoAuthor"></div>
+                        </div>
+                        <div>
+                            <div id="i18n_voiceInfo_license">License:</div>
+                            <div id="titleInfoLicense">Unknown</div>
+                        </div>
+
+                    </div>
+                    <div id="titleName">Select Voice Type</div>
+                </div>
+                <svg style="display:none;" id="cogButton" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
+                    <path fill="black" stroke="white" stroke-width="3" d="M47.16,21.221l-5.91-0.966c-0.346-1.186-0.819-2.326-1.411-3.405l3.45-4.917c0.279-0.397,0.231-0.938-0.112-1.282 l-3.889-3.887c-0.347-0.346-0.893-0.391-1.291-0.104l-4.843,3.481c-1.089-0.602-2.239-1.08-3.432-1.427l-1.031-5.886 C28.607,2.35,28.192,2,27.706,2h-5.5c-0.49,0-0.908,0.355-0.987,0.839l-0.956,5.854c-1.2,0.345-2.352,0.818-3.437,1.412l-4.83-3.45 c-0.399-0.285-0.942-0.239-1.289,0.106L6.82,10.648c-0.343,0.343-0.391,0.883-0.112,1.28l3.399,4.863 c-0.605,1.095-1.087,2.254-1.438,3.46l-5.831,0.971c-0.482,0.08-0.836,0.498-0.836,0.986v5.5c0,0.485,0.348,0.9,0.825,0.985 l5.831,1.034c0.349,1.203,0.831,2.362,1.438,3.46l-3.441,4.813c-0.284,0.397-0.239,0.942,0.106,1.289l3.888,3.891 c0.343,0.343,0.884,0.391,1.281,0.112l4.87-3.411c1.093,0.601,2.248,1.078,3.445,1.424l0.976,5.861C21.3,47.647,21.717,48,22.206,48 h5.5c0.485,0,0.9-0.348,0.984-0.825l1.045-5.89c1.199-0.353,2.348-0.833,3.43-1.435l4.905,3.441 c0.398,0.281,0.938,0.232,1.282-0.111l3.888-3.891c0.346-0.347,0.391-0.894,0.104-1.292l-3.498-4.857 c0.593-1.08,1.064-2.222,1.407-3.408l5.918-1.039c0.479-0.084,0.827-0.5,0.827-0.985v-5.5C47.999,21.718,47.644,21.3,47.16,21.221z M25,32c-3.866,0-7-3.134-7-7c0-3.866,3.134-7,7-7s7,3.134,7,7C32,28.866,28.866,32,25,32z"></path>
+                </svg>
+            </div>
+            <div class="content">
+                <div id="inputContainer">
+                    <div id="micContainer" style="width:100px;margin-top: -10px;margin-bottom: 10px;">
+                        <svg id="mic_SVG" xmlns="http://www.w3.org/2000/svg" fill="grey" viewBox="0 0 352 512"><path stroke="grey" d="M176 352c53.02 0 96-42.98 96-96V96c0-53.02-42.98-96-96-96S80 42.98 80 96v160c0 53.02 42.98 96 96 96zm160-160h-16c-8.84 0-16 7.16-16 16v48c0 74.8-64.49 134.82-140.79 127.38C96.71 376.89 48 317.11 48 250.3V208c0-8.84-7.16-16-16-16H16c-8.84 0-16 7.16-16 16v40.16c0 89.64 63.97 169.55 152 181.69V464H96c-8.84 0-16 7.16-16 16v16c0 8.84 7.16 16 16 16h160c8.84 0 16-7.16 16-16v-16c0-8.84-7.16-16-16-16h-56v-33.77C285.71 418.47 352 344.9 352 256v-48c0-8.84-7.16-16-16-16z"/></svg>
+                        <svg id="mic_progress_SVG" height="75" width="75">
+                          <circle id="mic_progress_SVG_circle" stroke-width="5" fill="transparent" stroke="white" r="35" cx="37" cy="37" />
+                        </svg>
+                        <div id="s2s_voiceId_selected_label_container" style="width: 125px;display: flex;justify-content: center;">
+                            <div id="s2s_voiceId_selected_label" style="display:none;color: white;position: absolute;background: rgba(0,0,0,0.5);z-index: 100;padding: 2px;font-size: 9pt;margin-top: -10px;">Voice conversion only available for v3 models.</div>
+                        </div>
+                    </div>
+                    <!-- <textarea id="dialogueInput" placeholder="Type your text here..."></textarea> -->
+
+
+                    <!-- ======================== -->
+                    <!-- =======   TEMP   ======= -->
+                    <!-- ======================== -->
+
+                    <div id="text_editor_scratch_space"></div>
+                    <div id="textEditorTooltip"></div>
+                    <div id="textEditorContainer">
+                        <div id="textEditorElem"></div>
+                        <textarea spellcheck="false" id="dialogueInput" placeholder="Type your text here..."></textarea>
+                    </div>
+
+                    <!-- ======================== -->
+                    <!-- =======   TEMP   ======= -->
+                    <!-- ======================== -->
+
+
+
+
+
+                </div>
+                <div id="wavesurferContainerContainer" style="display: flex;justify-content: center;height: 100px; max-height: 100px; width: 100%;overflow: hidden;">
+                    <div id="wavesurferContainer" style="height: 200px; width: calc(100% - 20px);cursor: text;filter: drop-shadow(1px 0px 0px rgba(0, 0, 0, 1));">
+                    </div>
+                </div>
+                <div id="buttonContainer">
+                    <button style="display:none;" id="keepSampleButton">Keep sample</button>
+                    <div style="display:none;" id="spinner" class="spinner"></div>
+                    <button style="display:none;" id="samplePlayPause">Play</button>
+                    <button id="generateVoiceButton" disabled>Generate Voice</button>
+                </div>
+                <div id="adv">
+                    <div id="editorContainer" style="height: 225px;background-color: rgba(255, 255, 255, 0.2);">
+                    </div>
+                    <div id="editorTooltip"></div>
+                    <div id="adv_opts">
+                        <div>
+                            <div>
+                                <span id="i18n_seq_edit_view">View:</span>
+                                <select id="seq_edit_view_select">
+                                    <option id="seq_edit_view_pitch_energy" value="pitch_energy">Pitch+Energy</option>
+                                    <option id="seq_edit_view_pitch" value="pitch">Pitch</option>
+                                    <option id="seq_edit_view_energy" value="energy">Energy</option>
+                                    <option id="seq_edit_view_emAngry" value="emAngry">Emotion: Angry</option>
+                                    <option id="seq_edit_view_emHappy" value="emHappy">Emotion: Happy</option>
+                                    <option id="seq_edit_view_emSad" value="emSad">Emotion: Sad</option>
+                                    <option id="seq_edit_view_emSurprise" value="emSurprise">Emotion: Surprise</option>
+                                </select>
+                            </div>
+                            <div>
+                                <span id="i18n_energy">Energy:</span>
+                                <input id="letterEnergyNumb" disabled="true" type="number" name="energyNum" min="3.6" step="0.01" max="4.3">
+                            </div>
+                            <div>
+                                <span id="i18n_length">Length:</span>
+                                <input id="letterLengthNumb" disabled="true" type="number" name="lengthNum" min="0.1" step="0.1" max="15">
+                            </div>
+                            <div>
+                                <span id="i18n_pitch">Pitch:</span>
+                                <input id="letterPitchNumb" disabled="true" type="number" name="lengthNum" min="-3" step="0.025" max="3">
+                            </div>
+                            <div>
+                                <span id="i18n_emotion_is">Emotion:</span>
+                                <input id="letterEmotionNumb" disabled="true" type="number" name="lengthNum" min="0" step="0.05" max="1">
+                            </div>
+                            <div>
+                                <span id="i18n_style_emb_is">Style:</span>
+                                <input id="letterStyleNumb" disabled="true" type="number" name="lengthNum" min="0" step="0.05" max="1">
+                            </div>
+                            <button id="resetLetter_btn">Reset Letter</button>
+                            <div id="vocoder_options_container" style="display: none;">
+                                <span id="i18n_vocoder">Vocoder:</span>
+                                <select id="vocoder_select">
+                                    <option value="256_waveglow">WaveGlow</option>
+                                    <option value="big_waveglow">Big WaveGlow</option>
+                                    <option value="qnd">Quick-and-dirty</option>
+                                </select>
+                                <span id="bespoke_hifi_bolt">🗲</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div>
+                                <span id="i18n_seq_edit_edit">Edit:</span>
+                                <select id="seq_edit_edit_select">
+                                    <option id="seq_edit_edit_pitch" value="pitch">Pitch</option>
+                                    <option id="seq_edit_edit_energy" value="energy">Energy</option>
+                                    <option id="seq_edit_edit_emotion" value="emotion">Emotion</option>
+                                </select>
+                            </div>
+                            <div id="editor_amplitude_options">
+                                <span>Amplitude</span>
+                                <input id="setting_editor_audio_amplitude" name="" placeholder="1" type="number" step=0.01 min=0>
+                            </div>
+                            <button id="reset_btn">Reset</button>
+                            <button id="amplify_btn">Amplify</button>
+                            <button id="flatten_btn">Flatten</button>
+                            <button id="jitter_btn">Jitter</button>
+                            <button id="increase_btn">Raise</button>
+                            <button id="decrease_btn">Lower</button>
+                            <div>
+                                <span id="i18n_pacing">Pacing:</span>
+                                <input id="pace_slid" style="width: 100px;" type="range" name="length" min="0.5" step="0.01" max="2" value="1">
+                                <input style="margin-left: 5px;" id="paceNumbInput" type="number" name="paceNumbInput" min="0.5" step="0.1" max="2" value="1">
+                            </div>
+                            <div id="variantElements" style="display: none">
+                                <span id="i18n_variant">Variant</span>
+                                <select id="variant_select"></select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div id="style_embedding_dropdown_container">
+                                <span id="i18n_base_style_emb_is">Base Style:</span>
+                                <select id="style_emb_select" style="width: 200px;" disabled="true">
+                                    <option id="default_opt_style_emb"></option>
+                                </select>
+                                <button id="style_emb_manage_btn" style="margin-left: 5px;">Manage</button>
+                            </div>
+                            <div id="base_lang_options_container">
+                                <span id="i18n_base_lang">Base Language:</span>
+                                <select id="base_lang_select" disabled="true"></select>
+                            </div>
+                            <div>
+                                <span id="i18n_use_SR">Use SR</span>
+                                <input id="useSRCkbx" type="checkbox">
+                            </div>
+                            <div>
+                                <span id="i18n_use_cleanup">Use Clean-up</span>
+                                <input id="useCleanupCkbx" type="checkbox" checked>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div id="voiceSamples"></div>
+                <div style="display: flex;align-items: center;margin-left: 10px;margin-right: 6px;margin-top: 10px;height: 35px;">
+                    <div style="flex-grow: 1;display: flex;margin-right: 5px;">
+                        <input id="voiceSamplesSearch" placeholder="Search output file names..." style="height: 30px;font-size: 14pt;margin-right: 2px;">
+                        <input id="voiceSamplesSearchPrompt" placeholder="Search prompts..." style="height: 30px;font-size: 14pt;">
+                    </div>
+                    <div style="width: 650px;display: flex;align-items: center;justify-content: flex-end;">
+
+                        <button id="main_paginationPrev" style="margin-right: 5px;">Previous</button>
+                        <div style="display: flex;align-items: center;">
+                            <div id="i18n_page_main">Page:</div>
+                            <input id="main_pageNum" type="number" min="1" step="1" style="height: 25px;width: 50px;margin: 10px;">
+                            <div id="main_total_pages" style="margin-right: 10px;"></div>
+                        </div>
+                        <button id="main_paginationNext" style="margin-right: 5px;">Next</button>
+
+                        <button id="voiceRecordsDeleteAllButton" style="margin-right: 10px;">Delete all</button>
+                        <div id="i18n_sortByOutput" style="text-shadow: 0px 0px 1px rgba(255,255,255,0.4);font-weight: bold;margin-right: 5px;">Sort by:</div>
+                        <button id="voiceRecordsOrderByButton" style="margin-left: 5px;margin-right: 5px;">Name</button>
+                        <button id="voiceRecordsOrderByOrderButton">Ascending</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div id="settingsContainer" style="display:none">
+            <div class="modal" style="height: 75vh;width: 60vw">
+                <h2 id="i18n_settings" style="margin-bottom: 0;">Settings</h2>
+                <div style="width: 90%;">
+                    <input id="searchSettingsInput" placeholder="Search settings...">
+                </div>
+                <div id="settingsOptionsContainer" class="flexTable">
+                    <div>
+                        <div id="i18n_setting_gpu">Use GPU (requires CUDA)</div>
+                        <div>
+                            <input id="useGPUCbx" type="checkbox" name="">
+                        </div>
+                    </div>
+                    <div>
+                        <div style="flex-direction: row;justify-content: flex-end;">
+                            <span id="i18n_settings_curr_install">Current installation:</span>
+                            <span id="settings_installation" style="margin-left: 5px;">CPU</span>
+                        </div>
+                        <div>
+                            <button id="setting_change_installation">Change to CPU+GPU</button>
+                        </div>
+                    </div>
+                    <div>
+                        <div id="i18n_setting_autoplay">Autoplay generated audio</div>
+                        <div>
+                            <input id="setting_autoplaygenCbx" type="checkbox" name="">
+                        </div>
+                    </div>
+                    <div>
+                        <div id="i18n_setting_defaulthifi">Default to loading the HiFi vocoder on voice change, if available</div>
+                        <div>
+                            <input id="setting_defaultToHiFi" type="checkbox" name="">
+                        </div>
+                    </div>
+                    <div>
+                        <div id="i18n_setting_keeppacing">Keep the same pacing value on new text generations</div>
+                        <div>
+                            <input id="setting_keepPaceOnNew" type="checkbox" name="">
+                        </div>
+                    </div>
+                    <!-- <div>
+                        <div id="i18n_setting_tooltip">Show the sliders tooltip</div>
+                        <div>
+                            <input id="setting_slidersTooltip" type="checkbox" name="">
+                        </div>
+                    </div> -->
+                    <div>
+                        <div id="i18n_autoregen">Auto regenerate</div>
+                        <div>
+                            <input id="autoplay_ckbx" type="checkbox" name="">
+                        </div>
+                    </div>
+                    <div>
+                        <div id="i18n_showDiscordStatus">Show Discord status</div>
+                        <div>
+                            <div style="display: flex;align-items: center;">
+                                <input id="setting_show_discord_status" type="checkbox" name="">
+                                <button id="openDiscord">Join xVASynth server</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div id="i18n_setting_promptfontsize">Text prompt font size</div>
+                        <div>
+                            <input id="setting_prompt_fontSize" type="number" min="6" step="1">
+                        </div>
+                    </div>
+                    <div>
+                        <div id="i18n_setting_bg_fade">Background image fade opacity</div>
+                        <div>
+                            <input id="setting_bg_gradient_opacity" type="number" min="0" max="1" step="0.1">
+                        </div>
+                    </div>
+                    <div>
+                        <div id="i18n_setting_autoreloadvoices">Auto-reload voices on files changes</div>
+                        <div>
+                            <input id="setting_areload_voices" type="checkbox" name="">
+                        </div>
+                    </div>
+                    <div>
+                        <div id="i18n_setting_keepeditorstate">Keep editor state on voice change</div>
+                        <div>
+                            <input id="setting_keepEditorOnVoiceChange" type="checkbox" name="">
+                        </div>
+                    </div>
+                    <div>
+                        <div id="i18n_setting_pitchrangeoverride">Pitch range over-ride</div>
+                        <div style="flex-direction: row">
+                            <input id="setting_pitchrangeoverrideEnabledCkbx" type="checkbox" name="">
+                            <input id="setting_pitchrangeoverride" type="number" style="margin-right: 25px;" min="1" step="1">
+                        </div>
+                    </div>
+                    <div>
+                        <div id="i18n_setting_outputjson">Output .json (needed for editing)</div>
+                        <div>
+                            <input id="setting_output_json" type="checkbox" name="">
+                        </div>
+                    </div>
+                    <div>
+                        <div id="i18n_setting_seqnumbering">Use sequential numbering for file names</div>
+                        <div>
+                            <input id="setting_output_num_seq" type="checkbox" name="">
+                        </div>
+                    </div>
+
+                    <div>
+                        <div id="i18n_setting_spacepadding">Automatically pad text sequence with spaces (better quality, usually)</div>
+                        <div>
+                            <input id="setting_space_padding" type="checkbox" name="">
+                        </div>
+                    </div>
+
+                    <div>
+                        <div id="i18n_setting_base_speaker">Base app output device</div>
+                        <div>
+                            <select id="setting_base_speaker">
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <div id="i18n_setting_alt_speaker">Alternate output device (ctrl+click play)</div>
+                        <div>
+                            <select id="setting_alt_speaker">
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <div id="i18n_settings_useSound">Use sound for errors</div>
+                        <div>
+                            <input id="setting_use_error_sound" type="checkbox" name="">
+                        </div>
+                    </div>
+                    <div>
+                        <div id="i18n_settings_err_soundfile">Error sound file</div>
+                        <div style="flex-direction: row;">
+                            <input id="setting_error_sound_file" style="width: 80%;">
+                            <button id="setting_errorSoundFileBtn" class="svgButton"></button>
+                        </div>
+                    </div>
+                    <div>
+                        <div id="i18n_settings_showTOTD">Show tip of the day</div>
+                        <div style="flex-direction: row;">
+                            <input id="setting_showTipOfTheDay" type="checkbox" style="width: 50%;">
+                            <button id="setting_btnShowTOTD">Show now</button>
+                        </div>
+                    </div>
+                    <div>
+                        <div id="i18n_settings_unseenTOTD">Only show unseen tips</div>
+                        <div>
+                            <input id="setting_showUnseenTipOfTheDay" type="checkbox">
+                        </div>
+                    </div>
+                    <div>
+                        <div id="i18n_settings_playChangedAudio">Play only changed audio, when regenerating</div>
+                        <div>
+                            <input id="setting_playChangedAudio" type="checkbox">
+                        </div>
+                    </div>
+                    <div>
+                        <div id="i18n_settings_arpabetPagination">ARPAbet pagination size</div>
+                        <div>
+                            <input id="setting_arpabet_paginationSize" type="number" value="200">
+                        </div>
+                    </div>
+                    <div>
+                        <div id="i18n_settings_max_filename_chars">Maximum filename characters (trimming for maximum windows filepath length)</div>
+                        <div>
+                            <input id="setting_max_filename_chars" type="number" placeholder="70" min="20">
+                        </div>
+                    </div>
+                    <div>
+                        <div id="i18n_settings_clear_text_after_synth">Clear the text input after generation</div>
+                        <div>
+                            <input id="setting_clear_text_after_synth" type="checkbox">
+                        </div>
+                    </div>
+                    <div>
+                        <div id="i18n_settings_model_version_highlight">Highlight only models with at least this version</div>
+                        <div style="flex-direction: row">
+                            <input id="setting_do_model_version_highlight" type="checkbox">
+                            <input id="setting_model_version_highlight" style="margin-right: 25px;" type="number" min="1" step="0.1" value="2">
+                        </div>
+                    </div>
+                    <div>
+                        <div id="i18n_setting_output_files_pagination_size">Output records pagination size</div>
+                        <div>
+                            <input id="setting_output_files_pagination_size" type="number" value="25">
+                        </div>
+                    </div>
+
+                    <hr style="width:100%">
+
+                    <div>
+                        <div id="i18n_setting_external_edit">External program for editing audio</div>
+                        <div style="flex-direction: row">
+                            <input id="setting_external_audio_editor" name="" placeholder="C:/Program Files (x86)/Audacity/audacity.exe" style="width: 80%">
+                            <button id="setting_externalEditorButton" class="svgButton"></button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div id="i18n_setting_ffmpeg">Use ffmpeg post-processing</div>
+                        <div>
+                            <input id="setting_audio_ffmpeg" name="" type="checkbox">
+                        </div>
+                    </div>
+                    <!-- <div>
+                        <div id="i18n_setting_ffmpeg_preapply">(recommended) Pre-apply ffmpeg effects to the preview sample</div>
+                        <div>
+                            <input id="setting_audio_ffmpeg_preview" name="" type="checkbox">
+                        </div>
+                    </div> -->
+                    <div>
+                        <div id="i18n_setting_ffmpeg_format">Audio format (wav, mp3, etc)</div>
+                        <div>
+                            <input id="setting_audio_format" name="" placeholder="wav">
+                        </div>
+                    </div>
+                    <div>
+                        <div id="i18n_setting_ffmpeg_hz">Audio sample rate (Hz)</div>
+                        <div>
+                            <input id="setting_audio_hz" type="number" placeholder="22050">
+                        </div>
+                    </div>
+                    <div>
+                        <div id="i18n_setting_ffmpeg_padstart">Silence padding start (ms)</div>
+                        <div>
+                            <input id="setting_audio_pad_start" name="" placeholder="0">
+                        </div>
+                    </div>
+                    <div>
+                        <div id="i18n_setting_ffmpeg_padend">Silence padding end (ms)</div>
+                        <div>
+                            <input id="setting_audio_pad_end" name="" placeholder="0">
+                        </div>
+                    </div>
+                    <div>
+                        <div id="i18n_setting_ffmpeg_pitchMult">Pitch multiplier</div>
+                        <div>
+                            <input id="setting_audio_pitchMult" name="" type="number" placeholder="1" min="0">
+                        </div>
+                    </div>
+                    <div>
+                        <div id="i18n_setting_ffmpeg_tempo">Tempo</div>
+                        <div>
+                            <input id="setting_audio_tempo" name="" type="number" placeholder="1" min="0">
+                        </div>
+                    </div>
+                    <div>
+                        <div id="i18n_setting_ffmpeg_deessing">De-essing</div>
+                        <div>
+                            <input id="setting_audio_deessing" name="" type="number" placeholder="0.1" min="0" max="1">
+                        </div>
+                    </div>
+                    <div>
+                        <div id="i18n_setting_ffmpeg_bitdepth">Audio bit depth</div>
+                        <div>
+                            <select id="setting_audio_bitdepth">
+                                <option value="pcm_s16le">pcm_s16le</option>
+                                <option value="pcm_s32le">pcm_s32le</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <div id="i18n_setting_useNR">Use noise reduction (recommended when using SR)</div>
+                        <div>
+                            <input id="setting_audio_useNR" name="" type="checkbox">
+                        </div>
+                    </div>
+                    <div>
+                        <div id="i18n_setting_ffmpeg_nr">Noise Reduction (dB)</div>
+                        <div>
+                            <input id="setting_audio_nr" name="" type="number" placeholder="5" min="0.01" max="97" step="0.1">
+                        </div>
+                    </div>
+                    <div>
+                        <div id="i18n_setting_ffmpeg_nf">Noise Floor (dB)</div>
+                        <div>
+                            <input id="setting_audio_nf" name="" type="number" placeholder="-20" min="-80" max="-20" step="1">
+                        </div>
+                    </div>
+                    <div>
+                        <div id="i18n_setting_ffmpeg_amplitude">Amplitude multiplier</div>
+                        <div>
+                            <input id="setting_audio_amplitude" name="" placeholder="1" type="number" step=0.01 min=0>
+                        </div>
+                    </div>
+                    <div>
+                        <div id="i18n_settings_doubleAmpDisplay">Also display amplitude setting in the editor</div>
+                        <div>
+                            <input id="setting_show_editor_ffmpegamplitude" name="" type="checkbox">
+                        </div>
+                    </div>
+
+
+
+                    <hr style="width:100%">
+                    <div>
+                        <div id="i18n_setting_batch_json">Output .json editor data for batch lines</div>
+                        <div>
+                            <input id="setting_batch_json" type="checkbox" name="">
+                        </div>
+                    </div>
+                    <!-- <div>
+                        <div id="i18n_setting_batch_fastmode">Use fast mode for Batch synth</div>
+                        <div>
+                            <input id="setting_batch_fastmode" type="checkbox" name="">
+                        </div>
+                    </div>
+                    <div>
+                        <div id="i18n_settings_batch_mp_max_parallelizations">Maximum parallelizations of lines for Fast mode</div>
+                        <div>
+                            <input id="setting_batch_maxFastModeParallelizations" type="number" placeholder="1000" min="1">
+                        </div>
+                    </div> -->
+                    <div>
+                        <div id="i18n_setting_batch_multip">Use multi-processing for batch mode ffmpeg output</div>
+                        <div>
+                            <input id="setting_batch_multip" type="checkbox" name="">
+                        </div>
+                    </div>
+                    <div>
+                        <div id="i18n_setting_batch_multip_count">Number of processes (0 for cpu count -1)</div>
+                        <div>
+                            <input id="setting_batch_multip_count" type="number" placeholder="0" min="0">
+                        </div>
+                    </div>
+                    <div>
+                        <div id="i18n_settings_csv_delimiter">CSV delimiter</div>
+                        <div>
+                            <input id="setting_batch_delimiter">
+                        </div>
+                    </div>
+                    <div>
+                        <div id="i18n_settings_paginationSize">Pagination size</div>
+                        <div>
+                            <input id="setting_batch_paginationSize" type="number">
+                        </div>
+                    </div>
+                    <div>
+                        <div id="i18n_settings_groupVoiceID">Group voices by voiceId and vocoder in preprocessing to minimize model switching</div>
+                        <div>
+                            <input id="setting_batch_doGrouping" type="checkbox">
+                        </div>
+                    </div>
+                    <div>
+                        <div id="i18n_settings_groupVocoder">Also do a secondary group by the vocoder - can take long to do with big files (100k+ lines)</div>
+                        <div>
+                            <input id="setting_batch_doVocoderGrouping" type="checkbox">
+                        </div>
+                    </div>
+
+
+
+                    <hr style="width:100%">
+
+                    <div>
+                        <div id="i18n_setting_microphone">Microphone</div>
+                        <div>
+                            <select id="setting_mic_selection">
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- <div>
+                        <div id="i18n_setting_autogeneratevoice">Automatically generate voice</div>
+                        <div>
+                            <input id="setting_s2s_autogenerate" type="checkbox" name="">
+                        </div>
+                    </div> -->
+
+                    <div style="min-height: 65px;display: none;">
+                        <div id="i18n_setting_s2s_bgnoise">Remove background noise from microphone. You need to record a background noise clip first. (requires sox >= v14.4.2) </div>
+                        <div>
+                            <div style="display: flex;align-items: center;">
+                                <input style="margin-right: 20px;" id="setting_s2s_removeNoise" type="checkbox" name="">
+                                <button id="s2s_settingsRecNoiseBtn">Record noise</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div id="i18n_vc_strength">Voice Conversion strength (1-3 recommended)</div>
+                        <div>
+                            <input id="setting_s2s_vcstrength" name="" placeholder="2" type="number" step=0.1>
+                        </div>
+                    </div>
+
+                    <!-- <div>
+                        <div id="i18n_setting_s2s_bgnoise_strength">Noise removal strength (0.2-0.3 recommended)</div>
+                        <div>
+                            <input id="setting_s2s_noiseRemStrength" name="" placeholder="0.25" type="number" step=0.01 min=0 max=1>
+                        </div>
+                    </div> -->
+
+
+
+
+                    <hr style="width:100%">
+                    <div>
+                        <div>WaveGlow</div>
+                        <div style="flex-direction: row;">
+                            <input id="setting_256waveglow_path" style="width: 80%">
+                            <button id="setting_waveglowPathButton" class="svgButton"></button>
+                        </div>
+                    </div>
+                    <div>
+                        <div>BIG WaveGlow</div>
+                        <div style="flex-direction: row;">
+                            <input id="setting_bigwaveglow_path" style="width: 80%">
+                            <button id="setting_bigwaveglowPathButton" class="svgButton"></button>
+                        </div>
+                    </div>
+                    <div id="setting_models_path_container" style="display: none">
+                        <div id="setting_models_path_label"></div>
+                        <div style="flex-direction: row;">
+                            <input id="setting_models_path_input" style="width:80%">
+                            <button id="setting_modelsPathButton" class="svgButton"></button>
+                        </div>
+                    </div>
+                    <div id="setting_out_path_container" style="display: none">
+                        <div id="setting_out_path_label"></div>
+                        <div style="flex-direction: row;">
+                            <input id="setting_out_path_input" style="width:80%">
+                            <button id="setting_outPathButton" class="svgButton"></button>
+                        </div>
+                    </div>
+                </div>
+                <div id="resetBtnsContainer" style="width:100%;height: 60px;">
+                    <button style="padding: 0px;" id="reset_settings_btn">Reset Settings</button>
+                    <button style="padding: 0px;" id="reset_paths_btn">Reset Paths</button>
+                </div>
+                <div id="app_version">v1.0.0</div>
+            </div>
+        </div>
+        <div id="updatesContainer" style="display:none">
+            <div class="modal">
+                <div id="updatesVersions">This app version: 1.0.0</div>
+                <div id="i18n_updateslog">Updates log:</div>
+
+                <div id="updatesLogList">
+
+                </div>
+
+                <button id="checkUpdates">Check for updates now</button>
+            </div>
+        </div>
+
+        <div id="pluginsContainer" style="display:none">
+            <div class="modal" style="width: 90vw">
+                <h2 id="i18n_plugins">Plugins</h2>
+                <div id="i18n_plugins_trusted">Download plugins only from trusted sources</div>
+                <div id="batch_container">
+                    <div id="batch_intro">
+                    </div>
+                    <div id="plugins_main" style="display: block;">
+                        <div id="pluginsRecordsHeader">
+                            <div id="i18n_pluginsh_enabled">Enabled</div>
+                            <div id="i18n_pluginsh_order">Order</div>
+                            <div id="i18n_pluginsh_name">Plugin Name</div>
+                            <div id="i18n_pluginsh_author">Author</div>
+                            <div id="i18n_pluginsh_endorse">Endorse</div>
+                            <div id="i18n_pluginsh_version">Plugin Version</div>
+                            <div id="i18n_pluginsh_type">Type</div>
+                            <div id="i18n_pluginsh_minv">Min App Version</div>
+                            <div id="i18n_pluginsh_maxv">Max App Version</div>
+                            <div id="i18n_pluginsh_description">Description</div>
+                            <div id="i18n_pluginsh_pluginid">Plugin Id</div>
+                        </div>
+                        <div id="pluginsRecordsContainer">
+                        </div>
+                    </div>
+
+                    <div id="plugins_opts">
+                        <button disabled="true" id="plugins_moveUpBtn">Move Up</button>
+                        <button disabled="true" id="plugins_moveDownBtn">Move Down</button>
+                        <button disabled="true" id="plugins_applyBtn">Apply</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+
+        <div id="infoContainer" style="display:none">
+            <div class="modal">
+                <h2 id="i18n_appinfo">App info</h2>
+
+                <span>
+                    <span id="i18n_appinfo_instr_1">For instructions on how to use the app, please watch</span>
+                    <a id="i18n_appinfo_instr_2" style="display:inline" href="https://www.youtube.com/watch?v=W-9SFoNuTtM" target="_blank">this short video</a>
+                    <span id="i18n_appinfo_instr_3">showcase on YouTube.</span>
+                </span>
+                <span>
+                    <span id="i18n_appinfo_instr_4">You can also view and/or contribute to the community guide on GitHub </span>
+                    <a id="i18n_appinfo_instr_5" href="https://github.com/DanRuta/xvasynth-community-guide" target="_blank">here</a><span>.</span>
+                </span>
+
+                <hr>
+                <div id="i18n_keyboard_reference">Keyboard shortcuts reference</div>
+                <div class="flexTable" style="overflow-y: auto;">
+                    <div>
+                        <div id="i18n_keyboard_enter">Enter</div>
+                        <div id="i18n_keyboard_enter_do">Generate the audio</div>
+                    </div>
+                    <div>
+                        <div id="i18n_keyboard_escape">Escape</div>
+                        <div id="i18n_keyboard_escape_do">Close modals and menus</div>
+                    </div>
+                    <div>
+                        <div id="i18n_keyboard_space">Space</div>
+                        <div id="i18n_keyboard_space_do">Bring focus to the input textarea</div>
+                    </div>
+                    <div>
+                        <div id="i18n_keyboard_ctrls">Ctrl+S</div>
+                        <div id="i18n_keyboard_ctrls_do">Keep sample</div>
+                    </div>
+                    <div>
+                        <div id="i18n_keyboard_ctrlshifts">Ctrl+Shift-S</div>
+                        <div id="i18n_keyboard_ctrlshifts_do">Keep sample (but with naming prompt)</div>
+                    </div>
+                    <div>
+                        <div id="i18n_keyboard_yn">Y/N</div>
+                        <div id="i18n_keyboard_yn_do">Yes/No options in prompt modals</div>
+                    </div>
+                    <div>
+                        <div id="i18n_keyboard_lr">Left/Right arrows</div>
+                        <div id="i18n_keyboard_lr_do">Move left/right along which letter is focused</div>
+                    </div>
+                    <div>
+                        <div id="i18n_keyboard_shift_lr">Shift-Left/Right arrows</div>
+                        <div id="i18n_keyboard_shift_lr_do">Create multi-letter selection range</div>
+                    </div>
+                    <div>
+                        <div id="i18n_keyboard_ctrl_lr">Ctrl+Left/Right arrows</div>
+                        <div id="i18n_keyboard_ctrl_lr_do">Move the sequence-wide pacing slider</div>
+                    </div>
+                    <div>
+                        <div id="i18n_keyboard_alt_ctrl_lr">Alt-Ctrl-Left/Right arrows</div>
+                        <div id="i18n_keyboard_alt_ctrl_lr_do">Adjust width of letter selection</div>
+                    </div>
+                    <div>
+                        <div id="i18n_keyboard_ctrla">Ctrl+A</div>
+                        <div id="i18n_keyboard_ctrla_do">Select all editor sequence letters</div>
+                    </div>
+                    <div>
+                        <div id="i18n_keyboard_ud">Up/Down arrows</div>
+                        <div id="i18n_keyboard_ud_do">Move pitch up/down for the letter(s) selected</div>
+                    </div>
+                    <div>
+                        <div id="i18n_keyboard_ctrl_ud">Ctrl+Up/Down arrows</div>
+                        <div id="i18n_keyboard_ctrl_ud_do">Pitch increase/decrease buttons</div>
+                    </div>
+                    <div>
+                        <div id="i18n_keyboard_ctrlshiftud">Ctrl+Shift+Up/Down arrows</div>
+                        <div id="i18n_keyboard_ctrlshiftud_do">Pitch amplify/flatten buttons</div>
+                    </div>
+                    <div>
+                        <div id="i18n_keyboard_ctrlenter">Ctrl+Enter</div>
+                        <div id="i18n_keyboard_ctrlenter_do">Manually re-generate a line</div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+        <div id="patreonContainer" style="display:none">
+            <div class="modal">
+                <h2 id="i18n_support">Support</h2>
+
+                <!-- <span id="i18n_support_link">You can support 'xVASynth' development on patreon</span> -->
+
+                <!-- <span id="patreonButton" href="https://www.patreon.com/bePatron?u=48461563" data-patreon-widget-type="become-patron-button">
+                    <svg style="height: 1rem;width: 1rem;" viewBox="0 0 569 546" xmlns="http://www.w3.org/2000/svg"><g><circle cx="362.589996" fill="#ffffff" cy="204.589996" data-fill="1" id="Oval" r="204.589996"></circle><rect fill="#ffffff" data-fill="2" height="545.799988" id="Rectangle" width="100" x="0" y="0"></rect></g></svg>
+                    <span style="width:5px"></span>
+                    Become a Patron!
+                </span> -->
+                <!-- <br> -->
+                <!-- <div>Search: xVASynth patreon</div> -->
+                <!-- <br><hr><br> -->
+                <span id="i18n_support_thanks">Special thanks:</span>
+
+                <span id="creditsList" style="overflow-y: auto;width: 100%;"></span>
+            </div>
+        </div>
+        <div id="gameSelectionContainer" style="display:none">
+            <div class="modal">
+                <div>
+                    <input id="searchGameInput" placeholder="Search games...">
+                    <div id="noAssetFilesFoundMessage" style="display:none;margin-top: 10px;margin-bottom: -10px;">Can't see all games' images? Get some example asset files from <a href="https://drive.google.com/drive/folders/1ktxlAsx25ZWR1LwXcuxwB69cRb_2Ol6N?usp=sharing">here</a> and place in <a id="assetDirLink" href="#">here</a></div>
+                </div>
+                <div id="gameSelectionListContainer"></div>
+            </div>
+        </div>
+        <div id="EULAContainer" style="display:none">
+            <div class="modal">
+                <div id="splash_screen1" style="flex-grow: 1;display: flex;
+    flex-direction: column;justify-content: space-around;width: 100%;">
+                    <div>
+                        <h1>Welcome to xVASynth</h1>
+                        <div style="margin-bottom: 30px;">Watch the videos below for a quick introduction to the app</div>
+                    </div>
+                    <style>
+                        .video {
+                          aspect-ratio: 16 / 9;
+                          width: 45%;
+                        }
+                    </style>
+                    <div style="flex-grow: 1;align-items: center;display: flex;   justify-content: center;">
+                        <iframe class="video" src="https://www.youtube.com/embed/5u4xpI-cAd8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                        <iframe style="margin-left:5px;" class="video" src="https://www.youtube.com/embed/W-9SFoNuTtM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    </div>
+                    <div>
+                        <button id="splashNextButton1">Next</button>
+                    </div>
+                </div>
+                <div id="splash_screen2" style="display: none;flex-direction: column;align-items: center;">
+                    <h1>End User License Agreement</h1>
+                    <div>
+                        <h2>End-User License Agreement (EULA) of <span class="app_name">xVASynth</span></h2>
+
+                        <p>This End-User License Agreement ("EULA") is a legal agreement between you and <span class="company_name">Dan Ruta</span>. Our EULA was created by <a href="https://www.eulatemplate.com">EULA Template</a> for <span class="app_name">xVASynth</span>.</p></p>
+
+                        <p>This EULA agreement governs your acquisition and use of our <span class="app_name">xVASynth</span> software ("Software") directly from <span class="company_name">Dan Ruta</span> or indirectly through a <span class="company_name">Dan Ruta</span> authorized reseller or distributor (a "Reseller"). Our Privacy Policy was created by <a href="https://www.generateprivacypolicy.com/">the Privacy Policy Generator</a>.</p>
+
+                        <p>Please read this EULA agreement carefully before completing the installation process and using the <span class="app_name">xVASynth</span> software. It provides a license to use the <span class="app_name">xVASynth</span> software and contains warranty information and liability disclaimers.</p>
+
+                        <p>If you register for a free trial of the <span class="app_name">xVASynth</span> software, this EULA agreement will also govern that trial. By clicking "accept" or installing and/or using the <span class="app_name">xVASynth</span> software, you are confirming your acceptance of the Software and agreeing to become bound by the terms of this EULA agreement.</p>
+
+                        <p>If you are entering into this EULA agreement on behalf of a company or other legal entity, you represent that you have the authority to bind such entity and its affiliates to these terms and conditions. If you do not have such authority or if you do not agree with the terms and conditions of this EULA agreement, do not install or use the Software, and you must not accept this EULA agreement.</p>
+
+                        <p>This EULA agreement shall apply only to the Software supplied by <span class="company_name">Dan Ruta</span> herewith regardless of whether other software is referred to or described herein. The terms also apply to any <span class="company_name">Dan Ruta</span> updates, supplements, Internet-based services, and support services for the Software, unless other terms accompany those items on delivery. If so, those terms apply.</p>
+
+                        <h3>License Grant</h3>
+
+                        <p><span class="company_name">Dan Ruta</span> hereby grants you a personal, non-transferable, non-exclusive licence to use the <span class="app_name">xVASynth</span> software on your devices in accordance with the terms of this EULA agreement.</p>
+
+                        <p>You are permitted to load the <span class="app_name">xVASynth</span> software (for example a PC, laptop, mobile or tablet) under your control. You are responsible for ensuring your device meets the minimum requirements of the <span class="app_name">xVASynth</span> software.</p>
+
+                        <p>You are not permitted to:</p>
+
+                        <ul>
+                            <li>Edit, alter, modify, adapt, translate or otherwise change the whole or any part of the Software nor permit the whole or any part of the Software to be combined with or become incorporated in any other software, nor decompile, disassemble or reverse engineer the Software or attempt to do any such things</li>
+                            <li>Reproduce, copy, distribute, resell or otherwise use the Software for any commercial purpose</li>
+                            <li>Allow any third party to use the Software on behalf of or for the benefit of any third party</li>
+                            <li>Use the Software in any way which breaches any applicable local, national or international law</li>
+                            <li>use the Software for any purpose that <span class="company_name">Dan Ruta</span> considers is a breach of this EULA agreement</li>
+                            <li style="color:red">Label xVASynth output as being audio spoken by any real person. Make sure to obviously clarify where possible/appropriate that the audio is software generated.</li>
+                            <li style="color:red">Use any xVASynth output for hurtful, offensive, demeaning, or any other negative effect, towards any real person. Be nice.</li>
+                            <li style="color:red">Use xVASynth in a commercial setting</li>
+                        </ul>
+
+                        <h3>Intellectual Property and Ownership</h3>
+
+                        <p><span class="company_name">Dan Ruta</span> shall at all times retain ownership of the Software as originally downloaded by you and all subsequent downloads of the Software by you. The Software (and the copyright, and other intellectual property rights of whatever nature in the Software, including any modifications made thereto) are and shall remain the property of <span class="company_name">Dan Ruta</span>.</p>
+
+                        <p><span class="company_name">Dan Ruta</span> reserves the right to grant licences to use the Software to third parties.</p>
+
+                        <h3>Termination</h3>
+
+                        <p>This EULA agreement is effective from the date you first use the Software and shall continue until terminated. You may terminate it at any time upon written notice to <span class="company_name">Dan Ruta</span>.</p>
+
+                        <p>It will also terminate immediately if you fail to comply with any term of this EULA agreement. Upon such termination, the licenses granted by this EULA agreement will immediately terminate and you agree to stop all access and use of the Software. The provisions that by their nature continue and survive will survive any termination of this EULA agreement.</p>
+
+                        <h3>Governing Law</h3>
+
+                        <p>This EULA agreement, and any dispute arising out of or in connection with this EULA agreement, shall be governed by and construed in accordance with the laws of <span class="country">gb</span>.</p>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="EULA_accept_ckbx">
+                        <span id="i18n_eula_accept">I accept the EULA</span>
+                    </div>
+
+                    <button id="EULA_closeButon">Close</button>
+                </div>
+            </div>
+        </div>
+        <div id="batchGenerationContainer" style="display:none;">
+            <div class="modal" style="height: 87vh;width: 97vw;padding-bottom: 0;">
+                <h2 id="i18n_batch_synthesis" style="margin-top: -10px;margin-bottom: 10px;">Batch synthesis</h2>
+                <div id="batch_container" style="margin-top: 0;margin-bottom: 0;">
+                    <div id="batch_intro">
+                        <div>
+                            <div style="display: flex;align-items: center;justify-content: center;">
+                                <span id="i18n_batchsize">Batch size:</span>
+                                <input type="number" id="batch_batchSizeInput" value="1" placeholder="1" min="1" step="1">
+                            </div>
+                            <div>
+                                <span id="i18n_vramUsage">VRAM usage:</span>
+                                <span id="vramUsage">22.5/24.0 GB (87%)</span>
+                            </div>
+                        </div>
+                        <div></div>
+                        <div style="flex-grow: 1;display: flex;align-items: center;justify-content: flex-end;">
+                            <div>
+                                <div style="height: 40px;display: flex;justify-content: center;align-items: center;">
+                                    <div><button id="batch_paginationPrev">Previous</button></div>
+                                    <div style="display: flex;align-items: center;">
+                                        <div id="i18n_page">Page:</div>
+                                        <input id="batch_pageNum" type="number" min="1" step="1" style="height: 25px;width: 50px;margin: 10px;">
+                                        <div id="batch_total_pages" style="margin-right: 10px;"></div>
+                                    </div>
+                                    <div><button id="batch_paginationNext">Next</button></div>
+                                </div>
+                            </div>
+                            <button id="batch_instructions_btn">Instructions</button>
+                            <button id="batch_generateSample">Generate Sample</button>
+                        </div>
+                    </div>
+                    <div id="batch_main">
+                        <span id="batchDropZoneNote">Drag and drop .csv files here</span>
+                        <div id="batchRecordsHeader" style="display: none;">
+                            <div id="i18n_batchh_num">#</div>
+                            <div id="i18n_batchh_status">Status</div>
+                            <div id="i18n_batchh_actions">Actions</div>
+                            <div id="i18n_batchh_voice">Voice</div>
+                            <div id="i18n_batchh_text">Text or <i>VC content</i></div>
+                            <div id="i18n_batchh_game">Game</div>
+                            <div id="i18n_batchh_outpath">Out Path</div>
+                            <div id="i18n_batchh_base_lang">Base lang</div>
+                            <div id="i18n_batchh_vc_style">VC style</div>
+                            <div id="i18n_batchh_vocoder">Vocoder</div>
+                            <div id="i18n_batchh_pacing">Pacing</div>
+                            <div id="i18n_batchh_pitch_amp">Pitch Amp.</div>
+                        </div>
+                        <div id="batchRecordsContainer">
+
+                        </div>
+                    </div>
+                    <div id="batch_footer" style="padding-bottom: 0;padding-top: 0;">
+                        <div style="max-height: 35px;display: flex;justify-content: center;margin-top: 5px;">
+                            <input type="text" id="batch_outputFolderInput" placeholder="Complete absolute directory path to output">
+                            <div style="display: none;" id="batch_progressBar"></div>
+                        </div>
+                        <div id="batch_ETA_container">
+                            <div id="batch_eta_lps"></div>
+                            <div id="i18n_batchLPS">lines per second</div>
+                            <div>|</div>
+                            <div id="i18n_etaFinished">Estimated time until finished:</div>
+                            <div id="batch_eta_time"></div>
+                            <div>|</div>
+                            <div id="batch_eta_eta"></div>
+                        </div>
+                        <div id="batch_out_opts" style="padding-top: 0;padding-bottom: 0;">
+                            <span></span>
+                            <span id="batch_clearDirOpts">
+                                <input type="checkbox" id="batch_clearDirFirstCkbx">
+                                <span id="i18n_batch_cleardir">Clear out the directory first</span>
+                            </span>
+                            <span id="batch_skipExistingOpts">
+                                <input type="checkbox" id="batch_skipExisting">
+                                <span id="i18n_batch_skip">Skip existing output</span>
+                            </span>
+                            <span id="batch_useSR">
+                                <input type="checkbox" id="batch_useSRCkbx">
+                                <span id="i18n_batch_useSR">Use SR</span>
+                            </span>
+                            <span id="batch_useCleanup">
+                                <input type="checkbox" id="batch_useCleanupCkbx">
+                                <span id="i18n_batch_useCleanUp">Use Clean-up</span>
+                            </span>
+                            <span id="batch_outputNumericallyOpts">
+                                <input type="checkbox" id="batch_outputNumerically">
+                                <span id="i18n_batch_outputNumerically">Output file names in numerical order</span>
+                            </span>
+                            <span style="display:none" id="batch_progressItems">
+                                <span id="batch_progressNotes">currently doing...</span>
+                            </span>
+                        </div>
+                        <div>
+                            <button style="display: none;" id="batch_synthesizeBtn">Synthesize Batch</button>
+                            <button style="display: none;" id="batch_pauseBtn">Pause</button>
+                            <button style="display: none;" id="batch_stopBtn">Stop</button>
+                            <button style="display: none;" id="batch_clearBtn">Clear</button>
+                            <button id="batch_openDirBtn">Open Output</button>
+                            <button id="batch_saveToCSV">Save to CSV</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="nexusContainer" style="display:none">
+            <div class="modal">
+                <div id="nexusNameDisplayContainer" style="opacity: 0;height: 30px;;display: flex;align-items: center;width: 100%;justify-content: flex-end;padding-right: 40px;">
+                    <div style="margin-right: 10px;"><span id="nexusNameDisplay">Logged in as: </span><span id="nexusUserName"></span></div>
+                    <div id="nexusAvatar"></div>
+                </div>
+                <div style="display: flex;height: 60vh;">
+                    <div style="width: 15vw;margin-left: 2vw;min-width: 250px;">
+                        <div id="i18n_games" style="display: flex;justify-content:center;align-items: center;height: 5vh;font-size: 16pt;">Games</div>
+                        <div style="background: rgb(75,75,75);overflow-y: auto;width: calc(100% - 10px);height: calc(55vh - 45px);padding-bottom: 10px;padding-right: 5px;padding-left: 5px;" id="nexusGamesList"></div>
+                        <div style="height: 40px;">
+                            <button id="nexusGamesListEnableAllBtn">Enable all</button>
+                            <button id="nexusGamesListDisableAllBtn">Disable all</button>
+                        </div>
+                    </div>
+                    <div style="width: 70vw;display: flex;flex-direction: column;align-items: center;">
+                        <div style="display: flex;justify-content: space-between;align-items: center;height: 5vh;font-size: 16pt;width: 95%;">
+                            <div id="i18n_models">Models</div>
+                            <div style="width: 60vw;display: flex;align-items: center;justify-content: flex-end;">
+                                <input id="nexusSearchBar" placeholder="Search voices..." style="height: 25px;width: calc(100% - 600px);">
+                                <span id="i18n_showNewUpdated" style="font-size: 12pt;margin-left: 5px;margin-right: 5px;">Show only new/updated</span>
+                                <input id="nexusOnlyNewUpdatedCkbx" type="checkbox">
+                                <button id="nexusCheckNow">Check now</button>
+                                <button id="nexusManageReposButton">Manage repos</button>
+                                <button id="nexusLogInButton">Log in</button>
+                            </div>
+                        </div>
+                        <div style="display: block;background: rgb(75,75,75);overflow-y: auto;width: 95%;height: 55vh;" id="nexus_main">
+                            <div id="nexusRecordsHeader">
+                                <div id="i18n_nexush_actions">Actions</div>
+                                <div id="i18n_nexush_game" style="text-decoration: underline;cursor: pointer;">Game</div>
+                                <div id="i18n_nexush_name" style="cursor: pointer;">Name</div>
+                                <div id="i18n_nexush_author" style="cursor: pointer;">Author</div>
+                                <div id="i18n_nexush_version" style="cursor: pointer;">Version</div>
+                                <div id="i18n_nexush_date" style="cursor: pointer;">Date</div>
+                                <div id="i18n_nexush_type" style="cursor: pointer;">Type</div>
+                                <div id="i18n_nexush_notes">Notes</div>
+                            </div>
+                            <div id="nexusRecordsContainer">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="width: 83vw;display: flex;justify-content: center;">
+                    <div style="width: 40%;display: flex;font-size: 16pt;">
+                        <div style="width: 50%;display: flex;align-items: center;">
+                            <div id="i18n_nexusDownloading" style="margin-right: 10px;">Downloading:</div>
+                            <div id="nexusDownloadingCount">0</div>
+                        </div>
+                        <div style="width: 50%;display: flex;align-items: center;">
+                            <div id="i18n_nexusInstalling" style="margin-right: 10px;">Installing:</div>
+                            <div id="nexusInstallingCount">0</div>
+                        </div>
+                        <div style="width: 50%;display: flex;align-items: center;">
+                            <div id="i18n_nexusFinished" style="margin-right: 10px;">Finished:</div>
+                            <div id="nexusFinishedCount">0</div>
+                        </div>
+                    </div>
+                    <div style="height:50px;overflow-y: auto;flex-grow: 1;background: rgb(75,75,75);text-align: left;" id="nexusDownloadLog"></div>
+                    <div style="width: 150px;display: flex;justify-content: flex-end;">
+                        <button id="nexusDownloadAllBtn">Download All</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="nexusReposContainer" style="display:none">
+            <div class="modal" style="width: 80vw;">
+                <h1 id="i18n_repositories">Repositories</h1>
+
+                <div id="nexusReposMenuContainer" style="display: flex;">
+                    <!-- Left -->
+                    <div style="width: 37vw;margin-right: 30px;">
+
+                        <div id="nexusSearchControls">
+                            <span id="i18n_nexusRepos_mod_name" style="margin-left: 0;">Mod name</span>
+                            <input id="nexusReposSearchBar" style="flex-grow: 1;width: auto;" placeholder="Mod title">
+                            <span id="i18n_nexusRepos_game">Game:</span>
+                            <select id="nexusAllGamesSelect" style="width: 100px;">
+                                <option id="i18n_nexusRepos_all" value="">All</option>
+                            </select>
+                            <button id="searchNexusButton" style="margin-right: 0;">Search Nexus</button>
+
+                        </div>
+
+                        <div id="nexus_search_main" style="width: 100%;display: block;">
+                            <div id="nexusSearchHeader">
+                                <div id="i18n_nexus_searchh_add">Add</div>
+                                <div id="i18n_nexus_searchh_link">Link</div>
+                                <div id="i18n_nexus_searchh_game">Game</div>
+                                <div id="i18n_nexus_searchh_name">Name</div>
+                                <div id="i18n_nexus_searchh_author">Author</div>
+                                <div id="i18n_nexus_searchh_endorsements">Endorsements</div>
+                                <div id="i18n_nexus_searchh_downloads">Downloads</div>
+                            </div>
+                            <div id="nexusSearchContainer">
+                                <span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right -->
+                    <div style="width: 37vw;">
+
+                        <div id="i18n_nexusRepos_modReposUsed" style="height: 45px;display: flex;align-items: center;font-size: 16pt;">Mod repos used</div>
+
+                        <div id="nexus_reposUsed_main" style="width: 100%;display: block;">
+                            <div id="nexusReposUsedHeader">
+                                <div id="i18n_nexus_reposUsedh_enabled"></div>
+                                <div id="i18n_nexus_reposUsedh_link">Link</div>
+                                <div id="i18n_nexus_reposUsedh_game">Game</div>
+                                <div id="i18n_nexus_reposUsedh_name">Name</div>
+                                <div id="i18n_nexus_reposUsedh_author">Author</div>
+                                <div id="i18n_nexus_reposUsedh_endorsements">Endorsements</div>
+                                <div id="i18n_nexus_reposUsedh_downloads" style="display: none;">Downloads</div>
+                                <div id="i18n_nexus_reposUsedh_remove" style="display: none;">Remove</div>
+                            </div>
+                            <div id="nexusReposUsedContainer">
+                                <span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+
+        <div id="embeddingsContainer" style="display:none">
+            <div class="modal" style="flex-direction: column;height: calc(85vh + 30px);">
+
+                <h2 id="i18n_vembVis" style="margin-top: 10px;margin-bottom: 0px;">Voice embeddings visualiser</h2>
+                <div style="display: flex;flex-direction: row;justify-content: center;align-items: center;margin-top: 0;">
+
+                    <!-- left -->
+                    <div style="height: calc(70vh + 100px);width: 20vw;margin: 10px;">
+                        <div id="i18n_games_vemb" class="sectionTitle" style="height: 50px;display: flex;align-items: flex-end;margin-bottom: 10px;margin-top: -10px;">Games</div>
+                        <div id="embeddingsGamesListContainer" class="listContainer"></div>
+                        <div id="i18n_voices" class="sectionTitle" style="margin-top: 30px;margin-bottom: 10px;">Voices</div>
+                        <div id="embeddings_main" class="listContainer" style="display: block;width: 100%;height: 32vh;">
+
+                            <div id="embeddingsRecordsHeader">
+                                <div id=""></div>
+                                <div id="i18n_vembShow">Show</div>
+                                <div id="i18n_vembName">Name</div>
+                                <div id="i18n_vembGame">Game</div>
+                                <div id="i18n_vembGender">Gender</div>
+                            </div>
+                            <div id="embeddingsRecordsContainer">
+                            </div>
+
+                        </div>
+                        <div style="height: 50px;">
+                            <input id="embeddingsSearchBar" placeholder="Search voices..." style="height: 30px;width: 100%;">
+                        </div>
+                    </div>
+                    <!-- Right -->
+                    <div style="height: calc(70vh + 100px);margin: 10px;">
+                        <div id="embeddingsTopRightBar">
+                            <div>
+                                <div>
+                                    <div id="i18n_voiceName">Voice Name:</div>
+                                    <div id="embeddingsVoiceNameDisplay"></div>
+                                </div>
+                                <div>
+                                    <div id="i18n_genderIs">Gender:</div>
+                                    <div id="embeddingsVoiceGenderDisplay"></div>
+                                </div>
+                                <div>
+                                    <div id="i18n_vemb_game">Game:</div>
+                                    <div id="embeddingsVoiceGameDisplay"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <button id="embeddingsPreviewButton">Preview</button>
+                                <button id="embeddingsLoadButton">Load</button>
+                            </div>
+                        </div>
+                        <div id="embeddingsSceneContainer">
+                            <div id="embeddingsHelpUI" style="height: 70vh;width: 60vw;background: rgba(0,0,0,0.5);display: flex;justify-content: center;align-items: center;position: fixed;flex-direction: column;">
+                                <span id="i18n_vemb_instr1">Left click drag to rotate</span>
+                                <span id="i18n_vemb_instr2">Right click drag to pan</span>
+                                <span id="i18n_vemb_instr3">Mouse wheel scroll to zoom</span>
+                                <span id="i18n_vemb_instr4">Left click on voice to select</span>
+                                <span id="i18n_vemb_instr5">Right click on voice to play sample</span>
+                                <button id="embeddingsCloseHelpUI">Close</button>
+                            </div>
+                        </div>
+                        <div style="height: 50px;display: flex;justify-content: space-between;">
+                            <div id="embeddingsSceneGenderFilters">
+                                <div>
+                                    <div>
+                                        <input id="embeddingsMalesCkbx" type="checkbox" checked>
+                                    </div>
+                                    <div id="i18n_vemb_males">Males</div>
+                                </div>
+                                <div>
+                                    <div>
+                                        <input id="embeddingsFemalesCkbx" type="checkbox" checked>
+                                    </div>
+                                    <div id="i18n_vemb_females">Females</div>
+                                </div>
+                                <div>
+                                    <div>
+                                        <input id="embeddingsOtherGendersCkbx" type="checkbox" checked>
+                                    </div>
+                                    <div id="i18n_vemb_other">Other</div>
+                                </div>
+                                <div style="width: 15vw;">
+                                    <div>
+                                        <input id="embeddingsOnlyInstalledCkbx" type="checkbox">
+                                    </div>
+                                    <div id="i18n_showOnlyInstalled">Show only installed voices</div>
+                                </div>
+                            </div>
+                            <div id="embeddingsSceneOptions">
+                                <div id="i18n_vemb_keyIs">Key:</div>
+                                <select id="embeddingsKey">
+                                    <option id="i18n_vemb_game_option" value="embsKey_game">Game</option>
+                                    <option id="i18n_vemb_gender_option" value="embsKey_gender">Gender</option>
+                                </select>
+                                <div id="i18n_algorithm">Algorithm</div>
+                                <select id="embeddingsAlgorithm">
+                                    <option value="embsAlgo_pca">PCA</option>
+                                    <option value="embsAlgo_tsne">tSNE</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="totdContainer" style="display: none;">
+            <div class="modal" style="height: 30vh;min-width: 700px;width: 45vw;">
+                <h2><span id="i18n_totd">Tip of the day</span> <span id="totd_counter"></span></h2>
+
+                <div id="tipMessage" style="display: flex;justify-content: center;align-items: center;height: 100%;margin: 5vw;"></div>
+
+                <div id="totdButtons">
+                    <span>
+                        <input id="totdShowTips" type="checkbox">
+                        <span id="i18n_totd_show">Show tip of the day</span>
+                    </span>
+                    <span>
+                        <input id="totdShowOnlyUnseenTips" type="checkbox">
+                        <span id="i18n_totd_show_unseen">Only show unseen tips</span>
+                    </span>
+                </div>
+                <div>
+                    <button id="totdPrevTipBtn">Previous tip</button>
+                    <button id="totd_close">Close</button>
+                    <button id="totdNextTipBtn">Next tip</button>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="arpabetContainer" style="display: none;">
+            <div id="arpabetModal" class="modal" style="width: 95vw;height: 90vh;">
+                <h2 style="margin-top: 0;margin-bottom: 0;">ARPAbet</h2>
+                <div style="display:flex;flex-grow: 1;margin-top: 0;">
+
+                    <!-- Left -->
+                    <div id="arpabetMenu_left">
+                        <h3 id="i18n_arpabet_dictionaries">Dictionaries</h3>
+                        <div id="arpabet_dicts_list">
+
+                        </div>
+                        <div style="margin-top: 5px;">
+                            <!-- <button id="" style="width: 37px;margin-left: 0;">+</button> -->
+                            <button id="arpabet_enableall_button" disabled>Enable all</button>
+                            <button id="arpabet_disableall_button" disabled>Disable all</button>
+                        </div>
+                    </div>
+
+                    <!-- Middle -->
+                    <div id="arpabetMenu_middle">
+                        <div>
+                            <h3 id=i18n_arpabet_words>Words</h3>
+
+                            <input id="arpabet_word_search_input" style="" placeholder="Search words...">
+
+                            <div style="width: 135px;display: flex;align-items: center;">
+                                <input id="arpabet_search_only_enabled" type="checkbox" name="">
+                                <span id="i18n_arpabet_ckbx_only_enabled">Only enabled</span>
+                            </div>
+
+                        </div>
+
+                        <div id="arpabetWordsList_main" style="width: 100%;display: block;">
+                            <div id="arpabetWordsListHeader">
+                                <div id="i18n_arpabetWordsListh_enabled"></div>
+                                <div id="i18n_arpabetWordsListh_delete">Delete</div>
+                                <div id="i18n_arpabetWordsListh_word">Word</div>
+                                <div>ARPAbet</div>
+                            </div>
+                            <div id="arpabetWordsListContainer">
+                                <span></span>
+                            </div>
+                        </div>
+
+
+
+                        <div id="arpabet_words_control" style="display: flex;height: 40px;align-items: center;justify-content: space-between;margin-top: 5px;width: 30vw;">
+                            <div style="display: flex;align-items: center;width: 200px;">
+                                <button id="arpabet_prev_btn" style="margin-left: 0;">Prev</button>
+                                <div id="arpabet_pagination_numbers">
+                                    0 of 0
+                                </div>
+                                <button id="arpabet_next_btn">Next</button>
+                            </div>
+                            <div style="display: flex;height: 100%;align-items: center;justify-content: space-between;width: calc(85vw - 250px - 525px - 150px - 200px);">
+                                <div id="i18n_arpabet_word_is">Word:</div>
+                                <input id="arpabet_word_input" style="width: 75px;height: 50%;">
+                                <div>ARPAbet:</div>
+                                <input id="arpabet_arpabet_input" style="width: 75px;height: 50%;">
+                                <button id="arpabet_save" style="margin-right: 0;">Save</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right -->
+                    <div id="arpabetMenu_right">
+                        <h3>
+                            <span id="i18n_arpabet_reference">Reference</span>
+                            <select id="arpabetMenuModelDropdown">
+                                <option value="2">(v2) FastPitch1.1</option>
+                                <option value="3">(v3) xVAPitch</option>
+                            </select>
+                        </h3>
+                        <div style="background: rgb(75,75,75);">
+                            <div id="arpabetReferenceList" class="flexTable"></div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div id="styleEmbeddingsContainer" style="display: none;">
+            <div class="modal" style="height: 60vh;min-width: 700px;width: 95vw;">
+                <h2 style="margin-top: 5vh;margin-bottom: -5vh;"><span id="i18n_embeddings" style="margin-top: 5vh;margin-bottom: -5vh;">Style Embeddings</span></h2>
+
+                <div style="display: flex;justify-content: center;align-items: center;height: 100%;margin: 5vw;width: 100%">
+
+                    <div id="wavFileDragDropArea" style="width: 30vw" class="flexTable">
+                        <div>
+                            <div id="i18n_style_emb_author">Author</div>
+                            <div>
+                                <input id="styleEmbAuthorInput" name="">
+                            </div>
+                        </div>
+                        <div>
+                            <div id="i18n_style_emb_gameId">Game ID</div>
+                            <div>
+                                <input id="styleEmbGameIdInput" name="">
+                            </div>
+                        </div>
+                        <div>
+                            <div id="i18n_style_emb_voiceId">Voice ID</div>
+                            <div>
+                                <input id="styleEmbVoiceIdInput" name="">
+                            </div>
+                        </div>
+                        <div>
+                            <div id="i18n_style_emb_name">Embedding name</div>
+                            <div>
+                                <input id="styleEmbNameInput" name="">
+                            </div>
+                        </div>
+                        <div>
+                            <div id="i18n_style_emb_description">Embedding description</div>
+                            <div>
+                                <input id="styleEmbDescriptionInput" name="">
+                            </div>
+                        </div>
+                        <div>
+                            <div id="i18n_style_emb_id">Embedding ID (Write a short, descriptive, alpha-numerical ID you think will be unique)</div>
+                            <div>
+                                <input id="styleEmbIdInput" name="">
+                            </div>
+                        </div>
+
+
+                        <div>
+                            <div id="i18n_style_emb_wavpath">Wav file path</div>
+                            <div>
+                                <input id="wavFilepathForEmbComputeInput" name="">
+                            </div>
+                        </div>
+                        <div style="display: flex;justify-content: center;">
+                            <button id="getStyleEmbeddingBtn">Get embedding</button>
+                        </div>
+                        <div>
+                            <div id="i18n_style_emb_values">Style embedding values</div>
+                            <div>
+                                <input id="styleEmbValuesInput" name="">
+                            </div>
+                        </div>
+                        <div>
+                            <button style="margin: 5px" id="styleEmbSave">Save</button>
+                            <button style="margin: 5px" id="styleEmbDelete" disabled="true">Delete</button>
+
+                        </div>
+                    </div>
+
+                    <div style="height: 50vh;;width: 0px;background-color: white;"></div>
+
+
+                    <div>
+                        <div id="styleembs_main" style="display: block;width: 70vw;margin-left: 10px;">
+                            <div id="styleembsRecordsHeader">
+                                <div id="i18n_styleembsh_enabled">Enabled</div>
+                                <div id="i18n_styleembsh_name">Emb Name</div>
+                                <div id="i18n_styleembsh_gameID">Game ID</div>
+                                <div id="i18n_styleembsh_voiceID">Voice ID</div>
+                                <div id="i18n_styleembsh_description">Description</div>
+                                <div id="i18n_styleembsh_embId">Emb Id</div>
+                                <div id="i18n_styleembsh_version">Version</div>
+                                <!-- <div id="i18n_styleembsh_endorse">Endorse</div> -->
+                            </div>
+                            <div id="styleembsRecordsContainer">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+
+        <div id="resetContainer" style="display: none;">
+            <div class="modal" style="height: 10vh;min-width: 500px;width: 30vw;min-height: 400px;">
+                <h2><span id="i18n_reset_what_prompt">What would you like to reset?</span> <span id="totd_counter"></span></h2>
+                <div id="i18n_reset_what_tip">Shift+click the Reset button to reset all 3.</div>
+
+                <div class="flexTable" style="overflow-y: auto;">
+                    <div>
+                        <div id="i18n_pitch">Pitch</div>
+                        <div><input type="checkbox" id="reset_what_pitch" checked></div>
+                    </div>
+                    <div>
+                        <div id="i18n_energy">Energy</div>
+                        <div><input type="checkbox" id="reset_what_energy" checked></div>
+                    </div>
+                    <div>
+                        <div id="i18n_duration">Duration</div>
+                        <div><input type="checkbox" id="reset_what_duration" checked></div>
+                    </div>
+                    <div>
+                        <div id="i18n_emotion">Emotion</div>
+                        <div><input type="checkbox" id="reset_what_emotion" checked></div>
+                    </div>
+                    <div>
+                        <div id="i18n_style">Style</div>
+                        <div><input type="checkbox" id="reset_what_style" checked></div>
+                    </div>
+                </div>
+
+                <button id="reset_what_confirm_btn">Reset</button>
+                <div id="reset_what_open_btn"></div>
+            </div>
+        </div>
+
+        <div id="batchMetadataCSVContainer" class="modelContainer" style="display: none;">
+            <div class="modal" style="height: 10vh;min-width: 500px;width: 30vw;min-height: 300px;">
+                <h2><span id="i18n_batch_metadata_confirm">Please confirm the voice details</span> <span id="totd_counter"></span></h2>
+                <div id="i18n_batch_metadata_tip">Select the voice in the main app, to pre-fill these</div>
+
+                <div class="flexTable" style="overflow-y: auto;">
+                    <div>
+                        <div id="i18n_batch_metadata_voiceID">Voice ID</div>
+                        <div><input id="batch_metadata_input_voiceID" checked></div>
+                    </div>
+                    <div>
+                        <div id="i18n_batch_metadata_gameID">Game ID</div>
+                        <div><input id="batch_metadata_input_gameID" checked></div>
+                    </div>
+                </div>
+
+                <button id="i18n_batch_metadata_confirm_btn">Confirm</button>
+                <div id="i18n_batch_metadata_open_btn"></div>
+            </div>
+        </div>
+
+        <div id="workbenchContainer" style="display:none">
+            <div class="modal" style="height: calc(80vh + 30px);width: calc(81vw);">
+                <h2 id="i18n_workbench">Voice Crafting Workbench</h2>
+
+                <div style="display:flex;height: 75vh;width: 80vw;">
+                    <!-- Left panel -->
+                    <div id="voiceWorkbenchVoicesList" style="height: 100%;width: 300px;background: repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.05) 35px, rgba(255,255,255,.05) 70px), linear-gradient(0deg, #444 0, rgba(0,0,0,0)), gray;overflow-y: auto;overflow-x: hidden;}"></div>
+                    <!-- Main panel -->
+                    <div style="width: calc(80vw - 310px);height: 100%;margin-left: 10px;overflow-y: auto;overflow-x: hidden;">
+
+
+                        <!-- Loaded -->
+                        <div id="voiceWorkbenchLoadedContent" style="display: none;flex-direction: column;">
+                            <div style="display: flex;align-items: center;">
+                                <textarea id="voiceWorkbenchInputTextArea" style="width: 50%;" placeholder="Enter a sentence to use for generating preview samples of your crafted voice with the current embedding and proposed delta change" value=""></textarea>
+                                <button id="voiceWorkbenchGenerateSampleButton">Generate</button>
+                                <div style="display: flex;flex-direction: column;">
+                                    <div id="voiceWorkbenchAudioCurrent" style="display: flex;align-items: center;">
+                                        <div id="i18n_vw_current" style="width: 100px">Current</div>
+                                        <div><button id="voiceWorkbenchAudioCurrentPlayPauseBtn" disabled>Play</button></div>
+                                        <div><button id="voiceWorkbenchAudioCurrentSaveBtn" disabled>Save</button></div>
+                                    </div>
+                                    <div id="voiceWorkbenchAudioNew" style="display: flex;align-items: center;">
+                                        <div style="width: 100px">New</div>
+                                        <div id="voiceWorkbenchAudioNewAudioContainer"></div>
+                                        <div><button id="voiceWorkbenchAudioNewPlayBtn" disabled>Play</button></div>
+                                        <div><button id="voiceWorkbenchAudioNewSaveBtn" disabled>Save</button></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flexTable">
+                                <div id="voiceWorkbenchCurrentEmbeddingDropzone">
+                                    <div id="i18n_vw_current_emb">Current Embedding</div>
+                                    <div>
+                                        <input id="voiceWorkbenchCurrentEmbeddingInput" value="" placeholder="Drag and drop .wav file">
+                                    </div>
+                                </div>
+                                <div>
+                                    <div id="i18n_vw_current_delta">Current Delta</div>
+                                    <div>
+                                        <input id="voiceWorkbenchCurrentDeltaInput" value="" disabled>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div id="i18n_vw_strength">Strength</div>
+                                    <div style="display: flex;flex-direction: row;padding: 0px 25px;max-width: calc(50% - 50px);">
+                                        <input id="voiceWorkbenchStrengthSlider" type="range" value="0.5" min="0" max="1" step="0.1" style="margin-right: 0 25px;">
+                                        <input id="voiceWorkbenchStrengthInput" type="number" min="0" value="0.5" step="0.1">
+                                    </div>
+                                </div>
+                                <div>
+                                    <button id="voiceWorkshopApplyDeltaButton" style="margin: auto;" disabled>Apply delta</button>
+                                </div>
+                            </div>
+                            <hr style="width:100%">
+                            <div class="flexTable">
+                                <div id="voiceWorkbenchRefADropzone">
+                                    <div id="i18n_refAF_a">Reference Audio File A:</div>
+                                    <div>
+                                        <span id="voiceWorkbenchRefAFilePath" style="margin-bottom: 5px;color: rgb(200,200,200);font-style: italic;line-break: anywhere;">From file: (Drag and drop a .wav file)</span>
+                                        <input id="voiceWorkbenchRefAInput" value="" placeholder="Use for delta from current" disabled>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <hr style="width:100%">
+                            <div class="flexTable">
+                                <div id="voiceWorkbenchRefBDropzone">
+                                    <div id="i18n_refAF_b">Reference Audio File B:</div>
+                                    <div>
+                                        <span id="voiceWorkbenchRefBFilePath" style="margin-bottom: 5px;color: rgb(200,200,200);font-style: italic;line-break: anywhere;">From file: (Drag and drop a .wav file)</span>
+                                        <input id="voiceWorkbenchRefBInput" value="" placeholder="Use together with A for delta from A to B" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr style="width:100%">
+
+                        </div>
+
+                        <!-- Start-up -->
+                        <div id="voiceWorkbenchStartupContent" class="flexTable" style=""> <!-- width: 50%;margin-left: 25%; -->
+                            <div>
+                                <div id="i18n_vw_basemodel">Base Model (v3 models only)</div>
+                                <div>
+                                    <select id="voiceWorkbenchModelDropdown">
+                                        <option value="<base>/base_v1.0">Base xVAPitch Model (v1.0)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <div id="i18n_vw_game">Game</div>
+                                <div>
+                                    <select id="voiceWorkbenchGamesDropdown">
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <div id="i18n_vw_voicename">Voice Name</div>
+                                <div>
+                                    <input id="voiceWorkbenchVoiceNameInput" placeholder="Name of your voice">
+                                </div>
+                            </div>
+                            <div>
+                                <div id="i18n_vw_voiceid">Voice ID</div>
+                                <div>
+                                    <input id="voiceWorkbenchVoiceIDInput" placeholder="A unique identifier for your voice (eg: f4_nate)">
+                                </div>
+                            </div>
+                            <div>
+                                <div id="i18n_vw_gender">Gender</div>
+                                <div>
+                                    <select id="voiceWorkbenchGenderDropdown">
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <div id="i18n_vw_author">Author</div>
+                                <div>
+                                    <input id="voiceWorkbenchAuthorInput" placeholder="Your name for credits">
+                                </div>
+                            </div>
+                            <div>
+                                <div id="i18n_vw_baselang">Base Language</div>
+                                <div>
+                                    <select id="voiceWorkbenchLanguageDropdown"></select>
+                                </div>
+                            </div>
+                            <div style="display: flex;justify-content: center;">
+                                <button id="voiceWorkbenchStartButton">Start</button>
+                            </div>
+                        </div>
+
+                        <div id="voiceWorkbenchLoadedContent2" style="display: none;flex-direction: column;">
+                            <div>
+                                <button id="voiceWorkbenchCancelButton">Cancel</button>
+                                <button id="voiceWorkbenchDeleteButton" disabled>Delete</button>
+                                <button id="voiceWorkbenchSaveButton">Save</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="modalContainer" style="display:none"></div>
+    </div>
+</div>
+
+<div id="workbenchIcon" title="Workbench">
+    <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+     width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000"
+     preserveAspectRatio="xMidYMid meet">
+    <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
+    fill="white" stroke="none">
+    <path d="M1780 4309 c-14 -5 -36 -20 -48 -32 -43 -40 -52 -70 -52 -176 l0
+    -101 -749 -2 c-739 -3 -750 -3 -777 -24 -15 -11 -37 -33 -48 -48 -20 -26 -21
+    -41 -24 -394 -2 -365 -2 -367 21 -407 14 -26 37 -48 67 -62 43 -22 53 -23 337
+    -23 l293 0 2 -1067 3 -1068 23 -33 c70 -97 219 -86 271 22 20 40 21 59 21 334
+    l0 292 1320 0 1320 0 0 -297 c0 -290 1 -299 23 -337 63 -112 227 -105 278 10
+    19 41 19 85 19 1092 l0 1050 98 4 c164 6 204 47 210 216 l4 102 79 0 79 0 0
+    -372 c0 -355 1 -374 21 -414 39 -81 131 -112 208 -72 89 46 86 27 89 467 l3
+    387 42 11 c25 7 56 26 76 47 30 31 35 44 39 96 4 52 1 66 -21 99 -26 39 -78
+    71 -116 71 -20 0 -21 5 -21 104 0 90 -3 107 -22 136 -39 57 -72 75 -138 75
+    -111 0 -160 -68 -160 -222 l0 -93 -80 0 -80 0 0 93 c0 108 -19 161 -71 198
+    l-34 24 -420 5 -420 5 -5 110 c-6 123 -16 147 -81 184 -71 40 -166 15 -209
+    -54 -18 -29 -23 -56 -28 -140 l-5 -105 -558 0 -559 0 0 93 c0 108 -19 161 -70
+    197 -37 26 -111 36 -150 19z m2290 -789 l0 -160 -1835 0 -1835 0 0 160 0 160
+    1835 0 1835 0 0 -160z m-310 -755 l0 -275 -1320 0 -1320 0 0 275 0 275 1320 0
+    1320 0 0 -275z m-1520 -760 l0 -165 -560 0 -560 0 0 165 0 165 560 0 560 0 0
+    -165z m1520 0 l0 -165 -600 0 -600 0 0 165 0 165 600 0 600 0 0 -165z"/>
+    </g>
+    </svg>
+</div>
+
+<div id="arpabetIcon" title="ARPAbet">
+    <svg width="30" height="25" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="400" height="291.8918918918919" viewBox="0, 0, 400,291.8918918918919"><g id="svgg"><path id="path0" d="M72.973 27.879 C 32.451 42.782,17.396 97.297,53.802 97.297 C 79.544 97.297,91.701 72.242,74.370 54.910 C 57.283 37.823,127.302 30.250,150.720 46.652 C 165.423 56.951,178.378 85.094,178.378 106.737 C 178.378 121.690,177.667 122.026,133.043 128.111 C 63.835 137.548,24.390 162.533,18.168 200.875 C 8.105 262.887,127.891 288.561,186.634 236.983 L 205.405 220.502 224.177 236.983 C 279.158 285.258,383.632 260.162,383.764 198.649 C 383.794 184.437,374.252 187.264,365.517 204.054 C 328.367 275.463,232.983 251.601,219.541 167.536 C 214.378 135.247,214.669 135.135,303.691 135.135 L 385.122 135.135 382.638 105.181 C 376.173 27.218,271.272 -9.201,219.131 48.414 C 210.152 58.336,209.281 58.158,185.830 41.628 C 158.995 22.713,104.930 16.127,72.973 27.879 M326.220 52.019 C 339.715 65.513,351.256 94.410,351.321 114.865 C 351.348 123.350,344.670 124.324,286.486 124.324 L 221.622 124.324 221.649 109.459 C 221.751 55.079,291.156 16.954,326.220 52.019 M180.884 170.569 C 188.274 229.709,123.639 272.474,79.427 237.697 C 33.938 201.915,81.663 142.798,157.485 141.005 L 177.133 140.541 180.884 170.569 " stroke="none" fill="#ffffff" fill-rule="evenodd"></path></g></svg>
+</div>
+<div id="embeddingsIcon" title="Embeddings visualiser">
+    <svg width="25" height="25" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0, 0, 400,400"><g id="svgg"><path id="path0" d="M150.000 20.230 C 65.534 26.594,5.904 105.137,22.679 187.932 C 41.869 282.642,149.542 329.959,232.409 280.098 L 237.105 277.272 288.552 328.719 L 340.000 380.166 360.083 360.083 L 380.166 340.000 328.719 288.552 L 277.272 237.105 280.098 232.409 C 316.949 171.163,301.885 92.110,245.067 48.568 C 218.394 28.128,183.443 17.709,150.000 20.230 M166.667 70.498 C 215.683 73.046,254.682 119.552,249.348 169.093 C 244.601 213.185,208.627 247.470,164.854 249.622 C 102.308 252.696,55.953 193.244,74.215 133.374 C 85.585 96.097,124.114 68.164,161.333 70.215 C 162.342 70.271,164.742 70.398,166.667 70.498 " stroke="none" fill="#ffffff" fill-rule="evenodd"></path></g></svg>
+</div>
+<div id="pluginsIcon" title="Plugins">
+    <svg width="25" height="25" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" fill-opacity="1" color-rendering="auto" color-interpolation="auto" text-rendering="auto" stroke="white" stroke-linecap="square" stroke-miterlimit="10" shape-rendering="auto" stroke-opacity="1" fill="#ffffff" stroke-dasharray="none" font-weight="normal" stroke-width="1" font-family="'Dialog'" font-style="normal" stroke-linejoin="miter" font-size="12" stroke-dashoffset="0" image-rendering="auto" viewBox="0, 150, 300, 250">
+      <defs id="genericDefs"/>
+      <g>
+        <g>
+          <path d="M244.6875 298.5469 Q229.2188 323.0156 228.0938 324.4219 Q216 340.0312 204.0469 340.0312 Q200.1094 340.0312 196.3125 338.625 Q190.9688 336.6562 180.7031 321.0469 Q171.2812 306.4219 166.6406 306.4219 Q159.3281 306.4219 153.2812 312.5469 Q147.2344 318.6562 147.2344 325.9688 Q147.2344 331.5938 162.1406 340.4531 Q177.0469 349.3125 177.0469 359.0156 Q177.0469 378 139.5 391.2188 Q135.8438 392.625 128.8125 394.4531 Q128.8125 394.4531 127.4062 394.4531 Q105.75 349.0312 89.8594 349.0312 Q84.7969 349.0312 78.1875 358.0312 Q68.3438 371.3906 64.5469 374.9062 Q54.5625 383.9062 41.625 383.9062 Q28.5469 383.9062 20.25 377.1562 Q11.25 369.8438 11.25 357.0469 Q11.25 345.7969 20.9531 337.5 Q29.9531 331.4531 38.9531 325.5469 Q48.6562 318.9375 48.6562 311.7656 Q48.6562 297.9844 15.4688 277.3125 Q40.0781 231.6094 57.7969 231.6094 Q67.3594 231.6094 75.2344 243.1406 Q81.1406 253.8281 87.0469 264.6562 Q93.6562 276.1875 99.8438 276.1875 Q104.2031 276.1875 108.0625 272.25 Q111.9375 268.3125 111.9375 263.9531 Q111.9375 257.2031 102.5156 250.3125 Q93.6562 243.9844 84.7969 237.7969 Q75.375 229.5 75.375 219.5156 Q75.375 205.3125 94.5 190.125 Q100.8281 185.0625 125.8594 169.875 Q134.5781 180.7031 143.1562 191.3906 Q155.1094 204.3281 165.7969 204.3281 Q169.875 204.3281 180.8438 191.1875 Q191.8125 178.0312 201.5156 178.0312 Q212.2031 178.0312 219.2344 186.3281 Q225.9844 194.0625 225.9844 205.0312 Q225.9844 216 215.8594 224.0156 Q215.1562 224.5781 197.0156 235.2656 Q186.8906 241.1719 186.8906 247.3594 Q186.8906 255.7969 207.5625 271.4062 Q215.4375 277.4531 244.6875 298.5469 ZM150.1875 212.625 Q142.4531 209.1094 123.3281 186.0469 Q89.8594 206.5781 89.8594 219.0938 Q89.8594 226.125 104.4844 236.8125 Q121.2188 249.0469 123.75 253.9688 Q126.7031 259.5938 126.5625 261 L126.4219 263.6719 Q126 272.25 117.1406 280.4062 Q108.2812 288.5625 99.8438 288.5625 Q88.3125 288.5625 80.7188 277.5938 Q75.375 267.3281 70.0312 257.0625 Q64.2656 246.0938 57.5156 246.0938 Q46.6875 246.0938 32.4844 272.6719 Q63.1406 292.5 63.1406 311.9062 Q63.1406 321.4688 53.4375 329.4844 Q44.4375 335.8125 35.2969 342 Q25.5938 349.3125 25.5938 357.0469 Q25.5938 371.5312 44.0156 371.5312 Q49.5 371.5312 52.7344 369.2812 Q57.2344 366.0469 66.6562 353.8125 Q74.8125 342.9844 83.8125 338.625 Q85.6406 337.7812 91.125 333.5625 Q135.2812 299.9531 142.0312 258.6094 Q143.5781 247.0781 145.125 235.4062 Q146.9531 221.7656 150.1875 212.625 Z" stroke="none"/>
+        </g>
+      </g>
+    </svg>
+</div>
+<div id="batchIcon" title="Batch mode">
+    <svg id="batchSVGIcon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="25" height="25" viewBox="0, 0, 400,310.24930747922434"><g id="svgg"><path id="path0" d="M5.549 99.446 C 5.515 149.266,5.829 215.831,6.246 247.368 L 7.004 304.709 198.516 304.709 L 390.028 304.709 390.028 157.523 L 390.028 10.338 282.825 9.602 C 223.864 9.197,137.371 8.865,90.617 8.865 L 5.611 8.864 5.549 99.446 M107.479 67.590 L 107.479 97.507 70.914 97.507 L 34.349 97.507 34.349 67.590 L 34.349 37.673 70.914 37.673 L 107.479 37.673 107.479 67.590 M362.327 67.590 L 362.327 97.507 249.307 97.507 L 136.288 97.507 136.288 67.590 L 136.288 37.673 249.307 37.673 L 362.327 37.673 362.327 67.590 M107.479 157.341 L 107.479 187.258 70.914 187.258 L 34.349 187.258 34.349 157.341 L 34.349 127.424 70.914 127.424 L 107.479 127.424 107.479 157.341 M362.327 157.341 L 362.327 187.258 249.307 187.258 L 136.288 187.258 136.288 157.341 L 136.288 127.424 249.307 127.424 L 362.327 127.424 362.327 157.341 M107.479 247.091 L 107.479 277.008 70.914 277.008 L 34.349 277.008 34.349 247.091 L 34.349 217.175 70.914 217.175 L 107.479 217.175 107.479 247.091 M362.327 247.091 L 362.327 277.008 249.307 277.008 L 136.288 277.008 136.294 257.895 C 136.297 247.382,136.621 233.920,137.015 227.978 L 137.730 217.175 250.029 217.175 L 362.327 217.175 362.327 247.091 " stroke="none" fill="#ffffff" fill-rule="evenodd"></path></g></svg>
+</div>
+<div id="updatesIcon" title="Changelog">
+    <svg id="update_nothing" version="1.0" xmlns="http://www.w3.org/2000/svg"
+     width="25.000000pt" height="25.000000pt" viewBox="0 0 250.000000 344.000000"
+     preserveAspectRatio="xMidYMid meet"><g transform="translate(300.000000,344.000000) scale(0.100000,-0.100000) rotate(90 0 0)"
+    fill="#ffffff" stroke="none"><path d="M2150 2507 l0 -357 -875 0 c-950 0 -901 3 -955 -55 l-25 -27 0 -348
+    0 -348 25 -27 c54 -58 5 -55 955 -55 l875 0 0 -357 0 -358 572 573 573 572
+    -573 572 -572 573 0 -358z"/></g></svg>
+    <svg id="update_something" style="display: none;margin-left: -15px;}" version="1.0" xmlns="http://www.w3.org/2000/svg"
+     width="50.000000pt" height="25.000000pt" viewBox="0 0 250.000000 344.000000"
+     preserveAspectRatio="xMidYMid meet"><g transform="translate(300.000000,344.000000) scale(0.100000,-0.100000) rotate(90 0 0)"
+    fill="#ff9800" stroke="none"><path d="M2150 2507 l0 -357 -875 0 c-950 0 -901 3 -955 -55 l-25 -27 0 -348
+    0 -348 25 -27 c54 -58 5 -55 955 -55 l875 0 0 -357 0 -358 572 573 573 572
+    -573 572 -572 573 0 -358z"/></g></svg>
+</div>
+<div id="patreonIcon" title="Patreon">
+    <img src="./assets/patreon.png">
+</div>
+<div id="infoIcon" title="Info">
+    <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="1024.000000pt" height="1024.000000pt" viewBox="0 0 1024.000000 1024.000000" preserveAspectRatio="xMidYMid meet"><g transform="translate(0.000000,1024.000000) scale(0.100000,-0.100000)" fill="#ffffff" stroke="none"><path d="M4920 9273 c-776 -41 -1504 -285 -2137 -715 -72 -49 -192 -137 -265 -196 -171 -136 -504 -469 -640 -639 -514 -646 -816 -1390 -899 -2218 -16 -155 -16 -615 0 -770 84 -830 387 -1575 905 -2225 131 -164 467 -499 634 -632 962 -766 2166 -1066 3378 -843 652 121 1287 413 1824 841 174 138 506 470 644 644 794 997 1091 2288 810 3525 -267 1174 -1048 2190 -2119 2756 -644 340 -1416 511 -2135 472z m640 -658 c708 -97 1329 -373 1855 -825 128 -110 355 -346 458 -475 851 -1069 1008 -2537 403 -3755 -182 -365 -370 -625 -670 -926 -233 -232 -422 -382 -676 -535 -1022 -614 -2304 -665 -3370 -135 -344 172 -619 367 -894 636 -268 262 -450 500 -629 821 -218 390 -358 827 -419 1309 -17 140 -17 640 0 780 103 811 427 1495 977 2059 266 272 502 454 826 634 390 218 862 369 1304 416 55 6 118 13 140 15 96 10 585 -4 695 -19z"/> <path d="M4960 7674 c-143 -24 -221 -54 -321 -120 -146 -97 -256 -255 -300 -434 -17 -70 -17 -248 0 -320 65 -268 273 -475 541 -541 71 -17 249 -17 320 0 285 70 495 293 545 580 19 105 19 137 0 242 -49 281 -253 503 -526 574 -59 15 -214 27 -259 19z"/> <path d="M4870 5724 c-476 -18 -902 -33 -947 -33 l-83 -1 0 -160 0 -160 203 0 c212 0 290 -11 366 -49 50 -26 98 -82 111 -130 7 -27 10 -369 8 -1083 -3 -1040 -3 -1043 -24 -1089 -23 -49 -67 -88 -124 -109 -23 -9 -109 -15 -257 -18 l-223 -4 0 -164 0 -164 1250 0 1250 0 0 164 0 164 -197 5 c-225 5 -281 17 -342 73 -26 23 -42 48 -50 79 -8 31 -11 430 -11 1379 l0 1336 -32 -1 c-18 -1 -422 -17 -898 -35z"/> </g> </svg>
+</div>
+<div id="settingsCog" title="Settings">
+    <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+     width="1280.000000pt" height="1280.000000pt" viewBox="0 0 1280.000000 1280.000000"
+     preserveAspectRatio="xMidYMid meet">
+    <g transform="translate(0.000000,1280.000000) scale(0.100000,-0.100000)"
+    fill="#ffffff" stroke="none">
+    <path d="M6010 12794 c-25 -2 -103 -9 -175 -15 -143 -12 -390 -49 -503 -74
+    l-72 -17 0 -529 0 -530 -139 -207 c-158 -234 -272 -376 -371 -461 -174 -150
+    -329 -225 -570 -277 -67 -15 -129 -18 -290 -18 -216 0 -338 13 -540 59 l-103
+    23 -366 366 -367 367 -139 -112 c-409 -327 -760 -689 -1070 -1102 l-58 -78
+    355 -357 356 -357 40 -105 c99 -258 137 -439 137 -655 0 -152 -9 -214 -47
+    -339 -97 -315 -393 -608 -871 -861 l-104 -55 -510 0 c-437 0 -512 -2 -516 -14
+    -10 -26 -55 -336 -69 -471 -8 -82 -13 -266 -12 -495 0 -373 10 -553 54 -954
+    11 -99 20 -183 20 -188 0 -4 227 -8 504 -8 l503 0 84 -34 c417 -169 661 -374
+    800 -672 141 -299 140 -732 -2 -1218 l-21 -71 -356 -357 -356 -357 27 -40 c45
+    -68 219 -281 350 -427 251 -282 517 -537 771 -740 l130 -105 371 371 371 370
+    79 10 c142 17 511 23 645 11 434 -40 741 -184 989 -464 75 -86 193 -261 250
+    -373 l41 -81 0 -525 0 -525 103 -16 c144 -23 406 -54 577 -69 189 -17 765 -16
+    935 0 137 14 468 59 498 68 16 5 17 39 17 538 l0 532 46 95 c141 290 366 525
+    634 659 117 59 291 114 445 141 113 20 164 23 385 24 154 0 302 -5 375 -14
+    l120 -13 397 -400 398 -401 37 29 c85 63 356 286 468 384 302 265 573 556 755
+    813 l34 48 -397 397 -397 397 -34 170 c-59 293 -70 384 -70 585 -1 143 4 204
+    18 270 48 220 136 387 291 549 142 149 293 255 533 375 l132 66 575 0 575 0 5
+    23 c7 35 34 248 50 407 52 515 43 1075 -26 1529 -11 75 -22 144 -25 154 -5 16
+    -42 17 -589 17 l-584 0 -128 64 c-540 271 -784 609 -818 1136 -10 155 22 485
+    75 760 l10 55 405 405 405 405 -64 93 c-205 303 -507 614 -872 897 -182 143
+    -372 278 -382 273 -5 -1 -184 -174 -396 -383 -279 -274 -397 -384 -424 -393
+    -20 -8 -100 -27 -177 -43 -747 -155 -1306 99 -1725 786 l-60 99 0 553 c0 455
+    -2 553 -13 553 -8 0 -94 9 -193 20 -364 40 -536 51 -829 54 -165 2 -320 2
+    -345 0z m725 -4200 c242 -29 482 -102 720 -219 252 -124 440 -260 636 -461
+    291 -300 495 -679 589 -1095 65 -289 67 -678 4 -964 -181 -817 -764 -1463
+    -1548 -1714 -241 -77 -425 -105 -691 -105 -372 0 -669 68 -1000 229 -332 161
+    -616 393 -826 675 -113 152 -159 227 -239 392 -117 239 -193 507 -221 777 -16
+    153 -6 431 20 586 123 727 562 1329 1214 1665 420 217 856 293 1342 234z"/>
+    </g>
+    </svg>
+</div>
+</body>
+<script>
+"use strict"
+const electronR = require('@electron/remote')
+const currentWindow = electronR.getCurrentWindow()
+// createElem
+"use strict";function _toConsumableArray(e){if(Array.isArray(e)){for(var t=0,r=Array(e.length);t<e.length;t++)r[t]=e[t];return r}return Array.from(e)}var _typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e};window.createElem=function(){for(var e=arguments.length,t=Array(e),r=0;r<e;r++)t[r]=arguments[r];var n=1;if(Number.isInteger(t[0])){if(!(t[0]>0))throw new Error("Element count must be larger than 0. Actual value: "+t[0]);n=t[0],t.shift()}else if(Number(t[0])===t[0]&&t[0]%1!=0)throw new Error("Floats are not supported for element count.");var o=t[0]?t[0]:"div";if(t.shift(),"string"!=typeof o)throw new Error("Tag name must be a string");var a=document.createElement(o.replace(/(#.*)|(\..*)/g,"")),s=o.match(/#(?:(?![#\.]).)*/),c=o.match(/\.(?:(?![#\.]).)*/g);if(s&&(a.id=s[0].substr(1,s[0].length)),c&&(a.className=c.map(function(e){return e.substr(1,e.length)}).join(" ")),t.length)if("string"==typeof t[0])a.innerHTML=t[0],t.shift();else if(!(Object(t[0])!==t[0]||t[0]instanceof HTMLElement||Array.isArray(t[0]))){for(var i in t[0])!function(){switch(i){case"class":a.className=t[0].class;break;case"style":var e=t[0].style;if(null!=e&&void 0!=e&&e.constructor===Object)a.style.cssText=Object.keys(e).map(function(t){return t.replace(/[A-Z]/g,function(e){return"-"+e.toLowerCase()})+":"+("number"==typeof e[t]?e[t]+"px":e[t])}).join(";");else{if("string"!=typeof e)throw new Error("Style value must be either object or string.");a.style.cssText=e}break;case"events":Object.keys(t[0].events).forEach(function(e){var r=t[0].events[e];Array.isArray(r)?r.forEach(function(t){return a.addEventListener(e,t)}):"function"==typeof r&&a.addEventListener(e,r)});break;default:a.setAttribute(i,t[0][i])}}();t.shift()}var u=function e(t){switch(!0){case t instanceof HTMLElement:a.appendChild(t);break;case Array.isArray(t):t.forEach(e);break;case!!t&&t.constructor===Object:throw new Error("Multiple attributes objects not supported");default:null!=t&&console.warn("Unsupported parameter. Type: "+(void 0===t?"undefined":_typeof(t))+" Value:",t)}};return t.forEach(u),n>1?[].concat(_toConsumableArray(new Array(n))).map(function(e){return a.cloneNode()}):a};
+
+// Chrome
+chromeMin.addEventListener("click", () => currentWindow.minimize())
+chromeMax.addEventListener("click", () => {
+    const w = currentWindow
+    w.isMaximized() ? w.unmaximize() : w.maximize()
+})
+chromeQuit.addEventListener("click", () => doFetch(`http://localhost:8008/stopServer`, {
+    method: "Post",
+    body: JSON.stringify({})
+}).then(r=>r.text()).then(() => {
+    try {
+        window.pythonProcess.kill()
+    } catch (e) {}
+    currentWindow.close()
+}).catch(e => {
+    try {
+        window.pythonProcess.kill()
+    } catch (e) {}
+    currentWindow.close()
+}))
+</script>
+<style id="pluginsCSS" type="text/css"></style>
+<script src="javascript/script.js"></script>
+<script type="text/javascript" src="lib/Three.min.js"></script>
+<script type="text/javascript" src="lib/OrbitControls.js"></script>
+<script type="text/javascript" src="lib/TrackballControls.js"></script>
+<script type="text/javascript" src="lib/Three.texture.js"></script>
+<script type="text/javascript" src="lib/Three.sprite.js"></script>
+<script type="text/javascript" src="lib/osutils.js"></script>
+<script src="lib/AbortControllerPolyfill.js"></script> <!-- https://polyfill.io/v3/polyfill.min.js?features=AbortController -->
+<script src="lib/wavesurfer.js"></script>
+</html>
