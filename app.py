@@ -13,6 +13,7 @@ input_textbox = gr.Textbox(
 gradio_app = gr.Interface(
     predict,
     input_textbox,
+    outputs="text",
     title="xVASynth",
 )
 
