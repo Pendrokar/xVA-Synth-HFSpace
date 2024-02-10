@@ -5,7 +5,7 @@ colorFrom: gray
 colorTo: gray
 sdk: gradio
 python_version: 3.9
-app_file: server.py
+app_file: app.py
 tags:
   - tts
   - t2s
