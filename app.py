@@ -8,15 +8,23 @@ import gradio as gr
 
 def run_xvaserver():
 	try:
-		import logging
 		# start the process without waiting for a response
-		logging.info('loginfo: Running xVAServer subprocess...')
 		print('Running xVAServer subprocess...')
 		xvaserver = Popen(['python', 'server.py'], stdout=PIPE, stderr=PIPE, universal_newlines=True)
 	except:
-		import logging
-		logging.error(f'Could not run xVASynth.')
+		print('Could not run xVASynth.')
 		sys.exit(0)
+
+    # Wait for a moment to ensure the server starts up
+    time.sleep(10)
+
+    # Check if the server is running
+    if xvaserver.poll() is not None:
+        print("Web server failed to start.")
+		sys.exit(0)
+
+	requests.get('http://0.0.0.0:8008')
+	print('xVAServer running on port 8008')
 
 	# Read and print stdout and stderr of the subprocess
 	while True:
