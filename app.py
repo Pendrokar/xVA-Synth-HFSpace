@@ -8,7 +8,10 @@ import gradio as gr
 
 def run_xvaserver():
 	try:
+		import logging
 		# start the process without waiting for a response
+		logging.info('loginfo: Running xVAServer subprocess...')
+		print('Running xVAServer subprocess...')
 		xvaserver = Popen(['python', 'server.py'], stdout=PIPE, stderr=PIPE, universal_newlines=True)
 	except:
 		import logging
@@ -31,6 +34,21 @@ def run_xvaserver():
 
 	# Wait for the process to exit
 	xvaserver.wait()
+
+def load_model():
+	model_type = 'xVAPitch'
+	language = 'en'
+
+	data = {
+		'outputs': None,
+		'version': '3.0',
+		'model': 'ccby/ccby_nvidia_hifi_6670_M',
+		'modelType': model_type,
+		'base_lang': language,
+		'pluginsContext': '{}',
+	}
+	requests.post('http://0.0.0.0:8008/loadModel', json=data)
+	return
 
 def predict(input, pacing):
 	model_type = 'xVAPitch'
