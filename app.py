@@ -15,12 +15,12 @@ def run_xvaserver():
 		print('Could not run xVASynth.')
 		sys.exit(0)
 
-    # Wait for a moment to ensure the server starts up
-    time.sleep(10)
+	# Wait for a moment to ensure the server starts up
+	time.sleep(10)
 
-    # Check if the server is running
-    if xvaserver.poll() is not None:
-        print("Web server failed to start.")
+	# Check if the server is running
+	if xvaserver.poll() is not None:
+		print("Web server failed to start.")
 		sys.exit(0)
 
 	requests.get('http://0.0.0.0:8008')
