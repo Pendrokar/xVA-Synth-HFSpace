@@ -21,7 +21,7 @@ if True:
     # Imports and logger setup
     # ========================
     try:
-        import python.pyinstaller_imports
+        # import python.pyinstaller_imports
         import numpy
 
         import logging
