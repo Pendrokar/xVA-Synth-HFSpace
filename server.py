@@ -5,7 +5,8 @@ import multiprocessing
 
 torch_dml_device = None
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
+if True:
     server = None
     multiprocessing.freeze_support()
 

@@ -1,7 +1,29 @@
 import server as xvaserver
 import gradio as gr
+import requests
 
 def predict(input):
+	model_type = 'xVAPitch'
+	line = 'Test'
+	pace = 1.0
+	save_path = 'test.wav'
+	language = 'en'
+	base_speaker_emb = []
+	use_sr = 0
+	use_cleanup = 0
+
+	data = {
+	    'modelType': model_type,
+	    'sequence': line,
+	    'pace': pace,
+	    'outfile': save_path,
+	    'vocoder': 'n/a',
+	    'base_lang': language,
+	    'base_emb': base_speaker_emb,
+	    'useSR': use_sr,
+	    'useCleanup': use_cleanup,
+	}
+	requests.post('http://localhost:8008/synthesize', json=data)
 	return ''
 
 input_textbox = gr.Textbox(
