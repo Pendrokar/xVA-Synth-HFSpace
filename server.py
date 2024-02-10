@@ -94,17 +94,7 @@ if __name__ == '__main__':
             pass
 
     if CPU_ONLY:
-        try:
-            import torch_directml
-            torch_dml_device = torch_directml.device()
-            logger.info("Successfully got the torch DirectML device")
-        except Exception as e:
-            # I've implemented support for DirectML, but at the time of writing (08/04/2023, v0.1.13.1.dev230301), it's hella broken...
-            # Not a single model can successfully .forward() when switching to DirectML device from cpu. I'm leaving in the code however,
-            # as I'd still like to add support for it once things are more stable. This try/catch should run ok when it's installed
-            torch_dml_device = torch.device("cpu")
-            logger.exception("Failed to get torch DirectML; falling back to cpu device")
-    # ========================
+        torch_dml_device = torch.device("cpu")
 
 
     try:
