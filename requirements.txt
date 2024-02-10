@@ -19,7 +19,7 @@ ffmpeg-python
 filelock==3.0.12
 future==0.18.2
 g2pC==0.9.9.3
-huggingface-hub==0.0.16
+huggingface-hub==0.19.4
 hydra-core==1.1.1
 idna==2.10
 importlib-metadata==2.0.0
@@ -61,7 +61,7 @@ torchvision==0.10.0
 tqdm==4.62.2
 transformers==4.10.0
 typing==3.7.4.3
-typing-extensions==3.7.4.3
+typing-extensions==4.2.0
 Unidecode==1.1.1
 urllib3==1.26.2
 webrtcvad==2.0.10
