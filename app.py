@@ -1,6 +1,9 @@
-import server as xvaserver
 import gradio as gr
 import requests
+from subprocess import Popen, PIPE
+
+xvaserver = Popen(['py', 'server.py'], stdout=PIPE, stderr=PIPE)
+stdout, stderr = process.communicate()
 
 def predict(input):
 	model_type = 'xVAPitch'
