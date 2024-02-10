@@ -1,6 +1,7 @@
-import gradio as gr
+import os
 import requests
 from subprocess import Popen, PIPE
+import gradio as gr
 
 try:
 	# start the process without waiting for a response
@@ -10,10 +11,10 @@ except:
 	logging.error(f'Could not run xVASynth.')
 	sys.exit(0)
 
-def predict(input):
+def predict(input, pacing):
 	model_type = 'xVAPitch'
 	line = 'Test'
-	pace = 1.0
+	pace = pacing if pacing else 1.0
 	save_path = 'test.wav'
 	language = 'en'
 	base_speaker_emb = []
@@ -32,18 +33,22 @@ def predict(input):
 	    'useCleanup': use_cleanup,
 	}
 	requests.post('http://localhost:8008/synthesize', json=data)
-	return ''
+	return 22100, os.open(save_path, "rb")
 
 input_textbox = gr.Textbox(
     label="Input Text",
     lines=1,
     autofocus=True
 )
+slider = gr.Slider(0.0, 2.0, value=1.0, step=0.1, label="Pacing")
 
 gradio_app = gr.Interface(
     predict,
-    input_textbox,
-    outputs="text",
+    [
+    	input_textbox,
+    	slider
+	],
+    outputs= "audio",
     title="xVASynth",
 )
 
