@@ -2,8 +2,13 @@ import gradio as gr
 import requests
 from subprocess import Popen, PIPE
 
-xvaserver = Popen(['python', 'server.py'], stdout=PIPE, stderr=PIPE)
-stdout, stderr = process.communicate()
+try:
+    # start the process without waiting for a response
+    Popen(['python', 'server.py'], stdout=PIPE, stderr=PIPE)
+except:
+	import logging
+    logging.error(f'Could not run xVASynth.')
+    sys.exit(0)
 
 def predict(input):
 	model_type = 'xVAPitch'
