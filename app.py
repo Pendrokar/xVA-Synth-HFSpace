@@ -2,7 +2,7 @@ import gradio as gr
 import requests
 from subprocess import Popen, PIPE
 
-xvaserver = Popen(['py', 'server.py'], stdout=PIPE, stderr=PIPE)
+xvaserver = Popen(['python', 'server.py'], stdout=PIPE, stderr=PIPE)
 stdout, stderr = process.communicate()
 
 def predict(input):
