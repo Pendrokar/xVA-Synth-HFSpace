@@ -4,8 +4,11 @@ import time
 import requests
 from subprocess import Popen, PIPE
 import threading
-# from huggingface_hub import hf_hub_download
+from huggingface_hub import hf_hub_download
 import gradio as gr
+
+model_path = hf_hub_download(repo_id=model_name, filename="ccby_nvidia_hifi_6670_M.pt")
+model_json_path = hf_hub_download(repo_id=model_name, filename="ccby_nvidia_hifi_6670_M.json")
 
 def run_xvaserver():
 	# start the process without waiting for a response
@@ -36,8 +39,7 @@ def run_xvaserver():
 
 def load_model():
 	model_name = "Pendrokar/TorchMoji"
-	model_path = hf_hub_download(repo_id=model_name, filename="ccby_nvidia_hifi_6670_M.pt")
-	model_json_path = hf_hub_download(repo_id=model_name, filename="ccby_nvidia_hifi_6670_M.json")
+
 	# model_path = '/tmp/hfcache/models--Pendrokar--xvapitch_nvidia_6670/snapshots/2e138a7c459fb1cb1182dd7bc66813f5325d30fd/ccby_nvidia_hifi_6670_M.pt'
 	# model_json_path = '/tmp/hfcache/models--Pendrokar--xvapitch_nvidia_6670/snapshots/2e138a7c459fb1cb1182dd7bc66813f5325d30fd/ccby_nvidia_hifi_6670_M.json'
 	# try:
