@@ -8,7 +8,8 @@ import glob
 from unidecode import unidecode
 # from g2pc import G2pC
 
-from h2p_parser.h2p import H2p
+# FIXME: Does not load it
+# from h2p_parser.h2p import H2p
 from num2words import num2words
 import pykakasi
 import epitran
@@ -112,8 +113,9 @@ class TextPreprocessor():
                 self.espeak = ESpeak(base_dir, language=self.lang_code2, keep_puncs=True)
 
         self.h2p = None
-        if lang_code=="en":
-            self.h2p = H2p(preload=True)
+        # FIXME: load h2p_parser
+        # if lang_code=="en":
+        #     self.h2p = H2p(preload=True)
 
         # Regular expression matching text enclosed in curly braces:
         self._curly_re = re.compile(r'(.*?)\{(.+?)\}(.*)')
