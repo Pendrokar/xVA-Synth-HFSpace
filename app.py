@@ -11,7 +11,7 @@ def run_xvaserver():
 	# try:
 	# start the process without waiting for a response
 	print('Running xVAServer subprocess...\n')
-	xvaserver = Popen(['python', 'resources/app/server.py'], stdout=PIPE, stderr=PIPE, cwd=f'{os.path.dirname(os.path.abspath(__file__))}/resources/app/')
+	xvaserver = Popen(['python', f'{os.path.dirname(os.path.abspath(__file__))}/resources/app/server.py'], stdout=PIPE, stderr=PIPE, cwd=f'{os.path.dirname(os.path.abspath(__file__))}/resources/app/')
 	# except:
 	# 	print('Could not run xVASynth.')
 	# 	sys.exit(0)
@@ -37,20 +37,6 @@ def run_xvaserver():
 
 	# load default voice model
 	load_model()
-
-	# Read and print stdout and stderr of the subprocess
-	while True:
-		output = xvaserver.stdout.readline()
-		if output == '' and xvaserver.poll() is not None:
-			break
-		if output:
-			print(output.strip())
-
-		error = xvaserver.stderr.readline()
-		if error == '' and xvaserver.poll() is not None:
-			break
-		if error:
-			print(error.strip(), file=sys.stderr)
 
 	# Wait for the process to exit
 	xvaserver.wait()
