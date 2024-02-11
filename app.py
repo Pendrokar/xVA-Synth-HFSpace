@@ -108,10 +108,7 @@ def predict(input, pacing):
 		with open('resources/app/server.log', 'r') as f:
 			print(f.read())
 
-	byte_data = None
-	with open(save_path, "rb") as file:
-		byte_data = file.read()
-	return (22050, byte_data)
+	return (22050, save_path)
 
 input_textbox = gr.Textbox(
 	label="Input Text",
