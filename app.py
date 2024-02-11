@@ -7,7 +7,7 @@ import threading
 from huggingface_hub import hf_hub_download
 import gradio as gr
 
-model_name = "Pendrokar/TorchMoji"
+model_name = "Pendrokar/xvapitch_nvidia_6670"
 model_path = hf_hub_download(repo_id=model_name, filename="ccby_nvidia_hifi_6670_M.pt")
 model_json_path = hf_hub_download(repo_id=model_name, filename="ccby_nvidia_hifi_6670_M.json")
 
