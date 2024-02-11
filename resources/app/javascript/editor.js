@@ -1984,9 +1984,9 @@ window.populateLanguagesDropdownsFromModel = (dropdown, modelJson=undefined) => 
 
     Object.keys(window.supportedLanguages).sort((a,b)=>window.supportedLanguages[a]<window.supportedLanguages[b]?-1:1).forEach(key => {
         if (!modelJson || !modelJson.lang_capabilities || modelJson.lang_capabilities.includes(key)) {
-            const opt = createElem("option", window.supportedLanguages[key])
-            opt.value = key
-            dropdown.appendChild(opt)
+            // const opt = createElem("option", window.supportedLanguages[key])
+            // opt.value = key
+            // dropdown.appendChild(opt)
         }
     })
 }

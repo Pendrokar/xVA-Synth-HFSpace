@@ -1,37 +1,9 @@
 "use strict"
 window.appVersion = "v3.0.3"
 
-window.PRODUCTION = module.filename.includes("resources")
-const path = window.PRODUCTION ? "./resources/app" : "."
-window.path = path
-
-const fs = require("fs")
-const zipdir = require('zip-dir')
-const {shell, ipcRenderer, clipboard} = require("electron")
-const doFetch = require("node-fetch")
-const {xVAAppLogger} = require("./javascript/appLogger.js")
-window.appLogger = new xVAAppLogger(`./app.log`, window.appVersion)
-process.on(`uncaughtException`, (data, origin) => {window.appLogger.log(`uncaughtException: ${data}`);window.appLogger.log(`uncaughtException: ${origin}`)})
-window.onerror = (event, source, lineno, colno, error) => {window.appLogger.log(`onerror: ${error.stack}`)}
-require("./javascript/i18n.js")
-require("./javascript/util.js")
-require("./javascript/nexus.js")
-require("./javascript/dragdrop_model_install.js")
-require("./javascript/embeddings.js")
-require("./javascript/totd.js")
-require("./javascript/arpabet.js")
-require("./javascript/style_embeddings.js")
 const {Editor} = require("./javascript/editor.js")
 require("./javascript/textarea.js")
-const {saveUserSettings, deleteFolderRecursive} = require("./javascript/settingsMenu.js")
 const xVASpeech = require("./javascript/speech2speech.js")
-require("./javascript/batch.js")
-require("./javascript/outputFiles.js")
-require("./javascript/workbench.js")
-const er = require('@electron/remote')
-window.electronBrowserWindow = er.getCurrentWindow()
-const child = require("child_process").execFile
-const spawn = require("child_process").spawn
 
 // Newly introduced in v3. I will slowly start moving global context variables into this, and update code throughout to reference this
 // instead of old variables such as window.games, window.currentModel, etc.
@@ -42,12 +14,6 @@ window.appState = {}
 if (window.PRODUCTION) {
     window.pythonProcess = spawn(`${path}/cpython_${window.userSettings.installation}/server.exe`, {stdio: "ignore"})
 }
-
-const {PluginsManager} = require("./javascript/plugins_manager.js")
-window.pluginsContext = {}
-window.pluginsManager = new PluginsManager(window.path, window.appLogger, window.appVersion)
-window.pluginsManager.runPlugins(window.pluginsManager.pluginsModules["start"]["pre"], event="pre start")
-
 
 let themeColour
 let secondaryThemeColour
@@ -1425,10 +1391,10 @@ window.setupModal(infoIcon, infoContainer)
 
 // Patreon
 // =======
-window.setupModal(patreonIcon, patreonContainer, () => {
-    const data = fs.readFileSync(`${path}/patreon.txt`, "utf8") + ", minermanb"
-    creditsList.innerHTML = data
-})
+// window.setupModal(patreonIcon, patreonContainer, () => {
+//     const data = fs.readFileSync(`${path}/patreon.txt`, "utf8") + ", minermanb"
+//     creditsList.innerHTML = data
+// })
 
 
 // Updates
