@@ -11,7 +11,7 @@ def run_xvaserver():
 	try:
 		# start the process without waiting for a response
 		print('Running xVAServer subprocess...\n')
-		xvaserver = Popen(['python', 'server.py'], stdout=PIPE, stderr=PIPE, universal_newlines=True)
+		xvaserver = Popen(['python', 'resources/app/server.py'], stdout=PIPE, stderr=PIPE, universal_newlines=True)
 	except:
 		print('Could not run xVASynth.')
 		sys.exit(0)
