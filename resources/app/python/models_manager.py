@@ -111,7 +111,8 @@ class ModelsManager(object):
             self.init_model(model_key, instance_index)
 
         if not os.path.exists(ckpt_path):
-            return "ENOENT"
+            self.logger.error('Checkpoint not found!')
+            raise FileNotFoundError()
 
         if self.models_bank[model_key][instance_index].ckpt_path != ckpt_path:
             self.logger.info(f'ModelsManager: Loading model checkpoint: {model_key}, {ckpt_path}')

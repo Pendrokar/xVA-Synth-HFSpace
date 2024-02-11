@@ -20,4 +20,4 @@ preload_from_hub:
 license: gpl-3.0
 ---
 
-Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference
+DanRuta's xVASynth, GitHub repo: [https://github.com/DanRuta/xVA-Synth](https://github.com/DanRuta/xVA-Synth)
