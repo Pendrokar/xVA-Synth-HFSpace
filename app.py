@@ -24,7 +24,11 @@ def run_xvaserver():
 		print("Web server failed to start.")
 		sys.exit(0)
 
-	requests.get('http://0.0.0.0:8008')
+	# contact local xVASynth server; ~2 second timeout
+	logging.info(f'Attempting to connect to xVASynth...')
+	response = requests.get('http://0.0.0.0:8008')
+	response.raise_for_status()  # If the response contains an HTTP error status code, raise an exception
+
 	print('xVAServer running on port 8008')
 
 	# Read and print stdout and stderr of the subprocess
