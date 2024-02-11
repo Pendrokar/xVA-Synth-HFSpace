@@ -35,6 +35,9 @@ def run_xvaserver():
 
 	print('xVAServer running on port 8008')
 
+	# load default model
+	load_model()
+
 	# Wait for the process to exit
 	xvaserver.wait()
 
@@ -70,7 +73,7 @@ def load_model():
 def predict(input_text, pacing):
 
 	# reload model just in case
-	load_model()
+	# load_model()
 
 	model_type = 'xVAPitch'
 	pace = pacing if pacing else 1.0
@@ -123,7 +126,7 @@ gradio_app = gr.Interface(
 	# examples=[
 	# 	["Once, I headed in much deeper. But I doubt I'll ever do that again.", 1],
 	# 	["You love hurting me, huh?", 1.5],
-	# 	["Ah! What is happening to me?!?", 1],
+	# 	["Ah, I see. Well, I'm afraid I can't help with that.", 1],
 	# 	["Embrace your demise!", 1],
 	# 	["Never come back!", 1]
 	# ],
