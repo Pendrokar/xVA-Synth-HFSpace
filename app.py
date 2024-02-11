@@ -108,7 +108,7 @@ def predict(input, pacing):
 		with open('resources/app/server.log', 'r') as f:
 			print(f.read())
 
-	return (22050, save_path)
+	return save_path
 
 input_textbox = gr.Textbox(
 	label="Input Text",
@@ -123,7 +123,7 @@ gradio_app = gr.Interface(
 		input_textbox,
 		slider
 	],
-	outputs="audio",
+	outputs=gr.Audio(label="22kHz audio", type="filepath"),
 	title="xVASynth (WIP)",
 )
 
