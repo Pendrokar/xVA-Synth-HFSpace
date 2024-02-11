@@ -25,7 +25,7 @@ def run_xvaserver():
 		sys.exit(0)
 
 	# contact local xVASynth server; ~2 second timeout
-	logging.info(f'Attempting to connect to xVASynth...')
+	print('Attempting to connect to xVASynth...')
 	response = requests.get('http://0.0.0.0:8008')
 	response.raise_for_status()  # If the response contains an HTTP error status code, raise an exception
 
