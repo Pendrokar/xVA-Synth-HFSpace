@@ -11,19 +11,13 @@ def run_xvaserver():
 	# try:
 	# start the process without waiting for a response
 	print('Running xVAServer subprocess...\n')
-	xvaserver = Popen(['python', 'resources/app/server.py'], stdout=PIPE, stderr=PIPE, universal_newlines=True)
+	xvaserver = Popen(['python', 'resources/app/server.py'], stdout=PIPE, stderr=PIPE, cwd=f'{os.path.dirname(os.path.abspath(__file__))}/resources/app/')
 	# except:
 	# 	print('Could not run xVASynth.')
 	# 	sys.exit(0)
 
 	# Wait for a moment to ensure the server starts up
 	time.sleep(10)
-
-	# load default voice model
-	load_model()
-
-	# predicted = predict('test', 1.0)
-	# print(predicted)
 
 	# Check if the server is running
 	if xvaserver.poll() is not None:
@@ -40,6 +34,9 @@ def run_xvaserver():
 		return
 
 	print('xVAServer running on port 8008')
+
+	# load default voice model
+	load_model()
 
 	# Read and print stdout and stderr of the subprocess
 	while True:
@@ -119,7 +116,7 @@ def predict(input, pacing):
 		print('Failed to synthesize!')
 
 	print('server.log contents:')
-	with open('server.log', 'r') as f:
+	with open('resources/app/server.log', 'r') as f:
 		print(f.read())
 
 	return 22100, os.open(save_path, "rb")
