@@ -29,7 +29,7 @@ def run_xvaserver():
 	try:
 		response = requests.get('http://0.0.0.0:8008')
 		response.raise_for_status()  # If the response contains an HTTP error status code, raise an exception
-    except requests.exceptions.RequestException as err:
+	except requests.exceptions.RequestException as err:
 		print('Failed to connect!')
 		return
 
