@@ -59,6 +59,10 @@ button:disabled {
     filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 1))
 }
 
+.tool-icon {
+    filter: invert();
+}
+
 body {
     margin: 0;
     overflow: hidden;
@@ -80,7 +84,7 @@ body {
 #right {
     height: 100%;
     flex-grow: 1;
-    width: 50vw;
+    width: 100vw;
 }
 
 #left {
@@ -89,13 +93,15 @@ body {
 }
 
 #right {
-    width: calc(100vw - 300px);
+    background: linear-gradient(0deg, #999 0, rgba(0, 0, 0, 0)), black;
+    background-repeat: no-repeat !important;
+    background-position-x: 100% !important;
+    background-size: cover !important;
     z-index: 1;
 }
 
 #rightBG1,
 #rightBG2 {
-    width: calc(100vw - 300px);
     background: linear-gradient(0deg, grey 0, rgba(0, 0, 0, 0)), grey;
     background-repeat: no-repeat !important;
     background-position-x: 100% !important;
@@ -510,7 +516,7 @@ audio {
 }
 
 #dialogueInput {
-    width: calc(95vw - 300px) !important;
+    color: #000 !important;
     margin-left: 1vw;
 }
 
