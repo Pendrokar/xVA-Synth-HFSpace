@@ -75,8 +75,12 @@ def load_model():
 		'base_lang': language,
 		'pluginsContext': '{}',
 	}
-	response = requests.post('http://0.0.0.0:8008/loadModel', json=data)
-	response.raise_for_status()  # If the response contains an HTTP error status code, raise an exception
+
+	try:
+		response = requests.post('http://0.0.0.0:8008/loadModel', json=data)
+		response.raise_for_status()  # If the response contains an HTTP error status code, raise an exception
+	except requests.exceptions.RequestException as err:
+		print('Failed to load voice model!')
 	return
 
 def predict(input, pacing):
