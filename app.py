@@ -87,6 +87,7 @@ def predict(input, pacing):
 	use_cleanup = 0
 
 	data = {
+		'pluginsContext': '{}',
 		'modelType': model_type,
 		'sequence': line,
 		'pace': pace,
