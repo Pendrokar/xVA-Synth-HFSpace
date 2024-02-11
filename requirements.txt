@@ -27,7 +27,7 @@ importlib-resources==5.2.2
 inflect==4.1.0
 jaconv==0.3
 joblib==0.17.0
-librosa==0.8.0
+librosa
 num2words==0.5.10
 numpy
 omegaconf==2.1.1
