@@ -94,7 +94,7 @@ def predict(input, pacing):
 		'useCleanup': use_cleanup,
 	}
 	response = requests.post('http://0.0.0.0:8008/synthesize', json=data)
-	response.raise_for_status()  # If the response contains an HTTP error status code, raise an exception
+	# response.raise_for_status()  # If the response contains an HTTP error status code, raise an exception
 
 	print('server.log contents:')
 	with open('server.log', 'r') as f:
