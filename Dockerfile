@@ -1,25 +1,4 @@
-# Set up a new user named "user" with user ID 1000
-RUN useradd -m -u 1000 user
-
-# Switch to the "user" user
-USER user
-
-# Set home to the user's home directory
-ENV HOME=/home/user \
-	PATH=/home/user/.local/bin:$PATH
-
-# Set the working directory to the user's home directory
-WORKDIR $HOME/app
-
-# Try and run pip command after setting the user with `USER user` to avoid permission issues with Python
-RUN pip install --no-cache-dir --upgrade pip
-
-# Copy the current directory contents into the container at $HOME/app setting the owner to the user
-COPY --chown=user . $HOME/app
-
-FROM docker.io/huggingface/downloader:0.17.3@sha256:b5bc7fb168c85737634c00c4099b19e251eb2e55b3523b4e389d98876b35f109
-
-FROM docker.io/library/python:3.9@sha256:5e11e0165c7e02fcb4a15772bd25e28266ed9c4e90fded5e8cc7a921affd7826
+FROM python:3.9
 
 RUN --mount=target=pre-requirements.txt,source=pre-requirements.txt 	pip install --no-cache-dir -r pre-requirements.txt
 
@@ -44,3 +23,5 @@ RUN pip freeze > /tmp/freeze.txt
 COPY --link --chown=1000 ./ /home/user/app
 
 COPY --from=pipfreeze --link --chown=1000 /tmp/freeze.txt .
+
+CMD ["python", "app.py"]
