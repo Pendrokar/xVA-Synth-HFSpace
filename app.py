@@ -26,8 +26,12 @@ def run_xvaserver():
 
 	# contact local xVASynth server; ~2 second timeout
 	print('Attempting to connect to xVASynth...')
-	response = requests.get('http://0.0.0.0:8008')
-	response.raise_for_status()  # If the response contains an HTTP error status code, raise an exception
+	try:
+		response = requests.get('http://0.0.0.0:8008')
+		response.raise_for_status()  # If the response contains an HTTP error status code, raise an exception
+    except requests.exceptions.RequestException as err:
+		print('Failed to connect!')
+		return
 
 	print('xVAServer running on port 8008')
 
@@ -93,8 +97,12 @@ def predict(input, pacing):
 		'useSR': use_sr,
 		'useCleanup': use_cleanup,
 	}
-	response = requests.post('http://0.0.0.0:8008/synthesize', json=data)
-	# response.raise_for_status()  # If the response contains an HTTP error status code, raise an exception
+
+	try:
+		response = requests.post('http://0.0.0.0:8008/synthesize', json=data)
+		response.raise_for_status()  # If the response contains an HTTP error status code, raise an exception
+	except requests.exceptions.RequestException as err:
+		print('Failed to synthesize!')
 
 	print('server.log contents:')
 	with open('server.log', 'r') as f:
