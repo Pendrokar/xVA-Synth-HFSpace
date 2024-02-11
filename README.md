@@ -3,7 +3,7 @@ title: xVASynth
 emoji: 🗣
 colorFrom: gray
 colorTo: gray
-sdk: gradio
+sdk: docker
 python_version: 3.9
 app_file: app.py
 app_port: 7860
