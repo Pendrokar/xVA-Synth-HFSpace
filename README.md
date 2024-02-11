@@ -6,6 +6,7 @@ colorTo: gray
 sdk: docker
 python_version: 3.9
 app_file: app.py
+app_port: 7860
 tags:
   - tts
   - t2s
