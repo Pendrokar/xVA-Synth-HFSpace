@@ -119,15 +119,15 @@ gradio_app = gr.Interface(
 		pacing_slider
 	],
 	outputs=gr.Audio(label="22kHz audio", type="filepath"),
-	title="xVASynth (WIP)",
-	examples=[
-		["Once, I headed in much deeper. But I doubt I'll ever do that again.", 1],
-		["You love hurting me, huh?", 1.5],
-		["Ah! What is happening to me?!?", 1],
-		["Embrace your demise!", 1],
-		["Never come back!", 1]
-	],
-	cache_examples=None
+	title="xVASynth (WIP)"
+	# examples=[
+	# 	["Once, I headed in much deeper. But I doubt I'll ever do that again.", 1],
+	# 	["You love hurting me, huh?", 1.5],
+	# 	["Ah! What is happening to me?!?", 1],
+	# 	["Embrace your demise!", 1],
+	# 	["Never come back!", 1]
+	# ],
+	# cache_examples=None
 )
 
 
