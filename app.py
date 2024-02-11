@@ -73,6 +73,10 @@ def load_model():
 	return
 
 def predict(input, pacing):
+
+	# reload model just in case
+	load_model()
+
 	model_type = 'xVAPitch'
 	line = 'Test'
 	pace = pacing if pacing else 1.0
