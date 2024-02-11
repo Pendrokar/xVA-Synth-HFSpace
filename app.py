@@ -19,6 +19,12 @@ def run_xvaserver():
 	# Wait for a moment to ensure the server starts up
 	time.sleep(10)
 
+	# load default voice model
+	load_model()
+
+	# predicted = predict('test', 1.0)
+	# print(predicted)
+
 	# Check if the server is running
 	if xvaserver.poll() is not None:
 		print("Web server failed to start.")
@@ -70,7 +76,7 @@ def load_model():
 	data = {
 		'outputs': None,
 		'version': '3.0',
-		'model': 'ccby/ccby_nvidia_hifi_6670_M',
+		'model': model_path.replace('.pt', ''),
 		'modelType': model_type,
 		'base_lang': language,
 		'pluginsContext': '{}',
@@ -141,12 +147,6 @@ if __name__ == "__main__":
 	web_server_thread = threading.Thread(target=run_xvaserver)
 	print('Starting xVAServer thread')
 	web_server_thread.start()
-
-	# load default voice model
-	load_model()
-
-	# predicted = predict('test', 1.0)
-	# print(predicted)
 
 	print('running Gradio interface')
 	gradio_app.launch()
