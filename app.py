@@ -67,13 +67,12 @@ def load_model():
 		print('Failed to load voice model!')
 	return
 
-def predict(input, pacing):
+def predict(input_text, pacing):
 
 	# reload model just in case
 	load_model()
 
 	model_type = 'xVAPitch'
-	line = 'Test'
 	pace = pacing if pacing else 1.0
 	save_path = '/tmp/xvapitch_audio_sample.wav'
 	language = 'en'
@@ -84,7 +83,8 @@ def predict(input, pacing):
 	data = {
 		'pluginsContext': '{}',
 		'modelType': model_type,
-		'sequence': line,
+		# pad with whitespaces as a workaround to avoid cutoffs
+		'sequence': input_text.center(len(input_text) + 2, ' '),
 		'pace': pace,
 		'outfile': save_path,
 		'vocoder': 'n/a',
@@ -120,6 +120,13 @@ gradio_app = gr.Interface(
 	],
 	outputs=gr.Audio(label="22kHz audio", type="filepath"),
 	title="xVASynth (WIP)",
+    examples=[
+        ["Once, I headed in much deeper. But I doubt I'll ever do that again.", 1],
+        ["You love hurting me, huh?", 1.5],
+        ["Ah! What is happening to me?!?", 1],
+        ["Embrace your demise!", 1],
+        ["Never come back!", 1]
+    ]
 )
 
 
