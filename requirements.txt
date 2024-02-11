@@ -19,6 +19,7 @@ ffmpeg-python
 filelock==3.0.12
 future==0.18.2
 g2pC==0.9.9.3
+httplib2==0.19.1
 huggingface-hub==0.19.4
 hydra-core==1.1.1
 idna==2.10
