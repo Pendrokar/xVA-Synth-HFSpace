@@ -34,6 +34,9 @@ def run_xvaserver():
 	# load default voice model
 	# load_model()
 
+	predicted = predict('test', 1.0)
+	print(predicted)
+
 	# Read and print stdout and stderr of the subprocess
 	while True:
 		output = xvaserver.stdout.readline()
