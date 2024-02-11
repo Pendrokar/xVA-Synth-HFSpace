@@ -8,13 +8,9 @@ import threading
 import gradio as gr
 
 def run_xvaserver():
-	# try:
 	# start the process without waiting for a response
 	print('Running xVAServer subprocess...\n')
 	xvaserver = Popen(['python', f'{os.path.dirname(os.path.abspath(__file__))}/resources/app/server.py'], stdout=PIPE, stderr=PIPE, cwd=f'{os.path.dirname(os.path.abspath(__file__))}/resources/app/')
-	# except:
-	# 	print('Could not run xVASynth.')
-	# 	sys.exit(0)
 
 	# Wait for a moment to ensure the server starts up
 	time.sleep(10)
@@ -24,7 +20,7 @@ def run_xvaserver():
 		print("Web server failed to start.")
 		sys.exit(0)
 
-	# contact local xVASynth server; ~2 second timeout
+	# contact local xVASynth server
 	print('Attempting to connect to xVASynth...')
 	try:
 		response = requests.get('http://0.0.0.0:8008')
@@ -34,9 +30,6 @@ def run_xvaserver():
 		return
 
 	print('xVAServer running on port 8008')
-
-	# load default voice model
-	load_model()
 
 	# Wait for the process to exit
 	xvaserver.wait()
@@ -104,9 +97,9 @@ def predict(input, pacing):
 		response.raise_for_status()  # If the response contains an HTTP error status code, raise an exception
 	except requests.exceptions.RequestException as err:
 		print('Failed to synthesize!')
-		print('server.log contents:')
-		with open('resources/app/server.log', 'r') as f:
-			print(f.read())
+	print('server.log contents:')
+	with open('resources/app/server.log', 'r') as f:
+		print(f.read())
 
 	return save_path
 
@@ -115,13 +108,13 @@ input_textbox = gr.Textbox(
 	lines=1,
 	autofocus=True
 )
-slider = gr.Slider(0.0, 2.0, value=1.0, step=0.1, label="Pacing")
+pacing_slider = gr.Slider(0.5, 2.0, value=1.0, step=0.1, label="Pacing")
 
 gradio_app = gr.Interface(
 	predict,
 	[
 		input_textbox,
-		slider
+		pacing_slider
 	],
 	outputs=gr.Audio(label="22kHz audio", type="filepath"),
 	title="xVASynth (WIP)",
