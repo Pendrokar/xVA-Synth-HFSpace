@@ -26,9 +26,11 @@ idna==2.10
 importlib-metadata==2.0.0
 importlib-resources==5.2.2
 inflect==4.1.0
+inquirerpy~=0.3.3
 jaconv==0.3
 joblib==0.17.0
 librosa
+nltk~=3.7
 num2words==0.5.10
 numpy
 omegaconf==2.1.1
@@ -43,6 +45,7 @@ pydub==0.25.1
 pykakasi==2.2.1
 pyparsing==2.4.7
 python-crfsuite==0.9.8
+pywordsegment~=0.2.1
 PyYAML
 regex==2021.8.28
 requests==2.25.1
