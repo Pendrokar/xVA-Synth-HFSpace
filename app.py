@@ -31,12 +31,6 @@ def run_xvaserver():
 
 	print('xVAServer running on port 8008')
 
-	# load default voice model
-	load_model()
-
-	predicted = predict('test', 1.0)
-	print(predicted)
-
 	# Read and print stdout and stderr of the subprocess
 	while True:
 		output = xvaserver.stdout.readline()
@@ -101,6 +95,11 @@ def predict(input, pacing):
 	}
 	response = requests.post('http://0.0.0.0:8008/synthesize', json=data)
 	response.raise_for_status()  # If the response contains an HTTP error status code, raise an exception
+
+	print('server.log contents:')
+	with open('server.log', 'r') as f:
+		print(f.read())
+
 	return 22100, os.open(save_path, "rb")
 
 input_textbox = gr.Textbox(
@@ -126,6 +125,12 @@ if __name__ == "__main__":
 	web_server_thread = threading.Thread(target=run_xvaserver)
 	print('Starting xVAServer thread')
 	web_server_thread.start()
+
+	# load default voice model
+	# load_model()
+
+	# predicted = predict('test', 1.0)
+	# print(predicted)
 
 	print('running Gradio interface')
 	gradio_app.launch()
