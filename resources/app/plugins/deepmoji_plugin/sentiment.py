@@ -224,34 +224,41 @@ def adjust_values(data=None):
 	em_angry_max = 0.6
 	try:
 		em_angry += float(data["pluginsContext"]["mantella_settings"]["emAngry"]) * 100
+		em_angry_max = 1
 	except:
 		pass
 	try:
 		em_happy += float(data["pluginsContext"]["mantella_settings"]["emHappy"]) * 100
+		em_emotion_max = 1
 	except:
 		pass
 	try:
 		em_sad += float(data["pluginsContext"]["mantella_settings"]["emSad"]) * 100
+		em_emotion_max = 1
 	except:
 		pass
 	try:
 		em_surprise += float(data["pluginsContext"]["mantella_settings"]["emSurprise"]) * 100
+		em_emotion_max = 1
 	except:
 		pass
 
-	# top_em highest wins all
-	top_em = max(
-		em_angry,
-		em_happy,
-		em_sad
-	)
-	em_angry = em_angry if (em_angry == top_em) else 0
-	em_happy = em_happy if (em_happy == top_em) else 0
-	# amplified sadness ratio
-	em_sad = (em_sad * 3) if (em_sad == top_em) else 0
+	# HF
+	if (len(text_scores) > 1):
+		# top_em highest wins all
+		top_em = max(
+			em_angry,
+			em_happy,
+			em_sad
+		)
+		em_angry = em_angry if (em_angry == top_em) else 0
+		em_happy = em_happy if (em_happy == top_em) else 0
+		# amplified sadness ratio
+		em_sad = (em_sad * 3) if (em_sad == top_em) else 0
 
-	# amplifier
-	ratio = float(plugin_settings['amplifier_ratio'])
+		# amplifier
+		ratio = float(plugin_settings['amplifier_ratio'])
+
 	logger.log(f'Amplifier ratio: {ratio}')
 	hasExcMark = False
 	if ('!!!' in text_scores[0]):
@@ -275,6 +282,10 @@ def adjust_values(data=None):
 		logger.log(f"! detected => em_angry_max: {em_angry_max}")
 		logger.log(f'! Ratio: {ratio}')
 		hasExcMark = True
+
+	# HF
+	if (len(text_scores) <= 1):
+		ratio = 1
 
 	# final values
 	em_angry = min(em_angry_max, em_angry / 100 * ratio) if em_angry > 0 else 0

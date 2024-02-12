@@ -215,8 +215,8 @@ pacing_slider = gr.Slider(0.5, 2.0, value=1.0, step=0.1, label="Duration")
 pitch_slider = gr.Slider(0, 1.0, value=0.5, step=0.05, label="Pitch", visible=False)
 energy_slider = gr.Slider(0.1, 1.0, value=1.0, step=0.05, label="Energy", visible=False)
 anger_slider = gr.Slider(0, 1.0, value=0, step=0.05, label="😠 Anger")
-happy_slider = gr.Slider(0, 1.0, value=0, step=0.05, label="😃 Happy")
-sad_slider = gr.Slider(0, 1.0, value=0, step=0.05, label="😭 Sad")
+happy_slider = gr.Slider(0, 1.0, value=0, step=0.05, label="😃 Happiness")
+sad_slider = gr.Slider(0, 1.0, value=0, step=0.05, label="😭 Sadness")
 surprise_slider = gr.Slider(0, 1.0, value=0, step=0.05, label="😮 Surprise")
 voice_radio = gr.Radio(
 	voice_models,
