@@ -115,7 +115,7 @@ def run_xvaserver():
 	print('xVAServer running on port 8008')
 
 	# load default model
-	load_model(voice_models[0])
+	load_model("ccby_nvidia_hifi_6670_M")
 
 	# Wait for the process to exit
 	xvaserver.wait()
@@ -214,10 +214,10 @@ input_textbox = gr.Textbox(
 pacing_slider = gr.Slider(0.5, 2.0, value=1.0, step=0.1, label="Duration")
 pitch_slider = gr.Slider(0, 1.0, value=0.5, step=0.05, label="Pitch", visible=False)
 energy_slider = gr.Slider(0.1, 1.0, value=1.0, step=0.05, label="Energy", visible=False)
-anger_slider = gr.Slider(0, 1.0, value=1.0, step=0.05, label="😠 Anger")
-happy_slider = gr.Slider(0, 1.0, value=1.0, step=0.05, label="😃 Happy")
-sad_slider = gr.Slider(0, 1.0, value=1.0, step=0.05, label="😭 Sad")
-surprise_slider = gr.Slider(0, 1.0, value=1.0, step=0.05, label="😮 Surprise")
+anger_slider = gr.Slider(0, 1.0, value=0, step=0.05, label="😠 Anger")
+happy_slider = gr.Slider(0, 1.0, value=0, step=0.05, label="😃 Happy")
+sad_slider = gr.Slider(0, 1.0, value=0, step=0.05, label="😭 Sad")
+surprise_slider = gr.Slider(0, 1.0, value=0, step=0.05, label="😮 Surprise")
 voice_radio = gr.Radio(
 	voice_models,
 	value="ccby_nvidia_hifi_6670_M",

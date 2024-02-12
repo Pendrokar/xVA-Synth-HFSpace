@@ -34,7 +34,9 @@ last_em_happy = float(0)
 last_em_sad = float(0)
 last_em_surprise = float(0)
 
-from plugins.deepmoji_plugin.xvasynth_torchmoji import scoreText
+def scoreText(text):
+	return text
+# from plugins.deepmoji_plugin.xvasynth_torchmoji import scoreText
 import csv
 
 def setup(data=None):
