@@ -213,7 +213,7 @@ language_radio = gr.Radio(
 	label="Language",
 	info="Will be more monotone and have an English accent. Tested mostly by a native Briton."
 )
-language_radio.change(set_default_text)
+# language_radio.change(set_default_text)
 
 gradio_app = gr.Interface(
 	predict,
