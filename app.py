@@ -115,7 +115,6 @@ def run_xvaserver():
 
 	# load default model
 	load_model(voice_models[0])
-	current_voice_model = voice_models[0]
 
 	# Wait for the process to exit
 	xvaserver.wait()
@@ -145,6 +144,8 @@ def load_model(voice_model_name):
 	return
 
 def predict(input_text, pacing, voice, lang):
+	# grab only the first 1000 characters
+	input_text = input_text[:1000]
 
 	# load voice model if not the current model
 	if (current_voice_model != voice):

@@ -1,0 +1,45 @@
+{
+    "plugin-name": "DeepMoji Plugin",
+    "author": "Pendrokar",
+    "nexus-link": "https://www.nexusmods.com/skyrimspecialedition/mods/107142",
+    "plugin-version": "0.9.0",
+    "plugin-short-description": "Analyses and adjusts emotional modifiers.",
+    "min-app-version": "3.0.0",
+    "install-requires-restart": false,
+    "uninstall-requires-restart": false,
+
+    "front-end-style-files": [],
+
+    "front-end-hooks": {
+        "start": {
+            "post": {
+                "file": "options.js",
+                "function": "setupSettings"
+            }
+        }
+    },
+    "back-end-hooks": {
+        "load-model": {
+            "pre": {
+                "file": "sentiment.py",
+                "function": "pre_load_model"
+            }
+        },
+        "batch-synth-line": {
+            "pre": {
+                "file": "sentiment.py",
+                "function": "fetch_text_batch"
+            }
+        },
+        "synth-line": {
+            "pre": {
+                "file": "sentiment.py",
+                "function": "fetch_text"
+            },
+            "mid": {
+                "file": "sentiment.py",
+                "function": "adjust_values"
+            }
+        }
+    }
+}
