@@ -8,9 +8,10 @@ from huggingface_hub import hf_hub_download
 import gradio as gr
 
 hf_model_name = "Pendrokar/xvapitch_nvidia"
-hf_cache_models_path = '/tmp/hfcache/models--Pendrokar--xvapitch_nvidia/snapshots/61b10e60b22bc21c1e072f72f1108b9c2b21e94c'
+hf_cache_models_path = '/home/user/.cache/huggingface/hub/models--Pendrokar--xvapitch_nvidia/snapshots/61b10e60b22bc21c1e072f72f1108b9c2b21e94c/'
+# models_path = './resources/app/models/ccby/'
+models_path = '/home/user/.cache/huggingface/hub/models--Pendrokar--xvapitch_nvidia/snapshots/61b10e60b22bc21c1e072f72f1108b9c2b21e94c/'
 
-models_path = './resources/app/models/ccby/'
 
 voice_models = [
 	"ccby_nvidia_hifi_6670_M",
@@ -27,13 +28,13 @@ voice_models = [
 current_voice_model = None
 
 # move models to a more persistant place
-try:
-	for voice_model_name in voice_model_names:
-		os.rename(hf_cache_models_path +'/'+ voice_model_name + '.pt', models_path + voice_model_name + '.pt')
-		os.rename(hf_cache_models_path +'/'+ voice_model_name + '.json', models_path + voice_model_name + '.json')
-		os.rename(hf_cache_models_path +'/'+ voice_model_name + '.wav', models_path + voice_model_name + '.wav')
-except Exception as e:
-	print('Failed to move downloaded models, perhaps already moved')
+# try:
+# 	for voice_model_name in voice_model_names:
+# 		os.rename(hf_cache_models_path + voice_model_name + '.pt', models_path + voice_model_name + '.pt')
+# 		os.rename(hf_cache_models_path + voice_model_name + '.json', models_path + voice_model_name + '.json')
+# 		os.rename(hf_cache_models_path + voice_model_name + '.wav', models_path + voice_model_name + '.wav')
+# except Exception as e:
+# 	print(f'Failed to move downloaded models, perhaps already moved: {e}')
 
 def run_xvaserver():
 	# start the process without waiting for a response
