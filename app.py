@@ -225,7 +225,7 @@ gradio_app = gr.Interface(
 	],
 	outputs=gr.Audio(label="22kHz audio output", type="filepath"),
 	title="xVASynth (WIP)",
-	clear_btn=None
+	clear_btn=gr.Button(visible=False)
 	# examples=[
 	# 	["Once, I headed in much deeper. But I doubt I'll ever do that again.", 1],
 	# 	["You love hurting me, huh?", 1.5],
