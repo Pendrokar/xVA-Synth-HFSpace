@@ -14,16 +14,16 @@ models_path = '/home/user/.cache/huggingface/hub/models--Pendrokar--xvapitch_nvi
 
 
 voice_models = [
-	"ccby_nvidia_hifi_6670_M",
-	"ccby_nv_hifi_11614_F",
-	"ccby_nvidia_hifi_11697_F",
-	"ccby_nvidia_hifi_12787_F",
-	"ccby_nvidia_hifi_6097_M",
-	"ccby_nvidia_hifi_6671_M",
-	"ccby_nvidia_hifi_8051_F",
-	"ccby_nvidia_hifi_9017_M",
-	"ccby_nvidia_hifi_9136_F",
-	"ccby_nvidia_hifi_92_F",
+	("Male #6670", "ccby_nvidia_hifi_6670_M"),
+	("Female #11614", "ccby_nv_hifi_11614_F"),
+	("Female #11697", "ccby_nvidia_hifi_11697_F"),
+	("Female #12787", "ccby_nvidia_hifi_12787_F"),
+	("Male #6097", "ccby_nvidia_hifi_6097_M"),
+	("Male #6671", "ccby_nvidia_hifi_6671_M"),
+	("Female #8051", "ccby_nvidia_hifi_8051_F"),
+	("Male #9017", "ccby_nvidia_hifi_9017_M"),
+	("Female #9136", "ccby_nvidia_hifi_9136_F"),
+	("Female #92", "ccby_nvidia_hifi_92_F"),
 ]
 current_voice_model = None
 
