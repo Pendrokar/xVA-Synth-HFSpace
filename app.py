@@ -172,12 +172,12 @@ def predict(
 	use_cleanup = 0
 
 	pluginsContext = {}
-    pluginsContext["mantella_settings"] = {
-        "emAngry": anger if anger > 0 else 0,
-        "emHappy": happy if happy > 0 else 0,
-        "emSad": sad if sad > 0 else 0,
-        "emSurprise": surprise if surprise > 0 else 0
-    }
+	pluginsContext["mantella_settings"] = {
+		"emAngry": (anger if anger > 0 else 0),
+		"emHappy": (happy if happy > 0 else 0),
+		"emSad": (sad if sad > 0 else 0),
+		"emSurprise": (surprise if surprise > 0 else 0)
+	}
 
 	data = {
 		'pluginsContext': json.dumps(pluginsContext),
