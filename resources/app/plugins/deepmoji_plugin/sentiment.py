@@ -258,6 +258,8 @@ def adjust_values(data=None):
 
 		# amplifier
 		ratio = float(plugin_settings['amplifier_ratio'])
+	else:
+		ratio = 1.0
 
 	logger.log(f'Amplifier ratio: {ratio}')
 	hasExcMark = False
@@ -285,6 +287,7 @@ def adjust_values(data=None):
 
 	# HF
 	if (len(text_scores) <= 1):
+		em_angry_max = 1
 		ratio = 1
 
 	# final values
