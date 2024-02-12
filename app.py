@@ -29,9 +29,9 @@ current_voice_model = None
 # move models to a more persistant place
 try:
 	for voice_model_name in voice_model_names:
-		os.rename(hf_cache_path +'/'+ voice_model_name + '.pt', models_path + voice_model_name + '.pt')
-		os.rename(hf_cache_path +'/'+ voice_model_name + '.json', models_path + voice_model_name + '.json')
-		os.rename(hf_cache_path +'/'+ voice_model_name + '.wav', models_path + voice_model_name + '.wav')
+		os.rename(hf_cache_models_path +'/'+ voice_model_name + '.pt', models_path + voice_model_name + '.pt')
+		os.rename(hf_cache_models_path +'/'+ voice_model_name + '.json', models_path + voice_model_name + '.json')
+		os.rename(hf_cache_models_path +'/'+ voice_model_name + '.wav', models_path + voice_model_name + '.wav')
 except Exception as e:
 	print('Failed to move downloaded models, perhaps already moved')
 
@@ -129,6 +129,7 @@ def predict(input_text, pacing):
 input_textbox = gr.Textbox(
 	label="Input Text",
 	lines=1,
+	max_lines=5,
 	autofocus=True
 )
 pacing_slider = gr.Slider(0.5, 2.0, value=1.0, step=0.1, label="Pacing")
