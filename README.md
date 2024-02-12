@@ -6,7 +6,7 @@ colorTo: gray
 sdk: gradio
 python_version: 3.9
 models:
-  - Pendrokar/xvapitch_nvidia_6670
+  - Pendrokar/xvapitch_nvidia
 app_file: app.py
 app_port: 7860
 tags:
@@ -16,7 +16,7 @@ tags:
 - s2s
 pinned: false
 preload_from_hub:
-  - Pendrokar/xvapitch_nvidia_6670
+  - Pendrokar/xvapitch_nvidia
 license: gpl-3.0
 ---
 
