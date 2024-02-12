@@ -61,13 +61,14 @@ def run_xvaserver():
 	print('xVAServer running on port 8008')
 
 	# load default model
-	load_model()
+	load_model(voice_models[0])
+	current_voice_model = voice_models[0]
 
 	# Wait for the process to exit
 	xvaserver.wait()
 
-def load_model():
-	model_path =  models_path + voice_models[0]
+def load_model(voice_model_name):
+	model_path =  models_path + voice_model_name
 
 	model_type = 'xVAPitch'
 	language = 'en'
@@ -84,15 +85,17 @@ def load_model():
 	try:
 		response = requests.post('http://0.0.0.0:8008/loadModel', json=data)
 		response.raise_for_status()  # If the response contains an HTTP error status code, raise an exception
+		current_voice_model = voice_model_name
 	except requests.exceptions.RequestException as err:
 		print('Failed to load voice model!')
+
 	return
 
-def predict(input_text, pacing):
+def predict(input_text, pacing, voice):
 
 	# load voice model if not the current model
-	# if (current_voice_model != voice_model)
-	# 	load_model()
+	if (current_voice_model != voice):
+		load_model(voice)
 
 	model_type = 'xVAPitch'
 	pace = pacing if pacing else 1.0
@@ -134,12 +137,18 @@ input_textbox = gr.Textbox(
 	autofocus=True
 )
 pacing_slider = gr.Slider(0.5, 2.0, value=1.0, step=0.1, label="Pacing")
+voice_radio = gr.Radio(
+	voice_models,
+	label="Voice",
+	info="NVIDIA HIFI CC-BY-4.0 model"
+),
 
 gradio_app = gr.Interface(
 	predict,
 	[
 		input_textbox,
-		pacing_slider
+		pacing_slider,
+		voice_radio
 	],
 	outputs=gr.Audio(label="22kHz audio", type="filepath"),
 	title="xVASynth (WIP)"
