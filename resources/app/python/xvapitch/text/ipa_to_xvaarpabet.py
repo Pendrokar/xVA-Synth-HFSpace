@@ -298,9 +298,9 @@ def _espeak_exe(base_dir, args: List, sync=False) -> List[str]:
     # logging.debug("espeakng: executing %s", repr(cmd))
     print("espeakng: executing %s", repr(" ".join(cmd)))
 
-    os.makedirs("/usr/share/espeak-ng-data", exist_ok=True)
-    if not os.path.exists("/usr/share/espeak-ng-data/phontab"):
-        shutil.copytree(f'{base_dir}/eSpeak_NG/espeak-ng-data', "/usr/share/espeak-ng-data", dirs_exist_ok=True)
+    # os.makedirs("/usr/share/espeak-ng-data", exist_ok=True)
+    # if not os.path.exists("/usr/share/espeak-ng-data/phontab"):
+    #     shutil.copytree(f'{base_dir}/eSpeak_NG/espeak-ng-data', "/usr/share/espeak-ng-data", dirs_exist_ok=True)
     # print(" ".join(cmd))
     # print(f'F:/Speech/espeak/eSpeak_NG/espeak-ng.exe --path="F:/Speech/espeak/eSpeak_NG" -q -b 1 -v ro --ipa=1 "bună ziua. Ce mai faceți?"')
     # print("---")
