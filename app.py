@@ -140,7 +140,7 @@ pacing_slider = gr.Slider(0.5, 2.0, value=1.0, step=0.1, label="Pacing")
 voice_radio = gr.Radio(
 	voice_models,
 	label="Voice",
-	info="NVIDIA HIFI CC-BY-4.0 model"
+	info="NVIDIA HIFI CC-BY-4.0 xVAPitch/v3 xVASynth model"
 )
 
 gradio_app = gr.Interface(
