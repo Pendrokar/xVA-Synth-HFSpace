@@ -161,11 +161,13 @@ input_textbox = gr.Textbox(
 pacing_slider = gr.Slider(0.5, 2.0, value=1.0, step=0.1, label="Pacing")
 voice_radio = gr.Radio(
 	voice_models,
+	value=voice_models[0],
 	label="Voice",
 	info="NVIDIA HIFI CC-BY-4.0 xVAPitch/v3 xVASynth model"
 )
 language_radio = gr.Radio(
 	languages,
+	value="en",
 	label="Language",
 	info="Will have an English accent as the models were English. Tested only by a native Briton."
 )
