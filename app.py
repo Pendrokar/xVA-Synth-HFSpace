@@ -220,7 +220,7 @@ sad_slider = gr.Slider(0, 1.0, value=1.0, step=0.05, label="😭 Sad")
 surprise_slider = gr.Slider(0, 1.0, value=1.0, step=0.05, label="😮 Surprise")
 voice_radio = gr.Radio(
 	voice_models,
-	value=voice_models[0],
+	value="ccby_nvidia_hifi_6670_M",
 	label="Voice",
 	info="NVIDIA HIFI CC-BY-4.0 xVAPitch/v3 xVASynth model"
 )
