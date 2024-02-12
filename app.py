@@ -28,35 +28,66 @@ voice_models = [
 current_voice_model = None
 
 languages = [
-	"en",
-	"de",
-	"es",
-	"it",
-	"fr",
-	"ru",
-	"tr",
-	"la",
-	"ro",
-	"da",
-	"vi",
-	"ha",
-	"nl",
-	"zh",
-	"ar",
-	"uk",
-	"hi",
-	"ko",
-	"pl",
-	"sw",
-	"fi",
-	"hu",
-	"pt",
-	"yo",
-	"sv",
-	"el",
-	"wo",
-	"jp"
+    ("🇬🇧 EN", "en"),
+    ("🇩🇪 DE", "de"),
+    ("🇪🇸 ES", "es"),
+    ("🇮🇹 IT", "it"),
+    ("🇫🇷 FR", "fr"),
+    ("🇷🇺 RU", "ru"),
+    ("🇹🇷 TR", "tr"),
+    ("🇻🇦 LA", "la"),
+    ("🇷🇴 RO", "ro"),
+    ("🇩🇰 DA", "da"),
+    ("🇻🇳 VI", "vi"),
+    ("🇳🇬 HA", "ha"),
+    ("🇳🇱 NL", "nl"),
+    ("🇨🇳 ZH", "zh"),
+    ("🇸🇦 AR", "ar"),
+    ("🇺🇦 UK", "uk"),
+    ("🇮🇳 HI", "hi"),
+    ("🇰🇷 KO", "ko"),
+    ("🇵🇱 PL", "pl"),
+    ("🇸🇪 SW", "sw"),
+    ("🇫🇮 FI", "fi"),
+    ("🇭🇺 HU", "hu"),
+    ("🇵🇹 PT", "pt"),
+    ("🇳🇬 YO", "yo"),
+    ("🇸🇪 SV", "sv"),
+    ("🇬🇷 EL", "el"),
+    ("🇸🇳 WO", "wo"),
+    ("🇯🇵 JP", "jp"),
 ]
+
+default_text = {
+	"en": "This is what my voice sounds like.",
+	"de": "So klingt meine Stimme.",
+	"es": "Así suena mi voz.",
+	"it": "Così suona la mia voce.",
+	"fr": "Voici à quoi ressemble ma voix.",
+	"ru": "Вот как звучит мой голос.",
+	"tr": "Benim sesimin sesi böyle.",
+	"la": "Haec est vox mea sonans.",
+	"ro": "Așa sună vocea mea.",
+	"da": "Sådan lyder min stemme.",
+	"vi": "Đây là giọng nói của tôi.",
+	"ha": "Wannan ne muryata ke.",
+	"nl": "Dit is hoe mijn stem klinkt.",
+	"zh": "这是我的声音。",
+	"ar": "هذا هو صوتي.",
+	"uk": "Ось як звучить мій голос.",
+	"hi": "यह मेरी आवाज़ कैसी लगती है।",
+	"ko": "여기 제 목소리가 어떤지 들어보세요.",
+	"pl": "Tak brzmi mój głos.",
+	"sw": "Sauti yangu inasikika hivi.",
+	"fi": "Näin ääneni kuulostaa.",
+	"hu": "Így hangzik a hangom.",
+	"pt": "É assim que minha voz soa.",
+	"yo": "Ìyí ni ohùn mi ńlá.",
+	"sv": "Såhär låter min röst.",
+	"el": "Έτσι ακούγεται η φωνή μου.",
+	"wo": "Ndox li neen xewnaal ma.",
+	"jp": "これが私の声です。",
+}
 
 def run_xvaserver():
 	# start the process without waiting for a response
@@ -154,23 +185,35 @@ def predict(input_text, pacing, voice, lang):
 
 input_textbox = gr.Textbox(
 	label="Input Text",
+	value="This is what my voice sounds like.",
 	lines=1,
 	max_lines=5,
 	autofocus=True
 )
-pacing_slider = gr.Slider(0.5, 2.0, value=1.0, step=0.1, label="Pacing")
+pacing_slider = gr.Slider(0.5, 2.0, value=1.0, step=0.1, label="Duration")
 voice_radio = gr.Radio(
 	voice_models,
 	value=voice_models[0],
 	label="Voice",
 	info="NVIDIA HIFI CC-BY-4.0 xVAPitch/v3 xVASynth model"
 )
+
+def set_default_text(lang):
+	input_textbox = gr.Textbox(
+		label="Input Text",
+		value=default_text[lang],
+		lines=1,
+		max_lines=5,
+		autofocus=True
+	)
+
 language_radio = gr.Radio(
 	languages,
 	value="en",
 	label="Language",
-	info="Will have an English accent as the models were English. Tested only by a native Briton."
+	info="Will be more monotone and have an English accent. Tested mostly by a native Briton."
 )
+language_radio.change(set_default_text)
 
 gradio_app = gr.Interface(
 	predict,
@@ -180,8 +223,9 @@ gradio_app = gr.Interface(
 		voice_radio,
 		language_radio
 	],
-	outputs=gr.Audio(label="22kHz audio", type="filepath"),
-	title="xVASynth (WIP)"
+	outputs=gr.Audio(label="22kHz audio output", type="filepath"),
+	title="xVASynth (WIP)",
+	clear_btn=None
 	# examples=[
 	# 	["Once, I headed in much deeper. But I doubt I'll ever do that again.", 1],
 	# 	["You love hurting me, huh?", 1.5],
