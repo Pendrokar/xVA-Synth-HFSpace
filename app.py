@@ -7,9 +7,33 @@ import threading
 from huggingface_hub import hf_hub_download
 import gradio as gr
 
-model_name = "Pendrokar/xvapitch_nvidia_6670"
-model_path = hf_hub_download(repo_id=model_name, filename="ccby_nvidia_hifi_6670_M.pt")
-model_json_path = hf_hub_download(repo_id=model_name, filename="ccby_nvidia_hifi_6670_M.json")
+hf_model_name = "Pendrokar/xvapitch_nvidia"
+hf_cache_models_path = '/tmp/hfcache/models--Pendrokar--xvapitch_nvidia/snapshots/61b10e60b22bc21c1e072f72f1108b9c2b21e94c'
+
+models_path = './resources/app/models/ccby/'
+
+voice_models = [
+	"ccby_nvidia_hifi_6670_M",
+	"ccby_nv_hifi_11614_F",
+	"ccby_nvidia_hifi_11697_F",
+	"ccby_nvidia_hifi_12787_F",
+	"ccby_nvidia_hifi_6097_M",
+	"ccby_nvidia_hifi_6671_M",
+	"ccby_nvidia_hifi_8051_F",
+	"ccby_nvidia_hifi_9017_M",
+	"ccby_nvidia_hifi_9136_F",
+	"ccby_nvidia_hifi_92_F",
+]
+current_voice_model = None
+
+# move models to a more persistant place
+try:
+	for voice_model_name in voice_model_names:
+		os.rename(hf_cache_path +'/'+ voice_model_name + '.pt', models_path + voice_model_name + '.pt')
+		os.rename(hf_cache_path +'/'+ voice_model_name + '.json', models_path + voice_model_name + '.json')
+		os.rename(hf_cache_path +'/'+ voice_model_name + '.wav', models_path + voice_model_name + '.wav')
+except Exception as e:
+	print('Failed to move downloaded models, perhaps already moved')
 
 def run_xvaserver():
 	# start the process without waiting for a response
@@ -42,14 +66,7 @@ def run_xvaserver():
 	xvaserver.wait()
 
 def load_model():
-
-	# model_path = '/tmp/hfcache/models--Pendrokar--xvapitch_nvidia_6670/snapshots/2e138a7c459fb1cb1182dd7bc66813f5325d30fd/ccby_nvidia_hifi_6670_M.pt'
-	# model_json_path = '/tmp/hfcache/models--Pendrokar--xvapitch_nvidia_6670/snapshots/2e138a7c459fb1cb1182dd7bc66813f5325d30fd/ccby_nvidia_hifi_6670_M.json'
-	# try:
-	# 	os.symlink(model_path, os.path.join('./models/ccby/', os.path.basename(model_path)))
-	# 	os.symlink(model_json_path, os.path.join('./models/ccby/', os.path.basename(model_json_path)))
-	# except:
-	# 	print('Failed creating symlinks, they probably already exist')
+	model_path =  models_path + voice_models[0]
 
 	model_type = 'xVAPitch'
 	language = 'en'
@@ -57,7 +74,7 @@ def load_model():
 	data = {
 		'outputs': None,
 		'version': '3.0',
-		'model': model_path.replace('.pt', ''),
+		'model': model_path,
 		'modelType': model_type,
 		'base_lang': language,
 		'pluginsContext': '{}',
@@ -72,8 +89,9 @@ def load_model():
 
 def predict(input_text, pacing):
 
-	# reload model just in case
-	# load_model()
+	# load voice model if not the current model
+	# if (current_voice_model != voice_model)
+	# 	load_model()
 
 	model_type = 'xVAPitch'
 	pace = pacing if pacing else 1.0
