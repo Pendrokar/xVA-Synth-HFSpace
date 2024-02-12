@@ -2,6 +2,7 @@ import os
 import sys
 import time
 import requests
+import json
 from subprocess import Popen, PIPE
 import threading
 from huggingface_hub import hf_hub_download
@@ -143,7 +144,18 @@ def load_model(voice_model_name):
 
 	return
 
-def predict(input_text, pacing, voice, lang):
+def predict(
+	input_text,
+	voice,
+	lang,
+	pacing,
+	pitch,
+	energy,
+	anger,
+	happy,
+	sad,
+	surprise
+):
 	# grab only the first 1000 characters
 	input_text = input_text[:1000]
 
@@ -159,8 +171,16 @@ def predict(input_text, pacing, voice, lang):
 	use_sr = 0
 	use_cleanup = 0
 
+	pluginsContext = {}
+    pluginsContext["mantella_settings"] = {
+        "emAngry": anger if anger > 0 else 0,
+        "emHappy": happy if happy > 0 else 0,
+        "emSad": sad if sad > 0 else 0,
+        "emSurprise": surprise if surprise > 0 else 0
+    }
+
 	data = {
-		'pluginsContext': '{}',
+		'pluginsContext': json.dumps(pluginsContext),
 		'modelType': model_type,
 		# pad with whitespaces as a workaround to avoid cutoffs
 		'sequence': input_text.center(len(input_text) + 2, ' '),
@@ -192,6 +212,12 @@ input_textbox = gr.Textbox(
 	autofocus=True
 )
 pacing_slider = gr.Slider(0.5, 2.0, value=1.0, step=0.1, label="Duration")
+pitch_slider = gr.Slider(0, 1.0, value=0.5, step=0.05, label="Pitch", visible=False)
+energy_slider = gr.Slider(0.1, 1.0, value=1.0, step=0.05, label="Energy", visible=False)
+anger_slider = gr.Slider(0, 1.0, value=1.0, step=0.05, label="😠 Anger")
+happy_slider = gr.Slider(0, 1.0, value=1.0, step=0.05, label="😃 Happy")
+sad_slider = gr.Slider(0, 1.0, value=1.0, step=0.05, label="😭 Sad")
+surprise_slider = gr.Slider(0, 1.0, value=1.0, step=0.05, label="😮 Surprise")
 voice_radio = gr.Radio(
 	voice_models,
 	value=voice_models[0],
@@ -220,9 +246,15 @@ gradio_app = gr.Interface(
 	predict,
 	[
 		input_textbox,
-		pacing_slider,
 		voice_radio,
-		language_radio
+		language_radio,
+		pacing_slider,
+		pitch_slider,
+		energy_slider,
+		anger_slider,
+		happy_slider,
+		sad_slider,
+		surprise_slider
 	],
 	outputs=gr.Audio(label="22kHz audio output", type="filepath"),
 	title="xVASynth (WIP)",
