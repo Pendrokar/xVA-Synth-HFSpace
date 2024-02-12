@@ -141,7 +141,7 @@ voice_radio = gr.Radio(
 	voice_models,
 	label="Voice",
 	info="NVIDIA HIFI CC-BY-4.0 model"
-),
+)
 
 gradio_app = gr.Interface(
 	predict,
