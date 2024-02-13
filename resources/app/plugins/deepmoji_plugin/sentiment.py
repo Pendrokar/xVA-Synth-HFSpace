@@ -86,9 +86,11 @@ def fetch_text(data=None):
 		pass
 
 	if (
-		plugin_settings["load_deepmoji_model"]=="false"
-		or plugin_settings["load_deepmoji_model"]==False
-		or data["pluginsContext"]["mantella_settings"]["run_model"]==False
+		(
+			plugin_settings["load_deepmoji_model"]=="false"
+			or plugin_settings["load_deepmoji_model"]==False
+		)
+		and data["pluginsContext"]["mantella_settings"]["run_model"]==False
 	):
 		logger.log("DeepMoji model skipped")
 		return
