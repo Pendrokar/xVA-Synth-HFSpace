@@ -39,7 +39,6 @@ languages = [
     ("🇵🇱 PL", "pl"),
     ("🇷🇴 RO", "ro"),
     ("🇸🇪 SV", "sv"),
-    ("SW", "sw"),
     ("🇩🇰 DA", "da"),
     ("🇫🇮 FI", "fi"),
     ("🇭🇺 HU", "hu"),
@@ -56,6 +55,7 @@ languages = [
     ("🇻🇳 VI", "vi"),
     ("🇻🇦 LA", "la"),
     ("HA", "ha"),
+    ("SW", "sw"),
     ("🇳🇬 YO", "yo"),
     ("WO", "wo"),
 ]
@@ -138,7 +138,7 @@ def load_model(voice_model_name):
 	}
 
 	try:
-		response = requests.post('http://0.0.0.0:8008/loadModel', json=data)
+		response = requests.post('http://0.0.0.0:8008/loadModel', json=data, timeout=60)
 		response.raise_for_status()  # If the response contains an HTTP error status code, raise an exception
 		current_voice_model = voice_model_name
 	except requests.exceptions.RequestException as err:
@@ -196,7 +196,7 @@ def predict(
 	}
 
 	try:
-		response = requests.post('http://0.0.0.0:8008/synthesize', json=data)
+		response = requests.post('http://0.0.0.0:8008/synthesize', json=data, timeout=60)
 		response.raise_for_status()  # If the response contains an HTTP error status code, raise an exception
 	except requests.exceptions.RequestException as err:
 		print('Failed to synthesize!')
