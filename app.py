@@ -10,9 +10,12 @@ import gradio as gr
 
 hf_model_name = "Pendrokar/xvapitch_nvidia"
 hf_cache_models_path = '/home/user/.cache/huggingface/hub/models--Pendrokar--xvapitch_nvidia/snapshots/61b10e60b22bc21c1e072f72f1108b9c2b21e94c/'
-# models_path = './resources/app/models/ccby/'
 models_path = '/home/user/.cache/huggingface/hub/models--Pendrokar--xvapitch_nvidia/snapshots/61b10e60b22bc21c1e072f72f1108b9c2b21e94c/'
 
+try:
+	os.symlink('/home/user/.cache/huggingface/hub/models--Pendrokar--TorchMoji/snapshots/58217568daaf64d3621245dd5c88c94e651a08d6/', '/home/user/app/resources/app/plugins/deepmoji_plugings/model')
+except:
+	print('Failed to create symlink to DeepMoji model, may already be there.')
 
 voice_models = [
 	("Male #6671", "ccby_nvidia_hifi_6671_M"),
