@@ -16,9 +16,11 @@ SPECIAL_TOKENS = ['CUSTOM_MASK',
                   'CUSTOM_BREAK']
 SPECIAL_TOKENS.extend(['{}BLANK_{}'.format(SPECIAL_PREFIX, i) for i in range(6, 10)])
 
-ROOT_PATH = dirname(dirname(abspath(__file__)))
-VOCAB_PATH = '{}/model/vocabulary.json'.format(ROOT_PATH)
-PRETRAINED_PATH = '{}/model/pytorch_model.bin'.format(ROOT_PATH)
+VOCAB_PATH = '/home/user/.cache/huggingface/hub/models--Pendrokar--TorchMoji/snapshots/58217568daaf64d3621245dd5c88c94e651a08d6/vocabulary.json'
+PRETRAINED_PATH =  '/home/user/.cache/huggingface/hub/models--Pendrokar--TorchMoji/snapshots/58217568daaf64d3621245dd5c88c94e651a08d6/pytorch_model.bin'
+# ROOT_PATH = dirname(dirname(abspath(__file__)))
+# VOCAB_PATH = '{}/model/vocabulary.json'.format(ROOT_PATH)
+# PRETRAINED_PATH = '{}/model/pytorch_model.bin'.format(ROOT_PATH)
 
 WEIGHTS_DIR = tempfile.mkdtemp()
 
