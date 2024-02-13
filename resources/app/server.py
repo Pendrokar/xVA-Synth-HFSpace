@@ -2,6 +2,7 @@ import os
 import sys
 import traceback
 import multiprocessing
+import json
 
 torch_dml_device = None
 
@@ -487,7 +488,7 @@ if __name__ == '__main__':
                     move_recorded_file(PROD, logger, models_manager, f'{"./resources/app" if PROD else "."}', file_path)
 
                 self._set_response()
-                self.wfile.write(req_response.encode("utf-8"))
+                self.wfile.write(json.dumps(req_response))
             except Exception as e:
                 with open("./DEBUG_request.txt", "w+") as f:
                     f.write(traceback.format_exc())
