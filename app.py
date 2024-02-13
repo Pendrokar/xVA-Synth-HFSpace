@@ -212,14 +212,15 @@ def predict(
 	try:
 		response = requests.post('http://0.0.0.0:8008/synthesize', json=data, timeout=60)
 		response.raise_for_status()  # If the response contains an HTTP error status code, raise an exception
-		# response_data = json.loads(response.text)
+		json_data = json.loads(response.text)
 	except requests.exceptions.RequestException as err:
 		print('Failed to synthesize!')
 		save_path = ''
-		response = {text: 'Failed'}
+		json_data = {text: 'Failed'}
 
-
-	json_data = json.loads(response)
+	print('server.log contents:')
+	with open('resources/app/server.log', 'r') as f:
+		print(f.read())
 
 	arpabet_html = '<h6>ARPAbet & Durations</h6>'
 	arpabet_symbols = json_data['arpabet'].split('|')
@@ -233,12 +234,8 @@ def predict(
 			+ arpabet_symbols[symb_i]\
 			+ '</strong> '
 
-	print('server.log contents:')
-	with open('resources/app/server.log', 'r') as f:
-		print(f.read())
-
 	return [
-		wav_path,
+		save_path,
 		arpabet_html,
 		round(json_data['em_angry'][0], 2),
 		round(json_data['em_happy'][0], 2),
