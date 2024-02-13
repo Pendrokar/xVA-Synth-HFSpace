@@ -36,7 +36,7 @@ last_em_surprise = float(0)
 
 def scoreText(text):
 	return text
-# from plugins.deepmoji_plugin.xvasynth_torchmoji import scoreText
+from plugins.deepmoji_plugin.xvasynth_torchmoji import scoreText
 import csv
 
 def setup(data=None):
@@ -88,6 +88,7 @@ def fetch_text(data=None):
 	if (
 		plugin_settings["load_deepmoji_model"]=="false"
 		or plugin_settings["load_deepmoji_model"]==False
+		or data["pluginsContext"]["mantella_settings"]["run_model"]==False
 	):
 		logger.log("DeepMoji model skipped")
 		return
@@ -229,17 +230,14 @@ def adjust_values(data=None):
 		pass
 	try:
 		em_happy += float(data["pluginsContext"]["mantella_settings"]["emHappy"]) * 100
-		em_emotion_max = 1
 	except:
 		pass
 	try:
 		em_sad += float(data["pluginsContext"]["mantella_settings"]["emSad"]) * 100
-		em_emotion_max = 1
 	except:
 		pass
 	try:
 		em_surprise += float(data["pluginsContext"]["mantella_settings"]["emSurprise"]) * 100
-		em_emotion_max = 1
 	except:
 		pass
 
@@ -260,6 +258,8 @@ def adjust_values(data=None):
 		ratio = float(plugin_settings['amplifier_ratio'])
 	else:
 		ratio = 1.0
+		em_emotion_max = 1
+		em_angry_max = 1
 
 	logger.log(f'Amplifier ratio: {ratio}')
 	hasExcMark = False

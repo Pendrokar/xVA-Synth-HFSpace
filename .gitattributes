@@ -37,3 +37,4 @@ resources/app/python/xvapitch/text/dicts/german.txt filter=lfs diff=lfs merge=lf
 resources/app/python/xvapitch/text/dicts/arabic.txt filter=lfs diff=lfs merge=lfs -text
 resources/app/python/xvapitch/text/dicts/russian.txt filter=lfs diff=lfs merge=lfs -text
 resources/app/python/xvapitch/text/dicts/spanish.txt filter=lfs diff=lfs merge=lfs -text
+resources/app/plugins/deepmoji_plugin/DeepMoji/text_unidecode/dicts/data.bin filter=lfs diff=lfs merge=lfs -text

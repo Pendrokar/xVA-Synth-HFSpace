@@ -163,7 +163,8 @@ def predict(
 	anger,
 	happy,
 	sad,
-	surprise
+	surprise,
+	use_deepmoji
 ):
 	# grab only the first 1000 characters
 	input_text = input_text[:1000]
@@ -184,8 +185,10 @@ def predict(
 		"emAngry": (anger if anger > 0 else 0),
 		"emHappy": (happy if happy > 0 else 0),
 		"emSad": (sad if sad > 0 else 0),
-		"emSurprise": (surprise if surprise > 0 else 0)
+		"emSurprise": (surprise if surprise > 0 else 0),
+		"run_model": use_deepmoji
 	}
+
 
 	data = {
 		'pluginsContext': json.dumps(pluginsContext),
@@ -256,6 +259,7 @@ language_radio = gr.Radio(
 	info="Will be more monotone and have an English accent. Tested mostly by a native Briton."
 )
 # language_radio.change(set_default_text)
+deepmoji_checkbox = gr.Checkbox(label="Use DeepMoji", info="Auto adjust emotional values")
 
 gradio_app = gr.Interface(
 	predict,
@@ -269,7 +273,8 @@ gradio_app = gr.Interface(
 		anger_slider,
 		happy_slider,
 		sad_slider,
-		surprise_slider
+		surprise_slider,
+		deepmoji_checkbox
 	],
 	outputs=[
 		gr.Audio(label="22kHz audio output", type="filepath"),
