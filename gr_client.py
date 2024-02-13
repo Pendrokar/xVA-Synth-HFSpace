@@ -114,12 +114,24 @@ def predict(
 		deepmoji_checked, # bool
 		api_name="/predict"
 	)
+
 	json_data = json.loads(response)
-	arpabet = json_data['arpabet'].replace('|<PAD>|', ' ')
+
+	arpabet_html = '<h6>ARPAbet & Durations</h6>'
+	arpabet_symbols = json_data['arpabet'].split('|')
+	for symb_i in range(len(json_data['durations'])):
+		if (arpabet_symbols[symb_i] == '<PAD>'):
+			continue
+
+		arpabet_html += '<strong class="arpabet" style="padding: 0 '\
+			+ str(round(float(json_data['durations'][symb_i]/2), 1))\
+			+'em">'\
+			+ arpabet_symbols[symb_i]\
+			+ '</strong> '
 
 	return [
 		wav_path,
-		arpabet,
+		arpabet_html,
 		round(json_data['em_angry'][0], 2),
 		round(json_data['em_happy'][0], 2),
 		round(json_data['em_sad'][0], 2),
@@ -212,7 +224,7 @@ language_radio = gr.Radio(
 	info="Will be more monotone and have an English accent. Tested mostly by a native Briton."
 )
 
-with gr.Blocks() as demo:
+with gr.Blocks(css=".arpabet {display: inline-block; background-color: gray; border-radius: 5px; font-size: 120%; margin: 0.1em 0}") as demo:
 	gr.Markdown("# xVASynth TTS")
 
 	with gr.Row():  # Main row for inputs and language selection
@@ -248,7 +260,7 @@ with gr.Blocks() as demo:
 				with gr.Column():  # Input column
 					happy_slider = gr.Slider(0, 1.0, value=0, step=0.05, label="😃 Happiness", info="Tread lightly beyond 0.7")
 					surprise_slider = gr.Slider(0, 1.0, value=0, step=0.05, label="😮 Surprise", info="Can oversaturate Happiness")
-			deepmoji_checkbox = gr.Checkbox(label="Use DeepMoji", info="Auto adjust emotional values")
+			deepmoji_checkbox = gr.Checkbox(label="Use DeepMoji", info="Auto adjust emotional values", value=True)
 
 	# Event handling using click
 	btn = gr.Button("Generate")
@@ -257,7 +269,7 @@ with gr.Blocks() as demo:
 		with gr.Column():  # Input column
 			output_wav = gr.Audio(label="22kHz audio output", type="filepath", editable=False)
 		with gr.Column():  # Input column
-			output_arpabet = gr.Textbox(label="ARPAbet", interactive=False)
+			output_arpabet = gr.HTML(label="ARPAbet")
 
 	btn.click(
 		fn=predict,
