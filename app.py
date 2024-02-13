@@ -35,34 +35,34 @@ base_speaker_emb = ''
 
 # order ranked by similarity to English due to the xVASynth's use of ARPAbet instead of IPA
 languages = [
-    ("🇬🇧 EN", "en"),
-    ("🇩🇪 DE", "de"),
-    ("🇪🇸 ES", "es"),
-    ("🇮🇹 IT", "it"),
-    ("🇳🇱 NL", "nl"),
-    ("🇵🇹 PT", "pt"),
-    ("🇵🇱 PL", "pl"),
-    ("🇷🇴 RO", "ro"),
-    ("🇸🇪 SV", "sv"),
-    ("🇩🇰 DA", "da"),
-    ("🇫🇮 FI", "fi"),
-    ("🇭🇺 HU", "hu"),
-    ("🇬🇷 EL", "el"),
-    ("🇫🇷 FR", "fr"),
-    ("🇷🇺 RU", "ru"),
-    ("🇺🇦 UK", "uk"),
-    ("🇹🇷 TR", "tr"),
-    ("🇸🇦 AR", "ar"),
-    ("🇮🇳 HI", "hi"),
-    ("🇯🇵 JP", "jp"),
-    ("🇰🇷 KO", "ko"),
-    ("🇨🇳 ZH", "zh"),
-    ("🇻🇳 VI", "vi"),
-    ("🇻🇦 LA", "la"),
-    ("HA", "ha"),
-    ("SW", "sw"),
-    ("🇳🇬 YO", "yo"),
-    ("WO", "wo"),
+	("🇬🇧 EN", "en"),
+	("🇩🇪 DE", "de"),
+	("🇪🇸 ES", "es"),
+	("🇮🇹 IT", "it"),
+	("🇳🇱 NL", "nl"),
+	("🇵🇹 PT", "pt"),
+	("🇵🇱 PL", "pl"),
+	("🇷🇴 RO", "ro"),
+	("🇸🇪 SV", "sv"),
+	("🇩🇰 DA", "da"),
+	("🇫🇮 FI", "fi"),
+	("🇭🇺 HU", "hu"),
+	("🇬🇷 EL", "el"),
+	("🇫🇷 FR", "fr"),
+	("🇷🇺 RU", "ru"),
+	("🇺🇦 UK", "uk"),
+	("🇹🇷 TR", "tr"),
+	("🇸🇦 AR", "ar"),
+	("🇮🇳 HI", "hi"),
+	("🇯🇵 JP", "jp"),
+	("🇰🇷 KO", "ko"),
+	("🇨🇳 ZH", "zh"),
+	("🇻🇳 VI", "vi"),
+	("🇻🇦 LA", "la"),
+	("HA", "ha"),
+	("SW", "sw"),
+	("🇳🇬 YO", "yo"),
+	("WO", "wo"),
 ]
 
 # Translated from English by DeepMind's Gemini Pro
@@ -218,11 +218,33 @@ def predict(
 		save_path = ''
 		response = {text: 'Failed'}
 
+
+	json_data = json.loads(response)
+
+	arpabet_html = '<h6>ARPAbet & Durations</h6>'
+	arpabet_symbols = json_data['arpabet'].split('|')
+	for symb_i in range(len(json_data['durations'])):
+		if (arpabet_symbols[symb_i] == '<PAD>'):
+			continue
+
+		arpabet_html += '<strong class="arpabet" style="padding: 0 '\
+			+ str(round(float(json_data['durations'][symb_i]/2), 1))\
+			+'em">'\
+			+ arpabet_symbols[symb_i]\
+			+ '</strong> '
+
 	print('server.log contents:')
 	with open('resources/app/server.log', 'r') as f:
 		print(f.read())
 
-	return [save_path, response.text]
+	return [
+		wav_path,
+		arpabet_html,
+		round(json_data['em_angry'][0], 2),
+		round(json_data['em_happy'][0], 2),
+		round(json_data['em_sad'][0], 2),
+		round(json_data['em_surprise'][0], 2)
+	]
 
 input_textbox = gr.Textbox(
 	label="Input Text",
@@ -246,14 +268,62 @@ voice_radio = gr.Radio(
 	info="NVIDIA HIFI CC-BY-4.0 xVAPitch voice model"
 )
 
-def set_default_text(lang):
-	input_textbox = gr.Textbox(
-		label="Input Text",
-		value=default_text[lang],
-		lines=1,
-		max_lines=5,
-		autofocus=True
-	)
+def set_default_text(lang, deepmoji_checked):
+	# DeepMoji only works on English Text
+	# checkbox_enabled = True
+	# if lang != 'en':
+	# 	checkbox_enabled = False
+
+	if lang == 'en':
+		checkbox_enabled = gr.Checkbox(
+			label="Use DeepMoji",
+			info="Auto adjust emotional values",
+			value=deepmoji_checked,
+			interactive=True
+		)
+	else:
+		checkbox_enabled = gr.Checkbox(
+			label="Use DeepMoji",
+			info="Works only with English!",
+			value=False,
+			interactive=False
+		)
+
+	return default_text[lang], checkbox_enabled  # Return the modified textbox (important for Blocks)
+
+def reset_em_sliders(
+	deepmoji_enabled,
+	anger,
+	happy,
+	sad,
+	surprise
+):
+	if (deepmoji_enabled):
+		return (0, 0, 0, 0)
+	else:
+		return (
+			anger,
+			happy,
+			sad,
+			surprise
+		)
+
+def toggle_deepmoji(
+	checked,
+	anger,
+	happy,
+	sad,
+	surprise
+):
+	if checked:
+		return (0, 0, 0, 0)
+	else:
+		return (
+			anger,
+			happy,
+			sad,
+			surprise
+		)
 
 language_radio = gr.Radio(
 	languages,
@@ -261,40 +331,135 @@ language_radio = gr.Radio(
 	label="Language",
 	info="Will be more monotone and have an English accent. Tested mostly by a native Briton."
 )
-# language_radio.change(set_default_text)
-deepmoji_checkbox = gr.Checkbox(label="Use DeepMoji", info="Auto adjust emotional values")
 
-gradio_app = gr.Interface(
-	predict,
-	[
-		input_textbox,
-		voice_radio,
-		language_radio,
-		pacing_slider,
-		pitch_slider,
-		energy_slider,
-		anger_slider,
-		happy_slider,
-		sad_slider,
-		surprise_slider,
-		deepmoji_checkbox
-	],
-	outputs=[
-		gr.Audio(label="22kHz audio output", type="filepath"),
-		gr.Textbox(label="xVASynth Server Response")
-	],
-	title="xVASynth (WIP)",
-	clear_btn=gr.Button(visible=False)
-	# examples=[
-	# 	["Once, I headed in much deeper. But I doubt I'll ever do that again.", 1],
-	# 	["You love hurting me, huh?", 1.5],
-	# 	["Ah, I see. Well, I'm afraid I can't help with that.", 1],
-	# 	["Embrace your demise!", 1],
-	# 	["Never come back!", 1]
-	# ],
-	# cache_examples=None
-)
+with gr.Blocks(css=".arpabet {display: inline-block; background-color: gray; border-radius: 5px; font-size: 120%; margin: 0.1em 0}") as demo:
+	gr.Markdown("# xVASynth TTS")
 
+	with gr.Row():  # Main row for inputs and language selection
+		with gr.Column():  # Input column
+			input_textbox = gr.Textbox(
+				label="Input Text",
+				value="This is what my voice sounds like.",
+				info="Also accepts ARPAbet symbols placed within {} brackets.",
+				lines=1,
+				max_lines=5,
+				autofocus=True
+			)
+			language_radio = gr.Radio(
+				languages,
+				value="en",
+				label="Language",
+				info="Will be more monotone and have an English accent. Tested mostly by a native Briton."
+			)
+			pacing_slider = gr.Slider(0.5, 2.0, value=1.0, step=0.1, label="Duration")
+		with gr.Column():  # Control column
+			voice_radio = gr.Radio(
+				voice_models,
+				value="ccby_nvidia_hifi_6671_M",
+				label="Voice",
+				info="NVIDIA HIFI CC-BY-4.0 xVAPitch voice model"
+			)
+			pitch_slider = gr.Slider(0, 1.0, value=0.5, step=0.05, label="Pitch", visible=False)
+			energy_slider = gr.Slider(0.1, 1.0, value=1.0, step=0.05, label="Energy", visible=False)
+			with gr.Row():  # Main row for inputs and language selection
+				with gr.Column():  # Input column
+					anger_slider = gr.Slider(0, 1.0, value=0, step=0.05, label="😠 Anger", info="Tread lightly beyond 0.9")
+					sad_slider = gr.Slider(0, 1.0, value=0, step=0.05, label="😭 Sadness", info="Duration increased when beyond 0.2")
+				with gr.Column():  # Input column
+					happy_slider = gr.Slider(0, 1.0, value=0, step=0.05, label="😃 Happiness", info="Tread lightly beyond 0.7")
+					surprise_slider = gr.Slider(0, 1.0, value=0, step=0.05, label="😮 Surprise", info="Can oversaturate Happiness")
+			deepmoji_checkbox = gr.Checkbox(label="Use DeepMoji", info="Auto adjust emotional values", value=True)
+
+	# Event handling using click
+	btn = gr.Button("Generate")
+
+	with gr.Row():  # Main row for inputs and language selection
+		with gr.Column():  # Input column
+			output_wav = gr.Audio(label="22kHz audio output", type="filepath", editable=False)
+		with gr.Column():  # Input column
+			output_arpabet = gr.HTML(label="ARPAbet")
+
+	btn.click(
+		fn=predict,
+		inputs=[
+			input_textbox,
+			voice_radio,
+			language_radio,
+			pacing_slider,
+			pitch_slider,
+			energy_slider,
+			anger_slider,
+			happy_slider,
+			sad_slider,
+			surprise_slider,
+			deepmoji_checkbox
+		],
+		outputs=[
+			output_wav,
+			output_arpabet,
+			anger_slider,
+			happy_slider,
+			sad_slider,
+			surprise_slider
+		]
+	)
+
+	language_radio.change(
+		set_default_text,
+		inputs=[language_radio, deepmoji_checkbox],
+		outputs=[input_textbox, deepmoji_checkbox]
+	)
+
+	deepmoji_checkbox.change(
+		toggle_deepmoji,
+		inputs=[
+			deepmoji_checkbox,
+			anger_slider,
+			happy_slider,
+			sad_slider,
+			surprise_slider
+		],
+		outputs=[
+			anger_slider,
+			happy_slider,
+			sad_slider,
+			surprise_slider
+		]
+	)
+
+	input_textbox.change(
+		reset_em_sliders,
+		inputs=[
+			deepmoji_checkbox,
+			anger_slider,
+			happy_slider,
+			sad_slider,
+			surprise_slider
+		],
+		outputs=[
+			anger_slider,
+			happy_slider,
+			sad_slider,
+			surprise_slider
+		]
+	)
+
+	voice_radio.change(
+		reset_em_sliders,
+		inputs=[
+			deepmoji_checkbox,
+			anger_slider,
+			happy_slider,
+			sad_slider,
+			surprise_slider
+		],
+		outputs=[
+			anger_slider,
+			happy_slider,
+			sad_slider,
+			surprise_slider
+		]
+	)
 
 if __name__ == "__main__":
 	# Run the web server in a separate thread
@@ -303,7 +468,7 @@ if __name__ == "__main__":
 	web_server_thread.start()
 
 	print('running Gradio interface')
-	gradio_app.launch()
+	demo.launch()
 
 	# Wait for the web server thread to finish (shouldn't be reached in normal execution)
 	web_server_thread.join()
