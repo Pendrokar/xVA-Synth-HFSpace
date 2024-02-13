@@ -13,7 +13,7 @@ hf_cache_models_path = '/home/user/.cache/huggingface/hub/models--Pendrokar--xva
 models_path = '/home/user/.cache/huggingface/hub/models--Pendrokar--xvapitch_nvidia/snapshots/61b10e60b22bc21c1e072f72f1108b9c2b21e94c/'
 
 try:
-	os.symlink('/home/user/.cache/huggingface/hub/models--Pendrokar--TorchMoji/snapshots/58217568daaf64d3621245dd5c88c94e651a08d6/', '/home/user/app/resources/app/plugins/deepmoji_plugings/model')
+	os.symlink('/home/user/.cache/huggingface/hub/models--Pendrokar--TorchMoji/snapshots/58217568daaf64d3621245dd5c88c94e651a08d6', '/home/user/app/resources/app/plugins/deepmoji_plugings/model', target_is_directory=True)
 except:
 	print('Failed to create symlink to DeepMoji model, may already be there.')
 
