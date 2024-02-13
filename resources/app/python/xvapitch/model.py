@@ -753,6 +753,13 @@ class xVAPitch(object):
             em_sad_pred.squeeze().cpu().detach().numpy() if em_sad_pred is not None else [],
             em_surprise_pred.squeeze().cpu().detach().numpy() if em_surprise_pred is not None else [],
         ]
+        pitch = [float(v) for v in pitch]
+        durations = [float(v) for v in durations]
+        energy = [float(v) for v in energy]
+        em_angry = [float(v) for v in em_angry]
+        em_happy = [float(v) for v in em_happy]
+        em_sad = [float(v) for v in em_sad]
+        em_surprise = [float(v) for v in em_surprise]
 
         del pitch_pred, dur_pred, energy_pred, text, sequence
         return {
