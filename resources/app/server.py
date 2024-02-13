@@ -488,7 +488,7 @@ if __name__ == '__main__':
                     move_recorded_file(PROD, logger, models_manager, f'{"./resources/app" if PROD else "."}', file_path)
 
                 self._set_response()
-                self.wfile.write(json.dumps(req_response))
+                self.wfile.write(json.dumps(req_response).encode('utf-8'))
             except Exception as e:
                 with open("./DEBUG_request.txt", "w+") as f:
                     f.write(traceback.format_exc())
