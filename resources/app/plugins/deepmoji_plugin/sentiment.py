@@ -391,9 +391,9 @@ def adjust_values(data=None):
 				data["hasDataChanged"] = True
 
 	prev_sentence = text_scores[0]
-	last_em_angry = em_angry
-	last_em_happy = em_happy
-	last_em_sad = em_sad
-	last_em_surprise = em_surprise
+	last_em_angry = float(0)
+	last_em_happy = float(0)
+	last_em_sad = float(0)
+	last_em_surprise = float(0)
 
 	return

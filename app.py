@@ -12,10 +12,11 @@ hf_model_name = "Pendrokar/xvapitch_nvidia"
 hf_cache_models_path = '/home/user/.cache/huggingface/hub/models--Pendrokar--xvapitch_nvidia/snapshots/61b10e60b22bc21c1e072f72f1108b9c2b21e94c/'
 models_path = '/home/user/.cache/huggingface/hub/models--Pendrokar--xvapitch_nvidia/snapshots/61b10e60b22bc21c1e072f72f1108b9c2b21e94c/'
 
-try:
-	os.symlink('/home/user/.cache/huggingface/hub/models--Pendrokar--TorchMoji/snapshots/58217568daaf64d3621245dd5c88c94e651a08d6', '/home/user/app/resources/app/plugins/deepmoji_plugings/model', target_is_directory=True)
-except:
-	print('Failed to create symlink to DeepMoji model, may already be there.')
+# FIXME: currently hardcoded in DeepMoji code
+# try:
+# 	os.symlink('/home/user/.cache/huggingface/hub/models--Pendrokar--TorchMoji/snapshots/58217568daaf64d3621245dd5c88c94e651a08d6', '/home/user/app/resources/app/plugins/deepmoji_plugings/model', target_is_directory=True)
+# except:
+# 	print('Failed to create symlink to DeepMoji model, may already be there.')
 
 voice_models = [
 	("Male #6671", "ccby_nvidia_hifi_6671_M"),
@@ -207,16 +208,15 @@ def predict(
 		'useCleanup': use_cleanup,
 	}
 
+	print('Synthesizing...')
 	try:
 		response = requests.post('http://0.0.0.0:8008/synthesize', json=data, timeout=60)
 		response.raise_for_status()  # If the response contains an HTTP error status code, raise an exception
 		# response_data = json.loads(response.text)
 	except requests.exceptions.RequestException as err:
 		print('Failed to synthesize!')
-		print('server.log contents:')
-		with open('resources/app/server.log', 'r') as f:
-			print(f.read())
-		return ['', err]
+		save_path = ''
+		response = {text: 'Failed'}
 
 	print('server.log contents:')
 	with open('resources/app/server.log', 'r') as f:
