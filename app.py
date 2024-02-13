@@ -204,7 +204,7 @@ def predict(
 	try:
 		response = requests.post('http://0.0.0.0:8008/synthesize', json=data, timeout=60)
 		response.raise_for_status()  # If the response contains an HTTP error status code, raise an exception
-		response_data = json.loads(response.text)
+		# response_data = json.loads(response.text)
 	except requests.exceptions.RequestException as err:
 		print('Failed to synthesize!')
 		print('server.log contents:')
