@@ -200,11 +200,16 @@ def predict(
 		response.raise_for_status()  # If the response contains an HTTP error status code, raise an exception
 	except requests.exceptions.RequestException as err:
 		print('Failed to synthesize!')
+		print('server.log contents:')
+		with open('resources/app/server.log', 'r') as f:
+			print(f.read())
+		return ['', err]
+
 	print('server.log contents:')
 	with open('resources/app/server.log', 'r') as f:
 		print(f.read())
 
-	return save_path
+	return [save_path, response]
 
 input_textbox = gr.Textbox(
 	label="Input Text",
@@ -259,7 +264,10 @@ gradio_app = gr.Interface(
 		sad_slider,
 		surprise_slider
 	],
-	outputs=gr.Audio(label="22kHz audio output", type="filepath"),
+	outputs=[
+		gr.Audio(label="22kHz audio output", type="filepath"),
+		"text"
+	],
 	title="xVASynth (WIP)",
 	clear_btn=gr.Button(visible=False)
 	# examples=[

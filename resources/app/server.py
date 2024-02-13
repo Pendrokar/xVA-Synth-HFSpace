@@ -131,7 +131,7 @@ if __name__ == '__main__':
     class Handler(BaseHTTPRequestHandler):
         def _set_response(self):
             self.send_response(200)
-            self.send_header("Content-Type", "text/html")
+            self.send_header("Content-Type", "application/json")
             self.end_headers()
 
         def do_GET(self):

@@ -753,17 +753,19 @@ class xVAPitch(object):
             em_sad_pred.squeeze().cpu().detach().numpy() if em_sad_pred is not None else [],
             em_surprise_pred.squeeze().cpu().detach().numpy() if em_surprise_pred is not None else [],
         ]
-        editor_values_text = ",".join([str(v) for v in pitch]) + "\n" + \
-                             ",".join([str(v) for v in durations]) + "\n" + \
-                             ",".join([str(v) for v in energy]) + "\n" + \
-                             ",".join([str(v) for v in em_angry]) + "\n" + \
-                             ",".join([str(v) for v in em_happy]) + "\n" + \
-                             ",".join([str(v) for v in em_sad]) + "\n" + \
-                             ",".join([str(v) for v in em_surprise]) + "\n" + \
-                             json.dumps(editorStyles)
 
-        del pitch_pred, dur_pred, energy_pred, em_angry, em_happy, em_sad, em_surprise, text, sequence
-        return editor_values_text +"\n"+all_cleaned_text +"\n"+ f'{start_index}\n{end_index}'
+        del pitch_pred, dur_pred, energy_pred, text, sequence
+        return {
+            "pitch": pitch,
+            "durations": durations,
+            "energy": energy,
+            "em_angry": em_angry,
+            "em_happy": em_happy,
+            "em_sad": em_sad,
+            "em_surprise": em_surprise,
+            "editorStyles": json.dumps(editorStyles),
+            "arpabet": all_cleaned_text
+        }
 
     def set_device (self, device):
         self.device = device
