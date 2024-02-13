@@ -15,79 +15,81 @@ models_path = '/home/user/.cache/huggingface/hub/models--Pendrokar--xvapitch_nvi
 
 
 voice_models = [
+	("Male #6671", "ccby_nvidia_hifi_6671_M"),
 	("Male #6670", "ccby_nvidia_hifi_6670_M"),
-	("Female #11614", "ccby_nv_hifi_11614_F"),
+	("Male #9017", "ccby_nvidia_hifi_9017_M"),
+	("Male #6097", "ccby_nvidia_hifi_6097_M"),
+	("Female #92", "ccby_nvidia_hifi_92_F"),
 	("Female #11697", "ccby_nvidia_hifi_11697_F"),
 	("Female #12787", "ccby_nvidia_hifi_12787_F"),
-	("Male #6097", "ccby_nvidia_hifi_6097_M"),
-	("Male #6671", "ccby_nvidia_hifi_6671_M"),
+	("Female #11614", "ccby_nv_hifi_11614_F"),
 	("Female #8051", "ccby_nvidia_hifi_8051_F"),
-	("Male #9017", "ccby_nvidia_hifi_9017_M"),
 	("Female #9136", "ccby_nvidia_hifi_9136_F"),
-	("Female #92", "ccby_nvidia_hifi_92_F"),
 ]
 current_voice_model = None
 
+# order ranked by similarity to English due to the xVASynth's use of ARPAbet instead of IPA
 languages = [
     ("🇬🇧 EN", "en"),
     ("🇩🇪 DE", "de"),
     ("🇪🇸 ES", "es"),
     ("🇮🇹 IT", "it"),
-    ("🇫🇷 FR", "fr"),
-    ("🇷🇺 RU", "ru"),
-    ("🇹🇷 TR", "tr"),
-    ("🇻🇦 LA", "la"),
-    ("🇷🇴 RO", "ro"),
-    ("🇩🇰 DA", "da"),
-    ("🇻🇳 VI", "vi"),
-    ("🇳🇬 HA", "ha"),
     ("🇳🇱 NL", "nl"),
-    ("🇨🇳 ZH", "zh"),
-    ("🇸🇦 AR", "ar"),
-    ("🇺🇦 UK", "uk"),
-    ("🇮🇳 HI", "hi"),
-    ("🇰🇷 KO", "ko"),
+    ("🇵🇹 PT", "pt"),
     ("🇵🇱 PL", "pl"),
-    ("🇸🇪 SW", "sw"),
+    ("🇷🇴 RO", "ro"),
+    ("🇸🇪 SV", "sv"),
+    ("SW", "sw"),
+    ("🇩🇰 DA", "da"),
     ("🇫🇮 FI", "fi"),
     ("🇭🇺 HU", "hu"),
-    ("🇵🇹 PT", "pt"),
-    ("🇳🇬 YO", "yo"),
-    ("🇸🇪 SV", "sv"),
     ("🇬🇷 EL", "el"),
-    ("🇸🇳 WO", "wo"),
+    ("🇫🇷 FR", "fr"),
+    ("🇷🇺 RU", "ru"),
+    ("🇺🇦 UK", "uk"),
+    ("🇹🇷 TR", "tr"),
+    ("🇸🇦 AR", "ar"),
+    ("🇮🇳 HI", "hi"),
     ("🇯🇵 JP", "jp"),
+    ("🇰🇷 KO", "ko"),
+    ("🇨🇳 ZH", "zh"),
+    ("🇻🇳 VI", "vi"),
+    ("🇻🇦 LA", "la"),
+    ("HA", "ha"),
+    ("🇳🇬 YO", "yo"),
+    ("WO", "wo"),
 ]
 
+# Translated from English by DeepMind's Gemini Pro
 default_text = {
-	"en": "This is what my voice sounds like.",
-	"de": "So klingt meine Stimme.",
-	"es": "Así suena mi voz.",
-	"it": "Così suona la mia voce.",
-	"fr": "Voici à quoi ressemble ma voix.",
-	"ru": "Вот как звучит мой голос.",
-	"tr": "Benim sesimin sesi böyle.",
-	"la": "Haec est vox mea sonans.",
-	"ro": "Așa sună vocea mea.",
-	"da": "Sådan lyder min stemme.",
-	"vi": "Đây là giọng nói của tôi.",
-	"ha": "Wannan ne muryata ke.",
-	"nl": "Dit is hoe mijn stem klinkt.",
-	"zh": "这是我的声音。",
 	"ar": "هذا هو صوتي.",
-	"uk": "Ось як звучить мій голос.",
-	"hi": "यह मेरी आवाज़ कैसी लगती है।",
-	"ko": "여기 제 목소리가 어떤지 들어보세요.",
-	"pl": "Tak brzmi mój głos.",
-	"sw": "Sauti yangu inasikika hivi.",
-	"fi": "Näin ääneni kuulostaa.",
-	"hu": "Így hangzik a hangom.",
-	"pt": "É assim que minha voz soa.",
-	"yo": "Ìyí ni ohùn mi ńlá.",
-	"sv": "Såhär låter min röst.",
+	"da": "Sådan lyder min stemme.",
+	"de": "So klingt meine Stimme.",
 	"el": "Έτσι ακούγεται η φωνή μου.",
-	"wo": "Ndox li neen xewnaal ma.",
+	"en": "This is what my voice sounds like.",
+	"es": "Así suena mi voz.",
+	"fi": "Näin ääneni kuulostaa.",
+	"fr": "Voici à quoi ressemble ma voix.",
+	"ha": "Wannan ne muryata ke.",
+	"hi": "यह मेरी आवाज़ कैसी लगती है।",
+	"hu": "Így hangzik a hangom.",
+	"it": "Così suona la mia voce.",
 	"jp": "これが私の声です。",
+	"ko": "여기 제 목소리가 어떤지 들어보세요.",
+	"la": "Haec est vox mea sonans.",
+	"nl": "Dit is hoe mijn stem klinkt.",
+	"pl": "Tak brzmi mój głos.",
+	"pt": "É assim que minha voz soa.",
+	"ro": "Așa sună vocea mea.",
+	"ru": "Вот как звучит мой голос.",
+	"sv": "Såhär låter min röst.",
+	"sw": "Sauti yangu inasikika hivi.",
+	"tr": "Benim sesimin sesi böyle.",
+	"uk": "Ось як звучить мій голос.",
+	"vi": "Đây là giọng nói của tôi.",
+	"wo": "Ndox li neen xewnaal ma.",
+	"yo": "Ìyí ni ohùn mi ńlá.",
+	"zh": "这是我的声音。",
 }
 
 def run_xvaserver():
@@ -115,7 +117,7 @@ def run_xvaserver():
 	print('xVAServer running on port 8008')
 
 	# load default model
-	load_model("ccby_nvidia_hifi_6670_M")
+	load_model("ccby_nvidia_hifi_6671_M")
 
 	# Wait for the process to exit
 	xvaserver.wait()
@@ -207,6 +209,7 @@ def predict(
 input_textbox = gr.Textbox(
 	label="Input Text",
 	value="This is what my voice sounds like.",
+	info="Also accepts ARPAbet symbols placed within {} brackets.",
 	lines=1,
 	max_lines=5,
 	autofocus=True
@@ -214,15 +217,15 @@ input_textbox = gr.Textbox(
 pacing_slider = gr.Slider(0.5, 2.0, value=1.0, step=0.1, label="Duration")
 pitch_slider = gr.Slider(0, 1.0, value=0.5, step=0.05, label="Pitch", visible=False)
 energy_slider = gr.Slider(0.1, 1.0, value=1.0, step=0.05, label="Energy", visible=False)
-anger_slider = gr.Slider(0, 1.0, value=0, step=0.05, label="😠 Anger")
-happy_slider = gr.Slider(0, 1.0, value=0, step=0.05, label="😃 Happiness")
-sad_slider = gr.Slider(0, 1.0, value=0, step=0.05, label="😭 Sadness")
-surprise_slider = gr.Slider(0, 1.0, value=0, step=0.05, label="😮 Surprise")
+anger_slider = gr.Slider(0, 1.0, value=0, step=0.05, label="😠 Anger", info="Tread lightly beyond 0.9")
+happy_slider = gr.Slider(0, 1.0, value=0, step=0.05, label="😃 Happiness", info="Tread lightly beyond 0.7")
+sad_slider = gr.Slider(0, 1.0, value=0, step=0.05, label="😭 Sadness", info="Duration increased when beyond 0.2")
+surprise_slider = gr.Slider(0, 1.0, value=0, step=0.05, label="😮 Surprise", info="Does not play well with Happiness with either being beyond 0.3")
 voice_radio = gr.Radio(
 	voice_models,
-	value="ccby_nvidia_hifi_6670_M",
+	value="ccby_nvidia_hifi_6671_M",
 	label="Voice",
-	info="NVIDIA HIFI CC-BY-4.0 xVAPitch/v3 xVASynth model"
+	info="NVIDIA HIFI CC-BY-4.0 xVAPitch voice model"
 )
 
 def set_default_text(lang):
