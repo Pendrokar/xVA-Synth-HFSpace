@@ -99,7 +99,7 @@ def predict(
 	surprise,
 	deepmoji_checked
 ):
-	wav_path, response = client.predict(
+	wav_path, arpabet_html, angry, happy, sad, surprise = client.predict(
 		input_text,	# str  in 'Input Text' Textbox component
 		voice,	# Literal['ccby_nvidia_hifi_6670_M', 'ccby_nv_hifi_11614_F', 'ccby_nvidia_hifi_11697_F', 'ccby_nvidia_hifi_12787_F', 'ccby_nvidia_hifi_6097_M', 'ccby_nvidia_hifi_6671_M', 'ccby_nvidia_hifi_8051_F', 'ccby_nvidia_hifi_9017_M', 'ccby_nvidia_hifi_9136_F', 'ccby_nvidia_hifi_92_F']  in 'Voice' Radio component
 		lang,	# Literal['en', 'de', 'es', 'it', 'fr', 'ru', 'tr', 'la', 'ro', 'da', 'vi', 'ha', 'nl', 'zh', 'ar', 'uk', 'hi', 'ko', 'pl', 'sw', 'fi', 'hu', 'pt', 'yo', 'sv', 'el', 'wo', 'jp']  in 'Language' Radio component
@@ -114,27 +114,31 @@ def predict(
 		api_name="/predict"
 	)
 
-	json_data = json.loads(response)
+	# json_data = json.loads(response)
 
-	arpabet_html = '<h6>ARPAbet & Durations</h6>'
-	arpabet_symbols = json_data['arpabet'].split('|')
-	for symb_i in range(len(json_data['durations'])):
-		if (arpabet_symbols[symb_i] == '<PAD>'):
-			continue
+	# arpabet_html = '<h6>ARPAbet & Durations</h6>'
+	# arpabet_symbols = json_data['arpabet'].split('|')
+	# for symb_i in range(len(json_data['durations'])):
+	# 	if (arpabet_symbols[symb_i] == '<PAD>'):
+	# 		continue
 
-		arpabet_html += '<strong class="arpabet" style="padding: 0 '\
-			+ str(round(float(json_data['durations'][symb_i]/2), 1))\
-			+'em">'\
-			+ arpabet_symbols[symb_i]\
-			+ '</strong> '
+	# 	arpabet_html += '<strong class="arpabet" style="padding: 0 '\
+	# 		+ str(round(float(json_data['durations'][symb_i]/2), 1))\
+	# 		+'em">'\
+	# 		+ arpabet_symbols[symb_i]\
+	# 		+ '</strong> '
 
 	return [
 		wav_path,
 		arpabet_html,
-		round(json_data['em_angry'][0], 2),
-		round(json_data['em_happy'][0], 2),
-		round(json_data['em_sad'][0], 2),
-		round(json_data['em_surprise'][0], 2)
+		angry,
+		happy,
+		sad,
+		surprise,
+		# round(json_data['em_angry'][0], 2),
+		# round(json_data['em_happy'][0], 2),
+		# round(json_data['em_sad'][0], 2),
+		# round(json_data['em_surprise'][0], 2)
 	]
 
 input_textbox = gr.Textbox(
