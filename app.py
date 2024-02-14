@@ -216,6 +216,7 @@ def predict(
 	except requests.exceptions.RequestException as err:
 		print('Failed to synthesize!')
 		save_path = ''
+		response = {'text': '{"message": "Failed"}'}
 		json_data = {
 			'arpabet': ['Failed'],
 			'durations': [0],
@@ -229,7 +230,7 @@ def predict(
 	with open('resources/app/server.log', 'r') as f:
 		print(f.read())
 
-	arpabet_html = '<h6>ARPAbet & Durations</h6>'
+	arpabet_html = '<h6>ARPAbet & Phoneme lengths</h6>'
 	arpabet_symbols = json_data['arpabet'].split('|')
 	utter_time = 0
 	for symb_i in range(len(json_data['durations'])):
@@ -237,17 +238,18 @@ def predict(
 		if (arpabet_symbols[symb_i] == '<PAD>'):
 			continue
 
-		duration = round(float(json_data['durations'][symb_i]/2), 1)
+		length = float(json_data['durations'][symb_i])
+		arpa_length = str(round(length/2, 1))
 		arpabet_html += '<strong\
 			class="arpabet"\
 			style="padding: 0 '\
-			+ str(duration)\
+			+ str(arpa_length)\
 			+'em"'\
-			+f" title=\"{utter_time} => {duration}\""\
+			+f" title=\"{utter_time} + {length}\""\
 			+'>'\
 			+ arpabet_symbols[symb_i]\
 			+ '</strong> '
-		utter_time += duration
+		utter_time += round(length, 1)
 
 	return [
 		save_path,
@@ -255,7 +257,8 @@ def predict(
 		round(json_data['em_angry'][0], 2),
 		round(json_data['em_happy'][0], 2),
 		round(json_data['em_sad'][0], 2),
-		round(json_data['em_surprise'][0], 2)
+		round(json_data['em_surprise'][0], 2),
+		response.text
 	]
 
 input_textbox = gr.Textbox(
@@ -412,7 +415,9 @@ with gr.Blocks(css=".arpabet {display: inline-block; background-color: gray; bor
 			anger_slider,
 			happy_slider,
 			sad_slider,
-			surprise_slider
+			surprise_slider,
+			# xVAServer JSON
+			gr.Textbox(visible=False)
 		]
 	)
 
