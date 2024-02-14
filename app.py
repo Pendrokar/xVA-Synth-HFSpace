@@ -144,6 +144,7 @@ def load_model(voice_model_name):
 
 	embs = base_speaker_emb
 
+	print('Loading voice model...')
 	try:
 		response = requests.post('http://0.0.0.0:8008/loadModel', json=data, timeout=60)
 		response.raise_for_status()  # If the response contains an HTTP error status code, raise an exception
@@ -153,7 +154,7 @@ def load_model(voice_model_name):
 		    voice_model_json = json.load(f)
 		embs = voice_model_json['games'][0]['base_speaker_emb']
 	except requests.exceptions.RequestException as err:
-		print('Failed to load voice model!')
+		print(f'FAILED to load voice model: {err}')
 
 	return embs
 
@@ -214,7 +215,7 @@ def predict(
 		response.raise_for_status()  # If the response contains an HTTP error status code, raise an exception
 		json_data = json.loads(response.text)
 	except requests.exceptions.RequestException as err:
-		print('Failed to synthesize!')
+		print('FAILED to synthesize: {err}')
 		save_path = ''
 		response = {'text': '{"message": "Failed"}'}
 		json_data = {
@@ -390,7 +391,12 @@ with gr.Blocks(css=".arpabet {display: inline-block; background-color: gray; bor
 
 	with gr.Row():  # Main row for inputs and language selection
 		with gr.Column():  # Input column
-			output_wav = gr.Audio(label="22kHz audio output", type="filepath", editable=False)
+			output_wav = gr.Audio(
+				label="22kHz audio output",
+				type="filepath",
+				editable=False,
+				autoplay=True
+			)
 		with gr.Column():  # Input column
 			output_arpabet = gr.HTML(label="ARPAbet")
 
