@@ -216,7 +216,14 @@ def predict(
 	except requests.exceptions.RequestException as err:
 		print('Failed to synthesize!')
 		save_path = ''
-		json_data = {'text': 'Failed'}
+		json_data = {
+			'arpabet': ['Failed'],
+			'durations': [0],
+			'em_anger': anger,
+			'em_happy': happy,
+			'em_sad': sad,
+			'em_surprise': surprise,
+		}
 
 	print('server.log contents:')
 	with open('resources/app/server.log', 'r') as f:
@@ -224,15 +231,23 @@ def predict(
 
 	arpabet_html = '<h6>ARPAbet & Durations</h6>'
 	arpabet_symbols = json_data['arpabet'].split('|')
+	utter_time = 0
 	for symb_i in range(len(json_data['durations'])):
+		# skip PAD symbol
 		if (arpabet_symbols[symb_i] == '<PAD>'):
 			continue
 
-		arpabet_html += '<strong class="arpabet" style="padding: 0 '\
-			+ str(round(float(json_data['durations'][symb_i]/2), 1))\
-			+'em">'\
+		duration = round(float(json_data['durations'][symb_i]/2), 1)
+		arpabet_html += '<strong\
+			class="arpabet"\
+			style="padding: 0 '\
+			+ str(duration)\
+			+'em"'\
+			+f" title=\"{utter_time} => {duration}\""\
+			+'>'\
 			+ arpabet_symbols[symb_i]\
 			+ '</strong> '
+		utter_time += duration
 
 	return [
 		save_path,
