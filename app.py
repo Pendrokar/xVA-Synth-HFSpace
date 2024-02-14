@@ -216,7 +216,7 @@ def predict(
 	except requests.exceptions.RequestException as err:
 		print('Failed to synthesize!')
 		save_path = ''
-		json_data = {text: 'Failed'}
+		json_data = {'text': 'Failed'}
 
 	print('server.log contents:')
 	with open('resources/app/server.log', 'r') as f:
@@ -460,9 +460,16 @@ with gr.Blocks(css=".arpabet {display: inline-block; background-color: gray; bor
 
 if __name__ == "__main__":
 	# Run the web server in a separate thread
-	web_server_thread = threading.Thread(target=run_xvaserver)
-	print('Starting xVAServer thread')
-	web_server_thread.start()
+
+	print('Attempting to connect to local xVASynth server...')
+	try:
+		response = requests.get('http://0.0.0.0:8008')
+		response.raise_for_status()  # If the response contains an HTTP error status code, raise an exception
+	except requests.exceptions.RequestException as err:
+		print('Failed to connect to xVASynth!')
+		web_server_thread = threading.Thread(target=run_xvaserver)
+		print('Starting xVAServer thread')
+		web_server_thread.start()
 
 	print('running Gradio interface')
 	demo.launch()
