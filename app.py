@@ -267,7 +267,7 @@ def predict(
 		round(json_data['em_happy'][0], 2),
 		round(json_data['em_sad'][0], 2),
 		round(json_data['em_surprise'][0], 2),
-		response.text
+		json_data
 	]
 
 input_textbox = gr.Textbox(
