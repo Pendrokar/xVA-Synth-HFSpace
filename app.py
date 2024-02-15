@@ -221,6 +221,7 @@ def predict(
 	print('Synthesizing...')
 	try:
 		response = xvaserver.synthesize(data)
+		json_data = json.loads(response)
 		# response = requests.post('http://0.0.0.0:8008/synthesize', json=data, timeout=60)
 		# response.raise_for_status()  # If the response contains an HTTP error status code, raise an exception
 		# json_data = json.loads(response.text)
