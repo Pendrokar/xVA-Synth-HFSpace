@@ -154,7 +154,7 @@ def load_model(voice_model_name):
 
 	print('Loading voice model...')
 	try:
-		xvaserver.loadModel(data)
+		response = xvaserver.loadModel(data)
 		# response = requests.post('http://0.0.0.0:8008/loadModel', json=data, timeout=60)
 		# response.raise_for_status()  # If the response contains an HTTP error status code, raise an exception
 		current_voice_model = voice_model_name
@@ -220,7 +220,7 @@ def predict(
 
 	print('Synthesizing...')
 	try:
-		xvaserver.synthesize(data)
+		response = xvaserver.synthesize(data)
 		# response = requests.post('http://0.0.0.0:8008/synthesize', json=data, timeout=60)
 		# response.raise_for_status()  # If the response contains an HTTP error status code, raise an exception
 		# json_data = json.loads(response.text)
