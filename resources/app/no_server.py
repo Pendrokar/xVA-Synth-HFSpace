@@ -50,6 +50,7 @@ try:
     import tqdm
     import regex
 except:
+    print(traceback.format_exc())
     with open("./DEBUG_err_import_torch.txt", "w+") as f:
         f.write(traceback.format_exc())
 # ================
