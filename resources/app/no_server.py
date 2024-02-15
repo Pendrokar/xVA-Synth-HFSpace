@@ -130,6 +130,7 @@ logger.info("Models ready")
 
 post_data = ""
 def loadModel(post_data):
+    req_response = ''
     logger.info("Direct: loadModel")
     logger.info(post_data)
     ckpt = post_data["model"]
