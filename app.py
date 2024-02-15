@@ -405,7 +405,7 @@ with gr.Blocks(css=".arpabet {display: inline-block; background-color: gray; bor
 			deepmoji_checkbox = gr.Checkbox(label="Use DeepMoji", info="Auto adjust emotional values", value=True)
 
 	# Event handling using click
-	btn = gr.Button("Generate")
+	btn = gr.Button("Generate", variant="primary")
 
 	with gr.Row():  # Main row for inputs and language selection
 		with gr.Column():  # Input column
@@ -440,7 +440,33 @@ with gr.Blocks(css=".arpabet {display: inline-block; background-color: gray; bor
 			happy_slider,
 			sad_slider,
 			surprise_slider,
-			# xVAServer JSON
+			# xVAServer response
+			gr.Textbox(visible=False)
+		]
+	)
+	input_textbox.submit(
+		fn=predict,
+		inputs=[
+			input_textbox,
+			voice_radio,
+			language_radio,
+			pacing_slider,
+			pitch_slider,
+			energy_slider,
+			anger_slider,
+			happy_slider,
+			sad_slider,
+			surprise_slider,
+			deepmoji_checkbox
+		],
+		outputs=[
+			output_wav,
+			output_arpabet,
+			anger_slider,
+			happy_slider,
+			sad_slider,
+			surprise_slider,
+			# xVAServer response
 			gr.Textbox(visible=False)
 		]
 	)
