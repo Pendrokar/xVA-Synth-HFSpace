@@ -9,6 +9,14 @@ from huggingface_hub import hf_hub_download
 import gradio as gr
 import resources.app.no_server as xvaserver
 
+try:
+	import resources.app.no_server as xvaserver
+except:
+	print('server.log contents:')
+	with open('resources/app/server.log', 'r') as f:
+		print(f.read())
+
+
 hf_model_name = "Pendrokar/xvapitch_nvidia"
 hf_cache_models_path = '/home/user/.cache/huggingface/hub/models--Pendrokar--xvapitch_nvidia/snapshots/61b10e60b22bc21c1e072f72f1108b9c2b21e94c/'
 models_path = '/home/user/.cache/huggingface/hub/models--Pendrokar--xvapitch_nvidia/snapshots/61b10e60b22bc21c1e072f72f1108b9c2b21e94c/'

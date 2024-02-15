@@ -10,7 +10,7 @@ multiprocessing.freeze_support()
 
 # PROD = 'xVASynth.exe' in os.listdir(".")
 PROD = True
-sys.path.append("./resources/app")
+# sys.path.append("./resources/app")
 
 # Saves me having to do backend re-compilations for every little UI hotfix
 with open(f'{"./resources/app" if PROD else "."}/javascript/script.js', encoding="utf8") as f:
