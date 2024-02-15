@@ -130,7 +130,7 @@ logger.info("Models ready")
 
 post_data = ""
 def loadModel(post_data):
-    req_response = '{}'
+    req_response = {}
     logger.info("Direct: loadModel")
     logger.info(post_data)
     ckpt = post_data["model"]
@@ -152,7 +152,7 @@ def loadModel(post_data):
     return req_response
 
 def synthesize(post_data):
-    req_response = '{}'
+    req_response = {}
     logger.info("Direct: synthesize")
     post_data["pluginsContext"] = json.loads(post_data["pluginsContext"])
     instance_index = post_data["instance_index"] if "instance_index" in post_data else 0
