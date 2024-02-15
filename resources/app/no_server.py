@@ -28,9 +28,9 @@ try:
     import logging
     from logging.handlers import RotatingFileHandler
     import json
-    from socketserver     import ThreadingMixIn
-    from python.audio_post import run_audio_post, prepare_input_audio, mp_ffmpeg_output, normalize_audio, start_microphone_recording, move_recorded_file
-    import ffmpeg
+    # from socketserver     import ThreadingMixIn
+    # from python.audio_post import run_audio_post, prepare_input_audio, mp_ffmpeg_output, normalize_audio, start_microphone_recording, move_recorded_file
+    # import ffmpeg
 except:
     print(traceback.format_exc())
     with open("./DEBUG_err_imports.txt", "w+") as f:
@@ -100,14 +100,14 @@ if CPU_ONLY:
     torch_dml_device = torch.device("cpu")
 
 
-try:
-    from python.plugins_manager import PluginManager
-    plugin_manager = PluginManager(APP_VERSION, PROD, CPU_ONLY, logger)
-    active_plugins = plugin_manager.get_active_plugins_count()
-    logger.info(f'Plugin manager loaded. {active_plugins} active plugins.')
-except:
-    logger.info("Plugin manager FAILED.")
-    logger.info(traceback.format_exc())
+# try:
+from python.plugins_manager import PluginManager
+plugin_manager = PluginManager(APP_VERSION, PROD, CPU_ONLY, logger)
+active_plugins = plugin_manager.get_active_plugins_count()
+logger.info(f'Plugin manager loaded. {active_plugins} active plugins.')
+# except:
+#     logger.info("Plugin manager FAILED.")
+#     logger.info(traceback.format_exc())
 
 plugin_manager.run_plugins(plist=plugin_manager.plugins["start"]["pre"], event="pre start", data=None)
 
