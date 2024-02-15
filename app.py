@@ -8,12 +8,12 @@ import threading
 from huggingface_hub import hf_hub_download
 import gradio as gr
 
-try:
-	import resources.app.no_server as xvaserver
-except:
-	print('server.log contents:')
-	with open('resources/app/server.log', 'r') as f:
-		print(f.read())
+# try:
+import resources.app.no_server as xvaserver
+# except:
+# 	print('server.log contents:')
+# 	with open('resources/app/server.log', 'r') as f:
+# 		print(f.read())
 
 
 hf_model_name = "Pendrokar/xvapitch_nvidia"
@@ -235,9 +235,9 @@ def predict(
 			'em_surprise': surprise,
 		}
 
-	print('server.log contents:')
-	with open('resources/app/server.log', 'r') as f:
-		print(f.read())
+	# print('server.log contents:')
+	# with open('resources/app/server.log', 'r') as f:
+	# 	print(f.read())
 
 	arpabet_html = '<h6>ARPAbet & Phoneme lengths</h6>'
 	arpabet_symbols = json_data['arpabet'].split('|')
