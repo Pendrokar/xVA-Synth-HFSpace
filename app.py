@@ -7,6 +7,7 @@ from subprocess import Popen, PIPE
 import threading
 from huggingface_hub import hf_hub_download
 import gradio as gr
+import resources.app.no_server as xvaserver
 
 hf_model_name = "Pendrokar/xvapitch_nvidia"
 hf_cache_models_path = '/home/user/.cache/huggingface/hub/models--Pendrokar--xvapitch_nvidia/snapshots/61b10e60b22bc21c1e072f72f1108b9c2b21e94c/'
@@ -146,8 +147,9 @@ def load_model(voice_model_name):
 
 	print('Loading voice model...')
 	try:
-		response = requests.post('http://0.0.0.0:8008/loadModel', json=data, timeout=60)
-		response.raise_for_status()  # If the response contains an HTTP error status code, raise an exception
+		xvaserver.loadModel(data)
+		# response = requests.post('http://0.0.0.0:8008/loadModel', json=data, timeout=60)
+		# response.raise_for_status()  # If the response contains an HTTP error status code, raise an exception
 		current_voice_model = voice_model_name
 
 		with open(model_path + '.json', 'r', encoding='utf-8') as f:
@@ -211,9 +213,10 @@ def predict(
 
 	print('Synthesizing...')
 	try:
-		response = requests.post('http://0.0.0.0:8008/synthesize', json=data, timeout=60)
-		response.raise_for_status()  # If the response contains an HTTP error status code, raise an exception
-		json_data = json.loads(response.text)
+		xvaserver.synthesize(data)
+		# response = requests.post('http://0.0.0.0:8008/synthesize', json=data, timeout=60)
+		# response.raise_for_status()  # If the response contains an HTTP error status code, raise an exception
+		# json_data = json.loads(response.text)
 	except requests.exceptions.RequestException as err:
 		print('FAILED to synthesize: {err}')
 		save_path = ''
@@ -487,18 +490,18 @@ with gr.Blocks(css=".arpabet {display: inline-block; background-color: gray; bor
 if __name__ == "__main__":
 	# Run the web server in a separate thread
 
-	print('Attempting to connect to local xVASynth server...')
-	try:
-		response = requests.get('http://0.0.0.0:8008')
-		response.raise_for_status()  # If the response contains an HTTP error status code, raise an exception
-	except requests.exceptions.RequestException as err:
-		print('Failed to connect to xVASynth!')
-		web_server_thread = threading.Thread(target=run_xvaserver)
-		print('Starting xVAServer thread')
-		web_server_thread.start()
+	# print('Attempting to connect to local xVASynth server...')
+	# try:
+	# 	response = requests.get('http://0.0.0.0:8008')
+	# 	response.raise_for_status()  # If the response contains an HTTP error status code, raise an exception
+	# except requests.exceptions.RequestException as err:
+	# 	print('Failed to connect to xVASynth!')
+	# 	web_server_thread = threading.Thread(target=run_xvaserver)
+	# 	print('Starting xVAServer thread')
+	# 	web_server_thread.start()
 
 	print('running Gradio interface')
 	demo.launch()
 
 	# Wait for the web server thread to finish (shouldn't be reached in normal execution)
-	web_server_thread.join()
+	# web_server_thread.join()
