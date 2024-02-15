@@ -1,5 +1,5 @@
 ---
-title: xVASynth (WIP)
+title: xVASynth TTS
 emoji: 🗣
 colorFrom: gray
 colorTo: gray

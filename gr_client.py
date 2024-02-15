@@ -99,7 +99,7 @@ def predict(
 	surprise,
 	deepmoji_checked
 ):
-	wav_path, arpabet_html, angry, happy, sad, surprise = client.predict(
+	wav_path, arpabet_html, angry, happy, sad, surprise, response = client.predict(
 		input_text,	# str  in 'Input Text' Textbox component
 		voice,	# Literal['ccby_nvidia_hifi_6670_M', 'ccby_nv_hifi_11614_F', 'ccby_nvidia_hifi_11697_F', 'ccby_nvidia_hifi_12787_F', 'ccby_nvidia_hifi_6097_M', 'ccby_nvidia_hifi_6671_M', 'ccby_nvidia_hifi_8051_F', 'ccby_nvidia_hifi_9017_M', 'ccby_nvidia_hifi_9136_F', 'ccby_nvidia_hifi_92_F']  in 'Voice' Radio component
 		lang,	# Literal['en', 'de', 'es', 'it', 'fr', 'ru', 'tr', 'la', 'ro', 'da', 'vi', 'ha', 'nl', 'zh', 'ar', 'uk', 'hi', 'ko', 'pl', 'sw', 'fi', 'hu', 'pt', 'yo', 'sv', 'el', 'wo', 'jp']  in 'Language' Radio component
@@ -114,31 +114,41 @@ def predict(
 		api_name="/predict"
 	)
 
-	# json_data = json.loads(response)
+	json_data = json.loads(response)
 
-	# arpabet_html = '<h6>ARPAbet & Durations</h6>'
-	# arpabet_symbols = json_data['arpabet'].split('|')
-	# for symb_i in range(len(json_data['durations'])):
-	# 	if (arpabet_symbols[symb_i] == '<PAD>'):
-	# 		continue
+	arpabet_html = '<h6>ARPAbet & Durations</h6>'
+	arpabet_html += '<table style="margin: 0 var(--size-2)"><tbody><tr>'
+	arpabet_nopad = json_data['arpabet'].split('|PAD|')
+	arpabet_symbols = json_data['arpabet'].split('|')
+	wpad_len = len(arpabet_symbols)
+	nopad_len = len(arpabet_nopad)
+	total_dur_length = 0
+	for symb_i in range(wpad_len):
+		if (arpabet_symbols[symb_i] == '<PAD>'):
+			continue
+		total_dur_length += float(json_data['durations'][symb_i])
 
-	# 	arpabet_html += '<strong class="arpabet" style="padding: 0 '\
-	# 		+ str(round(float(json_data['durations'][symb_i]/2), 1))\
-	# 		+'em">'\
-	# 		+ arpabet_symbols[symb_i]\
-	# 		+ '</strong> '
+	print(total_dur_length)
+	for symb_i in range(wpad_len):
+		if (arpabet_symbols[symb_i] == '<PAD>'):
+			continue
+
+		arpabet_length = float(json_data['durations'][symb_i])
+		cell_width = round(arpabet_length / total_dur_length * 100, 2)
+		arpabet_html += '<td class="arpabet" style="width: '\
+			+ str(cell_width)\
+			+'%">'\
+			+ arpabet_symbols[symb_i]\
+			+ '</td> '
+	arpabet_html += '<tr></tbody></table>'
 
 	return [
 		wav_path,
 		arpabet_html,
-		angry,
-		happy,
-		sad,
-		surprise,
-		# round(json_data['em_angry'][0], 2),
-		# round(json_data['em_happy'][0], 2),
-		# round(json_data['em_sad'][0], 2),
-		# round(json_data['em_surprise'][0], 2)
+		round(json_data['em_angry'][0], 2),
+		round(json_data['em_happy'][0], 2),
+		round(json_data['em_sad'][0], 2),
+		round(json_data['em_surprise'][0], 2)
 	]
 
 input_textbox = gr.Textbox(
@@ -227,8 +237,18 @@ language_radio = gr.Radio(
 	info="Will be more monotone and have an English accent. Tested mostly by a native Briton."
 )
 
-with gr.Blocks(css=".arpabet {display: inline-block; background-color: gray; border-radius: 5px; font-size: 120%; margin: 0.1em 0}") as demo:
+_DESCRIPTION = '''
+<div>
+<a style="display:inline-block;" href="https://github.com/DanRuta/xVA-Synth"><img src='https://img.shields.io/github/stars/DanRuta/xVA-Synth?style=social'/></a>
+<a style="display:inline-block; margin-left: .5em" href="https://discord.gg/nv7c6E2TzV"><img src='https://img.shields.io/discord/794590496202293278.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2'/></a>
+<span style="display: inline-block;margin-left: .5em;vertical-align: top;"><a href="https://huggingface.co/spaces/Pendrokar/xVASynth?duplicate=true" style="" target="_blank"><img style="margin-bottom: 0em;display: inline;" src="https://bit.ly/3gLdBN6" alt="Duplicate Space"></a> for a personal CPU-run</span>
+</div>
+'''
+
+with gr.Blocks(css=".arpabet {background-color: gray; border-radius: 5px; font-size: 120%; padding: 0 0.1em; margin: 0 0.1em; text-align: center}") as demo:
 	gr.Markdown("# xVASynth TTS")
+
+	gr.HTML(label="description", value=_DESCRIPTION)
 
 	with gr.Row():  # Main row for inputs and language selection
 		with gr.Column():  # Input column
@@ -266,13 +286,18 @@ with gr.Blocks(css=".arpabet {display: inline-block; background-color: gray; bor
 			deepmoji_checkbox = gr.Checkbox(label="Use DeepMoji", info="Auto adjust emotional values", value=True)
 
 	# Event handling using click
-	btn = gr.Button("Generate")
+	btn = gr.Button("Generate", variant="primary")
 
-	with gr.Row():  # Main row for inputs and language selection
-		with gr.Column():  # Input column
-			output_wav = gr.Audio(label="22kHz audio output", type="filepath", editable=False)
-		with gr.Column():  # Input column
-			output_arpabet = gr.HTML(label="ARPAbet")
+	# with gr.Row():  # Main row for inputs and language selection
+	# 	with gr.Column():  # Input column
+	output_wav = gr.Audio(
+		label="22kHz audio output",
+		type="filepath",
+		editable=False,
+		autoplay=True
+	)
+		# with gr.Column():  # Input column
+	output_arpabet = gr.HTML(label="ARPAbet")
 
 	btn.click(
 		fn=predict,

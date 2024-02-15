@@ -356,8 +356,18 @@ language_radio = gr.Radio(
 	info="Will be more monotone and have an English accent. Tested mostly by a native Briton."
 )
 
+_DESCRIPTION = '''
+<div>
+<a style="display:inline-block;" href="https://github.com/DanRuta/xVA-Synth"><img src='https://img.shields.io/github/stars/DanRuta/xVA-Synth?style=social'/></a>
+<a style="display:inline-block; margin-left: .5em" href="https://discord.gg/nv7c6E2TzV"><img src='https://img.shields.io/discord/794590496202293278.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2'/></a>
+<span style="display: inline-block;margin-left: .5em;vertical-align: top;"><a href="https://huggingface.co/spaces/Pendrokar/xVASynth?duplicate=true" style="" target="_blank"><img style="margin-bottom: 0em;display: inline;" src="https://bit.ly/3gLdBN6" alt="Duplicate Space"></a> for a personal CPU-run</span>
+</div>
+'''
+
 with gr.Blocks(css=".arpabet {display: inline-block; background-color: gray; border-radius: 5px; font-size: 120%; margin: 0.1em 0}") as demo:
 	gr.Markdown("# xVASynth TTS")
+
+	gr.HTML(label="description", value=_DESCRIPTION)
 
 	with gr.Row():  # Main row for inputs and language selection
 		with gr.Column():  # Input column
