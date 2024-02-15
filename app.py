@@ -7,7 +7,6 @@ from subprocess import Popen, PIPE
 import threading
 from huggingface_hub import hf_hub_download
 import gradio as gr
-import resources.app.no_server as xvaserver
 
 try:
 	import resources.app.no_server as xvaserver

@@ -96,8 +96,8 @@ except:
     except:
         pass
 
-# if CPU_ONLY:
-#     torch_dml_device = torch.device("cpu")
+if CPU_ONLY:
+    torch_dml_device = torch.device("cpu")
 
 
 try:
@@ -113,7 +113,7 @@ plugin_manager.run_plugins(plist=plugin_manager.plugins["start"]["pre"], event="
 
 
 # ======================== Models manager
-# modelsPaths = {}
+modelsPaths = {}
 try:
     from python.models_manager import ModelsManager
     models_manager = ModelsManager(logger, PROD, device="cpu")
@@ -128,7 +128,6 @@ print("Models ready")
 logger.info("Models ready")
 
 
-global modelsPaths
 post_data = ""
 def loadModel(post_data):
     logger.info("Direct: loadModel")
