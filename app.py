@@ -315,29 +315,22 @@ def set_default_text(lang, deepmoji_checked):
 
 	return default_text[lang], checkbox_enabled  # Return the modified textbox (important for Blocks)
 
+en_examples = [
+	"This is what my voice sounds like.",
+	"If there is anything else you need, feel free to ask.",
+	"Amazing! Could you do that again?",
+	"Why, I would be more than happy to help you!",
+	"That was unexpected.",
+	"How dare you! . You have no right.",
+	"Ahh, well, you see. There is more to it.",
+	"I can't believe she is gone.",
+	"Stay out of my way!!!",
+	# ARPAbet example
+	"This { IH1 Z } { W AH1 T } { M AY1 } { V OY1 S } { S AW1 N D Z } like.",
+]
+
 def set_example_as_input(example_text):
 	return example_text
-
-def toggle_example_dropdown(lang):
-	if lang == 'en':
-		return gr.Dropdown(
-			[
-				"If there is anything else you need, feel free to ask.",
-				"Amazing! Could you do that again?",
-				"Why, I would be more than happy to help you!",
-				"That was unexpected.",
-				"How dare you! . You have no right.",
-				"Ahh, well, you see. There is more to it.",
-				"I can't believe she is gone.",
-				"Stay out of my way!!!",
-			],
-			label="Example dropdown",
-			show_label=False,
-			info="English Examples",
-			visible=True
-		)
-	else:
-		return gr.Dropdown(visible=False)
 
 def reset_em_sliders(
 	deepmoji_enabled,
@@ -412,19 +405,12 @@ with gr.Blocks(css=".arpabet {display: inline-block; background-color: gray; bor
 			with gr.Row():
 				with gr.Column():
 					en_examples_dropdown = gr.Dropdown(
-						[
-							"If there is anything else you need, feel free to ask.",
-							"Amazing! Could you do that again?",
-							"Why, I would be more than happy to help you!",
-							"That was unexpected.",
-							"How dare you! . You have no right.",
-							"Ahh, well, you see. There is more to it.",
-							"I can't believe she is gone.",
-							"Stay out of my way!!!",
-						],
+						en_examples,
+						value=en_examples[0],
 						label="Example dropdown",
 						show_label=False,
-						info="English Examples"
+						info="English Examples",
+						visible=(language_radio.value == 'en')
 					)
 				with gr.Column():
 					pacing_slider = gr.Slider(0.5, 2.0, value=1.0, step=0.1, label="Duration")
@@ -523,12 +509,6 @@ with gr.Blocks(css=".arpabet {display: inline-block; background-color: gray; bor
 		set_example_as_input,
 		inputs=[en_examples_dropdown],
 		outputs=[input_textbox]
-	)
-
-	language_radio.change(
-		toggle_example_dropdown,
-		inputs=language_radio,
-		outputs=en_examples_dropdown
 	)
 
 	deepmoji_checkbox.change(

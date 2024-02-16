@@ -191,22 +191,28 @@ def set_default_text(lang, deepmoji_checked):
 
 	return default_text[lang], checkbox_enabled  # Return the modified textbox (important for Blocks)
 
+en_examples = [
+	"This is what my voice sounds like.",
+	"If there is anything else you need, feel free to ask.",
+	"Amazing! Could you do that again?",
+	"Why, I would be more than happy to help you!",
+	"That was unexpected.",
+	"How dare you! . You have no right.",
+	"Ahh, well, you see. There is more to it.",
+	"I can't believe she is gone.",
+	"Stay out of my way!!!",
+	# ARPAbet example
+	"This { IH1 Z } { W AH1 T } { M AY1 } { V OY1 S } { S AW1 N D Z } like.",
+]
+
 def set_example_as_input(example_text):
 	return example_text
 
 def toggle_example_dropdown(lang):
 	if lang == 'en':
 		return gr.Dropdown(
-			[
-				"If there is anything else you need, feel free to ask.",
-				"Amazing! Could you do that again?",
-				"Why, I would be more than happy to help you!",
-				"That was unexpected.",
-				"How dare you! . You have no right.",
-				"Ahh, well, you see. There is more to it.",
-				"I can't believe she is gone.",
-				"Stay out of my way!!!",
-			],
+			en_examples,
+			value=en_examples[0],
 			label="Example dropdown",
 			show_label=False,
 			info="English Examples",
@@ -289,16 +295,8 @@ with gr.Blocks(css=".arpabet {background-color: gray; border-radius: 5px; font-s
 			with gr.Row():
 				with gr.Column():
 					en_examples_dropdown = gr.Dropdown(
-						[
-							"If there is anything else you need, feel free to ask.",
-							"Amazing! Could you do that again?",
-							"Why, I would be more than happy to help you!",
-							"That was unexpected.",
-							"How dare you! . You have no right.",
-							"Ahh, well, you see. There is more to it.",
-							"I can't believe she is gone.",
-							"Stay out of my way!!!",
-						],
+						en_examples,
+						value=en_examples[0],
 						label="Example dropdown",
 						show_label=False,
 						info="English Examples"
