@@ -315,6 +315,30 @@ def set_default_text(lang, deepmoji_checked):
 
 	return default_text[lang], checkbox_enabled  # Return the modified textbox (important for Blocks)
 
+def set_example_as_input(example_text):
+	return example_text
+
+def toggle_example_dropdown(lang):
+	if lang == 'en':
+		return gr.Dropdown(
+			[
+				"If there is anything else you need, feel free to ask.",
+				"Amazing! Could you do that again?",
+				"Why, I would be more than happy to help you!",
+				"That was unexpected.",
+				"How dare you! . You have no right.",
+				"Ahh, well, you see. There is more to it.",
+				"I can't believe she is gone.",
+				"Stay out of my way!!!",
+			],
+			label="Example dropdown",
+			show_label=False,
+			info="English Examples",
+			visible=True
+		)
+	else:
+		return gr.Dropdown(visible=False)
+
 def reset_em_sliders(
 	deepmoji_enabled,
 	anger,
@@ -385,7 +409,25 @@ with gr.Blocks(css=".arpabet {display: inline-block; background-color: gray; bor
 				label="Language",
 				info="Will be more monotone and have an English accent. Tested mostly by a native Briton."
 			)
-			pacing_slider = gr.Slider(0.5, 2.0, value=1.0, step=0.1, label="Duration")
+			with gr.Row():
+				with gr.Column():
+					en_examples_dropdown = gr.Dropdown(
+						[
+							"If there is anything else you need, feel free to ask.",
+							"Amazing! Could you do that again?",
+							"Why, I would be more than happy to help you!",
+							"That was unexpected.",
+							"How dare you! . You have no right.",
+							"Ahh, well, you see. There is more to it.",
+							"I can't believe she is gone.",
+							"Stay out of my way!!!",
+						],
+						label="Example dropdown",
+						show_label=False,
+						info="English Examples"
+					)
+				with gr.Column():
+					pacing_slider = gr.Slider(0.5, 2.0, value=1.0, step=0.1, label="Duration")
 		with gr.Column():  # Control column
 			voice_radio = gr.Radio(
 				voice_models,
@@ -475,6 +517,18 @@ with gr.Blocks(css=".arpabet {display: inline-block; background-color: gray; bor
 		set_default_text,
 		inputs=[language_radio, deepmoji_checkbox],
 		outputs=[input_textbox, deepmoji_checkbox]
+	)
+
+	en_examples_dropdown.change(
+		set_example_as_input,
+		inputs=[en_examples_dropdown],
+		outputs=[input_textbox]
+	)
+
+	language_radio.change(
+		toggle_example_dropdown,
+		inputs=language_radio,
+		outputs=en_examples_dropdown
 	)
 
 	deepmoji_checkbox.change(
