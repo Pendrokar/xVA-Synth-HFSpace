@@ -8,17 +8,12 @@ import threading
 from huggingface_hub import hf_hub_download
 import gradio as gr
 
-# try:
+# start xVASynth server (no HTTP)
 import resources.app.no_server as xvaserver
-# except:
-# 	print('server.log contents:')
-# 	with open('resources/app/server.log', 'r') as f:
-# 		print(f.read())
-
 
 hf_model_name = "Pendrokar/xvapitch_nvidia"
 hf_cache_models_path = '/home/user/.cache/huggingface/hub/models--Pendrokar--xvapitch_nvidia/snapshots/61b10e60b22bc21c1e072f72f1108b9c2b21e94c/'
-models_path = '/home/user/.cache/huggingface/hub/models--Pendrokar--xvapitch_nvidia/snapshots/61b10e60b22bc21c1e072f72f1108b9c2b21e94c/'
+models_path = hf_cache_models_path
 
 # FIXME: currently hardcoded in DeepMoji code
 # try:
@@ -349,6 +344,9 @@ def reset_em_sliders(
 			surprise
 		)
 
+def set_default_audio(voice_id):
+	return models_path + voice_id + '.wav'
+
 def toggle_deepmoji(
 	checked,
 	anger,
@@ -438,7 +436,7 @@ with gr.Blocks(css=".arpabet {display: inline-block; background-color: gray; bor
 	with gr.Row():  # Main row for inputs and language selection
 		with gr.Column():  # Input column
 			output_wav = gr.Audio(
-				label="22kHz audio output",
+				label="22kHz audio output (autoplay enabled)",
 				type="filepath",
 				editable=False,
 				autoplay=True
@@ -562,21 +560,12 @@ with gr.Blocks(css=".arpabet {display: inline-block; background-color: gray; bor
 		]
 	)
 
+	voice_radio.change(
+		set_default_audio,
+		inputs=voice_radio,
+		outputs=output_wav
+	)
+
 if __name__ == "__main__":
-	# Run the web server in a separate thread
-
-	# print('Attempting to connect to local xVASynth server...')
-	# try:
-	# 	response = requests.get('http://0.0.0.0:8008')
-	# 	response.raise_for_status()  # If the response contains an HTTP error status code, raise an exception
-	# except requests.exceptions.RequestException as err:
-	# 	print('Failed to connect to xVASynth!')
-	# 	web_server_thread = threading.Thread(target=run_xvaserver)
-	# 	print('Starting xVAServer thread')
-	# 	web_server_thread.start()
-
-	print('running Gradio interface')
+	print('running custom Gradio interface')
 	demo.launch()
-
-	# Wait for the web server thread to finish (shouldn't be reached in normal execution)
-	# web_server_thread.join()
