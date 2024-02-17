@@ -62,7 +62,7 @@ tabulate==0.8.9
 threadpoolctl==2.1.0
 tokenizers==0.10.3
 torchaudio
-torchvision==0.10.0
+torchvision
 tqdm==4.62.2
 transformers==4.10.0
 typing==3.7.4.3
