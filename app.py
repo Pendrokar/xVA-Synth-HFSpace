@@ -5,21 +5,18 @@ import requests
 import json
 from subprocess import Popen, PIPE
 import threading
-from huggingface_hub import hf_hub_download
+from huggingface_hub import Repository
 import gradio as gr
 
 # start xVASynth server (no HTTP)
-import resources.app.no_server as xvaserver
+# import resources.app.no_server as xvaserver
 
+# model
 hf_model_name = "Pendrokar/xvapitch_nvidia"
-hf_cache_models_path = '/home/user/.cache/huggingface/hub/models--Pendrokar--xvapitch_nvidia/snapshots/61b10e60b22bc21c1e072f72f1108b9c2b21e94c/'
+model_repo = Repository(local_dir=hf_model_name)
+latest_commit_sha = model_repo.git_head_hash()
+hf_cache_models_path = f'/home/user/.cache/huggingface/hub/models--Pendrokar--xvapitch_nvidia/snapshots/{latest_commit_sha}/'
 models_path = hf_cache_models_path
-
-# FIXME: currently hardcoded in DeepMoji code
-# try:
-# 	os.symlink('/home/user/.cache/huggingface/hub/models--Pendrokar--TorchMoji/snapshots/58217568daaf64d3621245dd5c88c94e651a08d6', '/home/user/app/resources/app/plugins/deepmoji_plugings/model', target_is_directory=True)
-# except:
-# 	print('Failed to create symlink to DeepMoji model, may already be there.')
 
 voice_models = [
 	("Male #6671", "ccby_nvidia_hifi_6671_M"),
@@ -374,8 +371,9 @@ language_radio = gr.Radio(
 _DESCRIPTION = '''
 <div>
 <a style="display:inline-block;" href="https://github.com/DanRuta/xVA-Synth"><img src='https://img.shields.io/github/stars/DanRuta/xVA-Synth?style=social'/></a>
+<a style="display:inline-block;" href="https://www.nexusmods.com/skyrimspecialedition/mods/44184"><img src='https://img.shields.io/badge/Endorsements-3.3k-blue?logo=nexusmods'/></a>
 <a style="display:inline-block; margin-left: .5em" href="https://discord.gg/nv7c6E2TzV"><img src='https://img.shields.io/discord/794590496202293278.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2'/></a>
-<span style="display: inline-block;margin-left: .5em;vertical-align: top;"><a href="https://huggingface.co/spaces/Pendrokar/xVASynth?duplicate=true" style="" target="_blank"><img style="margin-bottom: 0em;display: inline;" src="https://bit.ly/3gLdBN6" alt="Duplicate Space"></a> for a personal CPU-run</span>
+<span style="display: inline-block;margin-left: .5em;vertical-align: top;"><a href="https://huggingface.co/spaces/Pendrokar/xVASynth?duplicate=true" style="" target="_blank"><img style="margin-bottom: 0em;display: inline;" src="https://bit.ly/3gLdBN6" alt="Duplicate Space"></a> for a personal CPU-run one</span>
 </div>
 '''
 

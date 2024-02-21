@@ -1,6 +1,6 @@
 ---
 title: xVASynth TTS
-emoji: 🗣
+emoji: 🧝‍♀️🧛‍♂️🧚‍♂
 colorFrom: gray
 colorTo: gray
 sdk: gradio
@@ -17,9 +17,11 @@ tags:
 - s2s
 pinned: false
 preload_from_hub:
-  - Pendrokar/xvapitch_nvidia 61b10e60b22bc21c1e072f72f1108b9c2b21e94c
-  - Pendrokar/TorchMoji 58217568daaf64d3621245dd5c88c94e651a08d6
+  - Pendrokar/xvapitch_nvidia
+  - Pendrokar/TorchMoji
 license: gpl-3.0
+thumbnail: >-
+  https://raw.githubusercontent.com/DanRuta/xVA-Synth/master/assets/x-icon.png
 ---
 
 DanRuta's xVASynth, GitHub repo: [https://github.com/DanRuta/xVA-Synth](https://github.com/DanRuta/xVA-Synth)
