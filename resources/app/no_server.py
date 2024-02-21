@@ -154,7 +154,7 @@ def loadModel(post_data):
 
     return req_response
 
-def synthesize(post_data):
+def synthesize(post_data, stream=False):
     req_response = {}
     logger.info("Direct: synthesize")
     post_data["pluginsContext"] = json.loads(post_data["pluginsContext"])

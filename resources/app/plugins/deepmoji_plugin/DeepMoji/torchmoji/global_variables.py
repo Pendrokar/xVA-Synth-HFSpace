@@ -6,6 +6,7 @@ from os.path import abspath, dirname
 from huggingface_hub import HfApi
 
 api = HfApi()
+hf_model_name = "Pendrokar/TorchMoji"
 commits = api.list_repo_commits(repo_id=hf_model_name)
 latest_commit_sha = commits[0].commit_id
 
