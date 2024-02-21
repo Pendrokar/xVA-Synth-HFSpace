@@ -3,6 +3,11 @@
 """
 import tempfile
 from os.path import abspath, dirname
+from huggingface_hub import HfApi
+
+api = HfApi()
+commits = api.list_repo_commits(repo_id=hf_model_name)
+latest_commit_sha = commits[0].commit_id
 
 # The ordering of these special tokens matter
 # blank tokens can be used for new purposes
@@ -16,8 +21,8 @@ SPECIAL_TOKENS = ['CUSTOM_MASK',
                   'CUSTOM_BREAK']
 SPECIAL_TOKENS.extend(['{}BLANK_{}'.format(SPECIAL_PREFIX, i) for i in range(6, 10)])
 
-VOCAB_PATH = '/home/user/.cache/huggingface/hub/models--Pendrokar--TorchMoji/snapshots/58217568daaf64d3621245dd5c88c94e651a08d6/vocabulary.json'
-PRETRAINED_PATH =  '/home/user/.cache/huggingface/hub/models--Pendrokar--TorchMoji/snapshots/58217568daaf64d3621245dd5c88c94e651a08d6/pytorch_model.bin'
+VOCAB_PATH = f'/home/user/.cache/huggingface/hub/models--Pendrokar--TorchMoji/snapshots/{latest_commit_sha}/vocabulary.json'
+PRETRAINED_PATH =  f'/home/user/.cache/huggingface/hub/models--Pendrokar--TorchMoji/snapshots/{latest_commit_sha}/pytorch_model.bin'
 # ROOT_PATH = dirname(dirname(abspath(__file__)))
 # VOCAB_PATH = '{}/model/vocabulary.json'.format(ROOT_PATH)
 # PRETRAINED_PATH = '{}/model/pytorch_model.bin'.format(ROOT_PATH)

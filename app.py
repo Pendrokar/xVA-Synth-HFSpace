@@ -5,16 +5,17 @@ import requests
 import json
 from subprocess import Popen, PIPE
 import threading
-from huggingface_hub import Repository
+from huggingface_hub import HfApi
 import gradio as gr
 
-# start xVASynth server (no HTTP)
-# import resources.app.no_server as xvaserver
+# start xVASynth service (no HTTP)
+import resources.app.no_server as xvaserver
 
 # model
 hf_model_name = "Pendrokar/xvapitch_nvidia"
-model_repo = Repository(local_dir=hf_model_name)
-latest_commit_sha = model_repo.git_head_hash()
+model_repo = HfApi()
+commits = model_repo.list_repo_commits(repo_id=hf_model_name)
+latest_commit_sha = commits[0].commit_id
 hf_cache_models_path = f'/home/user/.cache/huggingface/hub/models--Pendrokar--xvapitch_nvidia/snapshots/{latest_commit_sha}/'
 models_path = hf_cache_models_path
 
