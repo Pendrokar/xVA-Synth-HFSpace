@@ -16,7 +16,7 @@ epitran==1.2
 fairseq==0.10.0
 ffmpeg-normalize==1.22.4
 ffmpeg-progress-yield==0.2.0
-ffmpeg-python
+ffmpeg-python==0.2.0
 filelock==3.0.12
 future==0.18.2
 g2pC==0.9.9.3
@@ -30,7 +30,7 @@ inflect==4.1.0
 inquirerpy~=0.3.3
 jaconv==0.3
 joblib==0.17.0
-librosa
+librosa==0.9.2
 nltk~=3.7
 num2words==0.5.10
 numpy
@@ -61,8 +61,8 @@ SoundFile==0.10.3.post1
 tabulate==0.8.9
 threadpoolctl==2.1.0
 tokenizers==0.10.3
-torchaudio
-torchvision
+torchaudio==2.1.2
+torchvision==0.16.2
 tqdm==4.62.2
 transformers==4.10.0
 typing==3.7.4.3
