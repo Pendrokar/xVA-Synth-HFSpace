@@ -24,4 +24,4 @@ thumbnail: >-
   https://raw.githubusercontent.com/DanRuta/xVA-Synth/master/assets/x-icon.png
 ---
 
-DanRuta's xVASynth, GitHub repo: [https://github.com/DanRuta/xVA-Synth](https://github.com/DanRuta/xVA-Synth)
+DanRuta's xVASynth backend without the editor. xVASynth editor GitHub repo: [https://github.com/DanRuta/xVA-Synth](https://github.com/DanRuta/xVA-Synth)
